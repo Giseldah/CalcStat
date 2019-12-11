@@ -11,7 +11,7 @@ Installation/use:
 
 Lotro Plugins:
 Extract the zip file to your Lotro Plugins directory. After, you should have a directory like "C:\Users\UserName\Documents\The Lord of the Rings Online\Plugins\Giseldah\CalcStat"
-Plugins can import this library using the statement: import Giseldah.CalcStat
+Plugins can import this library using the statement: import "Giseldah.CalcStat"
 The directory already contains a "Percentage calculations only" version by default, so you don't need to compile statdata.csv if this is all you require.
 
 OpenOffice/LibreOffice:

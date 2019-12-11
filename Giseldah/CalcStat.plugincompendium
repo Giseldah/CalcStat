@@ -6,6 +6,8 @@
   <Author>Giseldah</Author>
   <InfoUrl>http://www.lotrointerface.com/downloads/info1022</InfoUrl>
   <DownloadUrl>http://www.lotrointerface.com/downloads/download1022</DownloadUrl>
-  <Descriptors />
+  <Descriptors>
+    <descriptor>Giseldah\CalcStat.plugin</descriptor>
+  </Descriptors>
   <Dependencies />
 </PluginConfig>
