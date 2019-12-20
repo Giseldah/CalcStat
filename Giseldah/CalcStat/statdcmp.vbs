@@ -30,17 +30,48 @@ Const SDFLDCNT = 14
 Const SDFLDSEP = ","
 Const SDSTRQUOT = """"
 
-Const InFileFull = "statdata.csv"
-Const OutFileName = "CalcStat"
-Const OutFileExtBas = ".bas"
-Const OutFileExtLua = ".lua"
-Const OutFileExtVbs = ".vbs"
+Const InFileName = "statdata.csv"
+Const DataFileName = "statdcmp.dat"
 
-Const optOutFileBas = 1	'output file choice StarBasic
-Const optOutFileLua = 2	'output file choice Lua-script
-Const optOutFileVbs = 3	'output file choice VB-script
+'script data
+Dim ScriptDescr
+Dim OutFileName
+Dim STextStart
+Dim STextEnd
+Dim STextSNSearchCondStartSm
+Dim STextSNSearchCondSm
+Dim STextSNSearchCondStartEq
+Dim STextSNSearchCondEq
+Dim STextSNSearchCondStartGr
+Dim STextSNSearchCondGr
+Dim STextSNSearchAlternative
+Dim STextSNSearchEnd
+Dim STextSNSearchResult
+Dim STextSeqLSearchCondStart
+Dim STextSeqLSearchCond
+Dim STextSeqLSearchAlternative
+Dim STextSeqLSearchEnd
+Dim STextSeqLSearchResult
+Dim STextIntLSearchCondStart
+Dim STextIntLSearchCond
+Dim STextIntLSearchAlternative
+Dim STextIntLSearchEnd
+Dim STextIntLSearchResult
+Dim	STextDefineC
+Dim	STextDefineL
+Dim	STextDefineN
+Dim	STextDefinePNULL
+Dim	STextDefineSN
+Dim STextArrayStart
+Dim STextArraySep
+Dim STextArrayEnd
 
-Dim OutFileOption 'output file choice
+'script text variables
+Const STV_SN = "$STATNAME"
+Const STV_LVL = "$LEVEL"
+Const STV_LSTART = "$LVLSTART"
+Const STV_LEND = "$LVLEND"
+Const STV_CALC = "$CALC"
 
 'indexes Binary Search Tree node variables
 Const BST_KEY = 0
@@ -54,6 +85,7 @@ Const SCRIPT_DEFINE = "D" 'define $name for replacements
 Const SCRIPT_SEQUENTIAL = "S" 'in sequence L <= Lend
 Const SCRIPT_INTERVAL = "I" 'by interval Lstart <= L <= Lend
 
+'defines
 Const DF_DEF = 0 'defined text to replace
 Const DF_REPL = 1 'replacement text
 
@@ -65,9 +97,24 @@ Dim CompileOption 'compile option choice
 Main
 Sub Main
 
-	OutFileOption = CInt(InputBox("Enter a Number:"&Chr(10)&"1 = StarBasic"&Chr(10)&"2 = Lua-script <- for plugins"&Chr(10)&"3 = VB-script","Choose output script type",2))
+	Dim DataArray
 
-	If Not (OutFileOption = optOutFileBas Or OutFileOption = optOutFileLua Or OutFileOption = optOutFileVbs) Then
+	If Not ReadDataFile(DataFileName,DataArray) Then
+		MsgBox Replace("Could not read #S# file. Operation cancelled.","#S#",DataFileName)
+		Exit Sub
+	End If
+	
+	Dim ScrSelText
+	Dim ScrSelDefault
+	Dim ScrSelCount
+	
+	GetScrSelData DataArray,ScrSelText,ScrSelDefault,ScrSelCount
+	
+	Dim OutFileOption
+
+	OutFileOption = CInt(InputBox(ScrSelText,"Choose output script type",ScrSelDefault))
+
+	If Not (1 <= OutFileOption And OutFileOption <= ScrSelCount) Then
 		MsgBox "Invalid option. Operation cancelled."
 		Exit Sub
 	End If
@@ -79,9 +126,11 @@ Sub Main
 		Exit Sub
 	End If
 	
+	GetScriptData DataArray,OutFileOption
+	
 	Dim SDInfoLst
 
-	ReadSDFile InFileFull,SDInfoLst
+	ReadSDFile InFileName,SDInfoLst
 	
 	If Not IsEmpty(SDInfoLst) Then
 		MsgBox Replace("Found #N# data records.","#N#",CStr(UBound(SDInfoLst)+1))
@@ -104,31 +153,451 @@ Sub Main
 		.LineSeparator = adCRLF
 		.Open
 
-		WriteScrStart OutStream
+		WriteSText OutStream,STextStart,""
 
 		Dim iNodeIndex
 		iNodeIndex = LBound(aBalancedBST)	'Head node of the tree is first in the list
 
-		WriteScrStatsNode OutStream, SDInfoLst, aDefines, aBalancedBST, iNodeIndex, "	"
+		WriteScrStatsNode OutStream,SDInfoLst,aDefines,aBalancedBST,iNodeIndex,""
 
-		WriteScrEnd OutStream
+		WriteSText OutStream,STextEnd,""
 
-		Dim OutFileFull
-If OutFileOption = optOutFileBas Then
-		OutFileFull = OutFileName+OutFileExtBas
-ElseIf OutFileOption = optOutFileLua Then
-		OutFileFull = OutFileName+OutFileExtLua
-ElseIf OutFileOption = optOutFileVbs Then
-		OutFileFull = OutFileName+OutFileExtVbs
-End If
-		.SaveToFile OutFileFull, adSaveCreateOverWrite
+		.SaveToFile OutFileName,adSaveCreateOverWrite
 		.Close
 	End With
 	Set OutStream = Nothing
 
-	MsgBox Replace(Replace("Compilation of #S1# to #S2# completed.","#S1#",InFileFull),"#S2#",OutFileFull)
+	MsgBox Replace(Replace("Compilation of #S1# to #S2# completed.","#S1#",InFileName),"#S2#",OutFileName)
 	
 End Sub
+
+Function ReadDataFile(ByVal theDataFileName, ByRef theDataArray)
+
+	Dim Result
+	Result = True
+
+	Dim DataStream
+	Set DataStream = CreateObject("ADODB.Stream")
+	With DataStream
+		.Type = adTypeText
+		.CharSet = "UTF-8"
+		.LineSeparator = adLF
+		.Open
+		.LoadFromFile theDataFileName
+
+		Dim RowText
+
+		Do Until .EOS
+			RowText = .ReadText(adReadLine)
+
+			RowText = Replace(RowText,Chr(10),"")
+			RowText = Replace(RowText,Chr(13),"")
+
+			If IsEmpty(theDataArray) Then
+				ReDim theDataArray(0)
+			Else
+				ReDim Preserve theDataArray(UBound(theDataArray)+1)
+			End If
+			theDataArray(UBound(theDataArray)) = RowText
+		Loop
+
+		.Close
+	End With
+	Set DataStream = Nothing
+
+	If IsEmpty(theDataArray) Then
+		Result = False
+	End If
+	
+	ReadDataFile = Result
+	
+End Function
+
+Sub	GetScrSelData(ByVal theDataArray, ByRef theScrSelText, ByRef theScrSelDefault, ByRef theScrSelCount)
+
+	Dim SelText
+	SelText = "Enter a Number:"
+
+	Dim SelCount
+	SelCount = 0
+	
+	Dim I
+	I = LBound(theDataArray)
+	Dim MaxI
+	MaxI = UBound(theDataArray)
+	
+	Dim ScrTextLen
+	
+	'default script number
+	theScrSelDefault = CInt(theDataArray(I))
+	I = I+1
+	
+	Do Until MaxI-I < 18
+		'script description
+		SelCount = SelCount+1
+		SelText = SelText & Chr(10) & CStr(SelCount) & " = " & theDataArray(I)
+		I = I+1
+
+		'outfilename
+		I = I+1
+
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script start text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script end text
+		I = I+ScrTextLen
+
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition start smaller text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition smaller text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition start equal text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition equal text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition start greater text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition greater text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search alternative text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search end text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search result text
+		I = I+ScrTextLen
+
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search condition start text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search condition text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search alternative text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search end text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search result text
+		I = I+ScrTextLen
+		
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search condition start text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search condition text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search alternative text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search end text
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search result text
+		I = I+ScrTextLen
+		
+		'script Define C text
+		I = I+1
+		'script Define L text
+		I = I+1
+		'script Define N text
+		I = I+1
+		'script Define PNULL text
+		I = I+1
+		'script Define SN text
+		I = I+1
+
+		'script Array start text
+		I = I+1
+		'script Array separator text
+		I = I+1
+		'script Array end text
+		I = I+1
+	Loop
+	
+	theScrSelText = SelText
+	theScrSelCount = SelCount
+	
+End Sub
+
+Sub	GetScriptData(ByVal theDataArray, ByVal theOutFileOption)
+
+	Dim ScriptCount
+	ScriptCount = 0
+	
+	Dim I
+	I = LBound(theDataArray)
+	Dim MaxI
+	MaxI = UBound(theDataArray)
+	
+	Dim ScrTextLen
+	
+	'default script number
+	I = I+1
+	
+	Do Until MaxI-I < 18
+		ScriptCount = ScriptCount+1
+
+		'script description
+		If ScriptCount = theOutFileOption Then
+			ScriptDescr = theDataArray(I)
+		End If
+		I = I+1
+
+		'outfilename
+		If ScriptCount = theOutFileOption Then
+			OutFileName = theDataArray(I)
+		End If
+		I = I+1
+
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script start text
+		If ScriptCount = theOutFileOption Then
+			STextStart = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script end text
+		If ScriptCount = theOutFileOption Then
+			STextEnd = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition start smaller text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchCondStartSm = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition smaller text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchCondSm = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition start equal text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchCondStartEq = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition equal text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchCondEq = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition start greater text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchCondStartGr = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search condition greater text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchCondGr = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search alternative text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchAlternative = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search end text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchEnd = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script SN search result text
+		If ScriptCount = theOutFileOption Then
+			STextSNSearchResult = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search condition start text
+		If ScriptCount = theOutFileOption Then
+			STextSeqLSearchCondStart = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search condition text
+		If ScriptCount = theOutFileOption Then
+			STextSeqLSearchCond = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search alternative text
+		If ScriptCount = theOutFileOption Then
+			STextSeqLSearchAlternative = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search end text
+		If ScriptCount = theOutFileOption Then
+			STextSeqLSearchEnd = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Sequential Level Search result text
+		If ScriptCount = theOutFileOption Then
+			STextSeqLSearchResult = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search condition start text
+		If ScriptCount = theOutFileOption Then
+			STextIntLSearchCondStart = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search condition text
+		If ScriptCount = theOutFileOption Then
+			STextIntLSearchCond = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search alternative text
+		If ScriptCount = theOutFileOption Then
+			STextIntLSearchAlternative = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search end text
+		If ScriptCount = theOutFileOption Then
+			STextIntLSearchEnd = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		ScrTextLen = CInt(theDataArray(I))
+		I = I+1
+		'script Interval Level Search result text
+		If ScriptCount = theOutFileOption Then
+			STextIntLSearchResult = GetScriptText(theDataArray,I,ScrTextLen)
+		End If
+		I = I+ScrTextLen
+		
+		'script Define C text
+		If ScriptCount = theOutFileOption Then
+			STextDefineC = theDataArray(I)
+		End If
+		I = I+1
+		'script Define L text
+		If ScriptCount = theOutFileOption Then
+			STextDefineL = theDataArray(I)
+		End If
+		I = I+1
+		'script Define N text
+		If ScriptCount = theOutFileOption Then
+			STextDefineN = theDataArray(I)
+		End If
+		I = I+1
+		'script Define PNULL text
+		If ScriptCount = theOutFileOption Then
+			STextDefinePNULL = theDataArray(I)
+		End If
+		I = I+1
+		'script Define SN text
+		If ScriptCount = theOutFileOption Then
+			STextDefineSN = theDataArray(I)
+		End If
+		I = I+1
+
+		'script Array start text
+		If ScriptCount = theOutFileOption Then
+			STextArrayStart = theDataArray(I)
+		End If
+		I = I+1
+		'script Array separator text
+		If ScriptCount = theOutFileOption Then
+			STextArraySep = theDataArray(I)
+		End If
+		I = I+1
+		'script Array end text
+		If ScriptCount = theOutFileOption Then
+			STextArrayEnd = theDataArray(I)
+		End If
+		I = I+1
+	Loop
+	
+	theScrSelText = SelText
+	theScrSelCount = SelCount
+	
+End Sub
+
+Function GetScriptText(theDataArray,I,ScrTextLen)
+
+	Dim ScriptText
+	
+	For II = I To I+ScrTextLen-1
+		If IsEmpty(ScriptText) Then
+			ReDim ScriptText(0)
+		Else
+			ReDim Preserve ScriptText(UBound(ScriptText)+1)
+		End If
+		ScriptText(UBound(ScriptText)) = theDataArray(II)
+	Next
+	
+	GetScriptText = ScriptText
+	
+End Function
 
 Function ReadDefines(theSDInfoLst)
 
@@ -137,37 +606,36 @@ Function ReadDefines(theSDInfoLst)
 	Dim sStat, sLastStat
 	sLastStat = ""
 
+	Redim aDefines(4)
+	aDefines(0) = Array("$C",STextDefineC)
+	aDefines(1) = Array("$L",STextDefineL)
+	aDefines(2) = Array("$N",STextDefineN)
+	aDefines(3) = Array("$PNULL",STextDefinePNULL)
+	aDefines(4) = Array("$SN",STextDefineSN)
+	
 	For SI = LBound(theSDInfoLst) To UBound(theSDInfoLst)
 		If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_DEFINE Then
 			sStat = UCase(theSDInfoLst(SI)(SD_STAT))
 			If sStat <> sLastStat Then
-				If sLastStat <> "" Then
-					Redim Preserve aDefines(UBound(aDefines)+1)
-					aDefines(UBound(aDefines)) = Array(sStat,theSDInfoLst(SI)(SD_P1))
-				Else
-					aDefines = Array(Array(sStat,theSDInfoLst(SI)(SD_P1)))
-				End If
+				Redim Preserve aDefines(UBound(aDefines)+1)
+				aDefines(UBound(aDefines)) = Array(sStat,theSDInfoLst(SI)(SD_P1))
 				sLastStat = sStat
 			End If
 		End If
 	Next
 
-	If VarType(theDefines) = 8204 Then
-		Dim temp
-	
-		For I = UBound(aDefines)-1 To LBound(aDefines) Step -1
-			For J = 0 to I
-				If Len(aDefines(J)(0)) < Len(aDefines(J+1)(0)) Then
-					temp = aDefines(J+1)
-					aDefines(J+1) = aDefines(J)
-					aDefines(J) = temp
-				End If
-			Next
-		Next 
-	End If
-	
-	''MsgBox Replace("Number of defines: #N#","#N#",CStr(UBound(aDefines)+1))
+	Dim temp
 
+	For I = UBound(aDefines)-1 To LBound(aDefines) Step -1
+		For J = 0 to I
+			If Len(aDefines(J)(0)) < Len(aDefines(J+1)(0)) Then
+				temp = aDefines(J+1)
+				aDefines(J+1) = aDefines(J)
+				aDefines(J) = temp
+			End If
+		Next
+	Next 
+	
 	ReadDefines = aDefines
 
 End Function
@@ -177,100 +645,57 @@ Function ReplaceDefines(theText, theDefines)
 	Dim sNewText
 	sNewText = theText
 
-	If VarType(theDefines) = 8204 Then
-	
-		Dim sSearchText
-		sSearchText = UCase(theText)
+	Dim sSearchText
+	sSearchText = UCase(theText)
 
-		Dim SDefine
-		Dim sRepl
+	Dim SDefine
+	Dim sRepl
 	
-		For DI = LBound(theDefines) To UBound(theDefines)
-			sDefine = theDefines(DI)(DF_DEF)
-			sRepl = theDefines(DI)(DF_REPL)
+	Dim nSearch
+	
+	For DI = LBound(theDefines) To UBound(theDefines)
+		sDefine = theDefines(DI)(DF_DEF)
+		sRepl = theDefines(DI)(DF_REPL)
+		If UCase(sDefine) <> UCase(sRepl) Then
 			nSearch = InStr(sSearchText,sDefine)
 			While nSearch > 0
 				sNewText = Left(sNewText,nSearch-1)+sRepl+Right(sNewText,Len(sSearchText)-nSearch+1-Len(sDefine))
-				sSearchText = Left(sSearchText,nSearch-1)+sRepl+Right(sSearchText,Len(sSearchText)-nSearch+1-Len(sDefine))
+				sSearchText = Left(sSearchText,nSearch-1)+UCase(sRepl)+Right(sSearchText,Len(sSearchText)-nSearch+1-Len(sDefine))
 				nSearch = InStr(sSearchText,sDefine)
 			Wend
-		Next
-	End If
+		End If
+	Next
 	
 	ReplaceDefines = sNewText
 
 End Function
 
-Sub WriteScrStart(theOutStream)
+Sub WriteSText(theOutStream,theSText,theIndent)
+
+	If VarType(theSText) <> 8204 Then
+		Exit Sub
+	End If
 
 	With theOutStream
-
-If OutFileOption = optOutFileBas Then
-.WriteText "Function CalcStat(ByVal SName As String, ByVal SLvl As Double, Optional SParam As Variant) As Variant", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	Dim SN As String", adWriteLine
-.WriteText "	Dim L As Double", adWriteLine
-.WriteText "	Dim N As Double", adWriteLine
-.WriteText "	Dim C As String", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	SN = UCase(LTrim(RTrim(SName)))", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	L = SLvl", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	If IsMissing(SParam) Then", adWriteLine
-.WriteText "		N = 1#", adWriteLine
-.WriteText "		C = """"", adWriteLine
-.WriteText "	ElseIf IsNumeric(SParam) Then", adWriteLine
-.WriteText "		N = SParam", adWriteLine
-.WriteText "		C = """"", adWriteLine
-.WriteText "	Else", adWriteLine
-.WriteText "		N = 1#", adWriteLine
-.WriteText "		C = SParam", adWriteLine
-.WriteText "	EndIf", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText "_G.CalcStat = function(sname, slvl, sparam)", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	local sn = string.upper(string.match(sname,""(%w+)""));", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	local L = slvl;", adWriteLine
-.WriteText "	local N = 1;", adWriteLine
-.WriteText "	local C = """";", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	if sparam ~= nil then", adWriteLine
-.WriteText "		if type(sparam) == ""number"" then", adWriteLine
-.WriteText "			N = sparam;", adWriteLine
-.WriteText "		else", adWriteLine
-.WriteText "			C = sparam;", adWriteLine
-.WriteText "		end", adWriteLine
-.WriteText "	end", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText "Function CalcStat(ByVal SName, ByVal SLvl, ByVal SParam)", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	Dim SN", adWriteLine
-.WriteText "	Dim L", adWriteLine
-.WriteText "	Dim N", adWriteLine
-.WriteText "	Dim C", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	SN = UCase(LTrim(RTrim(SName)))", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	L = SLvl", adWriteLine
-.WriteText "", adWriteLine
-.WriteText "	If VarType(SParam) = 9 Then", adWriteLine
-.WriteText "		N = 1", adWriteLine
-.WriteText "		C = """"", adWriteLine
-.WriteText "	ElseIf VarType(SParam) <> 8 Then", adWriteLine
-.WriteText "		N = SParam", adWriteLine
-.WriteText "		C = """"", adWriteLine
-.WriteText "	Else", adWriteLine
-.WriteText "		N = 1", adWriteLine
-.WriteText "		C = SParam", adWriteLine
-.WriteText "	End If", adWriteLine
-End If
-.WriteText "", adWriteLine
-
+		For I = LBound(theSText) To UBound(theSText)
+			.WriteText theIndent & theSText(I), adWriteLine
+		Next
 	End With
-
+	
 End Sub
+
+Function ReplSText(theSText,theSearch,theRepl)
+
+	Dim NewSText
+	NewSText = theSText
+
+	For I = LBound(NewSText) To UBound(NewSText)
+		NewSText(I) = Replace(NewSText(I),theSearch,theRepl)
+	Next
+
+	ReplSText = NewSText
+	
+End Function
 
 Sub WriteScrStatsNode(theOutStream,theSDInfoLst,theDefines,aBST,iNodeIndex,sIndent)
 	
@@ -289,24 +714,12 @@ Sub WriteScrStatsNode(theOutStream,theSDInfoLst,theDefines,aBST,iNodeIndex,sInde
 		
 		If iLeftIndex <> -1 Then
 			If bIfOpen Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"ElseIf SN < """+sStatName+""" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"elseif sn < """+sStatName+""" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"ElseIf SN < """+sStatName+""" Then", adWriteLine
-End If
+				WriteSText theOutStream,ReplSText(STextSNSearchCondSm,STV_SN,sStatName),sIndent
 			Else
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"If SN < """+sStatName+""" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"if sn < """+sStatName+""" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"If SN < """+sStatName+""" Then", adWriteLine
-End If
+				WriteSText theOutStream,ReplSText(STextSNSearchCondStartSm,STV_SN,sStatName),sIndent
 				bIfOpen = True
 			End If
-			WriteScrStatsNode theOutStream, theSDInfoLst, theDefines, aBST, iLeftIndex, sIndent+"	"
+			WriteScrStatsNode theOutStream,theSDInfoLst,theDefines,aBST,iLeftIndex,sIndent+"	"
 		End If
 		
 		Dim iRightIndex
@@ -314,93 +727,32 @@ End If
 		
 		If iRightIndex <> -1 Then
 			If bIfOpen Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"ElseIf SN > """+sStatName+""" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"elseif sn > """+sStatName+""" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"ElseIf SN > """+sStatName+""" Then", adWriteLine
-End If
+				WriteSText theOutStream,ReplSText(STextSNSearchCondGr,STV_SN,sStatName),sIndent
 			Else
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"If SN > """+sStatName+""" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"if sn > """+sStatName+""" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"If SN > """+sStatName+""" Then", adWriteLine
-End If
+				WriteSText theOutStream,ReplSText(STextSNSearchCondStartGr,STV_SN,sStatName),sIndent
 				bIfOpen = True
 			End If
-			WriteScrStatsNode theOutStream, theSDInfoLst, theDefines, aBST, iRightIndex, sIndent+"	"
+			WriteScrStatsNode theOutStream,theSDInfoLst,theDefines,aBST,iRightIndex,sIndent+"	"
 		End If
 
 		If iLeftIndex = -1 Or iRightIndex = -1 Then
 			If bIfOpen Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"ElseIf SN = """+sStatName+""" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"elseif sn == """+sStatName+""" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"ElseIf SN = """+sStatName+""" Then", adWriteLine
-End If
+				WriteSText theOutStream,ReplSText(STextSNSearchCondEq,STV_SN,sStatName),sIndent
 			Else
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"If SN = """+sStatName+""" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"if sn == """+sStatName+""" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"If SN = """+sStatName+""" Then", adWriteLine
-End If
+				WriteSText theOutStream,ReplSText(STextSNSearchCondStartEq,STV_SN,sStatName),sIndent
 				bIfOpen = True
 			End If
-			WriteScrStat theOutStream,sStatName,theSDInfoLst,theDefines,sIndent+"	"
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"Else", adWriteLine
-.WriteText sIndent+"	CalcStat = 0", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"else", adWriteLine
-.WriteText sIndent+"	return 0;", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"Else", adWriteLine
-.WriteText sIndent+"	CalcStat = 0", adWriteLine
-End If
+			WriteScrStat theOutStream,sStatName,theSDInfoLst,theDefines,sIndent
+			WriteSText theOutStream,STextSNSearchAlternative,sIndent
+			WriteSText theOutStream,ReplSText(STextSNSearchResult,STV_CALC,"0"),sIndent
 		ElseIf iLeftIndex <> -1 And iRightIndex <> -1 Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"Else", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"else", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"Else", adWriteLine
-End If
-			WriteScrStat theOutStream,sStatName,theSDInfoLst,theDefines,sIndent+"	"
+			WriteSText theOutStream,STextSNSearchAlternative,sIndent
+			WriteScrStat theOutStream,sStatName,theSDInfoLst,theDefines,sIndent
 		End If
 
 		If bIfOpen Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"End If", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"end", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"End If", adWriteLine
-End If
+			WriteSText theOutStream,STextSNSearchEnd,sIndent
 		End If
-	End With
-
-End Sub
-
-Sub WriteScrEnd(theOutStream)
-
-	With theOutStream
-
-.WriteText "", adWriteLine
-If OutFileOption = optOutFileBas Then
-.WriteText "End Function", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText "end", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText "End Function", adWriteLine
-End If
-
 	End With
 
 End Sub
@@ -544,60 +896,23 @@ Sub WriteScrStat(theOutStream,theStat,theSDInfoLst,theDefines,sIndent)
 				Next
 				
 				If theSDInfoLst(SI)(SD_TYPE) <> "" And theSDInfoLst(SI)(SD_LEND) <> "" And SI = StatPos Then
-If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"Select Case L-DblCalcDev", adWriteLine
-.WriteText sIndent+"	Case <= "+theSDInfoLst(SI)(SD_LEND)+"#", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"if L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"If L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" Then", adWriteLine
-End If
-ElseIf theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"If "+theSDInfoLst(SI)(SD_LSTART)+" <= L+DblCalcDev And L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"if "+theSDInfoLst(SI)(SD_LSTART)+" <= L+DblCalcDev and L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"If "+theSDInfoLst(SI)(SD_LSTART)+" <= L+DblCalcDev And L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" Then", adWriteLine
-End If
-End If
+					If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
+						WriteSText theOutStream,ReplSText(STextSeqLSearchCondStart,STV_LVL,theSDInfoLst(SI)(SD_LEND)),sIndent
+					ElseIf theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL Then
+						WriteSText theOutStream,ReplSText(ReplSText(STextIntLSearchCondStart,STV_LSTART,theSDInfoLst(SI)(SD_LSTART),theSDInfoLst(SI)(SD_LEND))),sIndent
+					End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) <> "" And theSDInfoLst(SI)(SD_LEND) <> "" Then
-If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"	Case <= "+theSDInfoLst(SI)(SD_LEND)+"#", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"elseif L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"ElseIf L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" Then", adWriteLine
-End If
-ElseIf theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"ElseIf "+theSDInfoLst(SI)(SD_LSTART)+" <= L+DblCalcDev And L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" Then", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"elseif "+theSDInfoLst(SI)(SD_LSTART)+" <= L+DblCalcDev and L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" then", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"ElseIf "+theSDInfoLst(SI)(SD_LSTART)+" <= L+DblCalcDev And L-DblCalcDev <= "+theSDInfoLst(SI)(SD_LEND)+" Then", adWriteLine
-End If
-End If
+					If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
+						WriteSText theOutStream,ReplSText(STextSeqLSearchCond,STV_LVL,theSDInfoLst(SI)(SD_LEND)),sIndent
+					ElseIf theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL Then
+						WriteSText theOutStream,ReplSText(ReplSText(STextIntLSearchCond,STV_LSTART,theSDInfoLst(SI)(SD_LSTART),theSDInfoLst(SI)(SD_LEND))),sIndent
+					End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) <> "" And ((theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL And theSDInfoLst(SI)(SD_LSTART) <> "") Or (theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL And theSDInfoLst(SI)(SD_LSTART) = "" And theSDInfoLst(SI)(SD_LEND) = "")) Then
-If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"	Case Else", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"else", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"Else", adWriteLine
-End If
-ElseIf theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"Else", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"else", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"Else", adWriteLine
-End If
-End If
+					If theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
+						WriteSText theOutStream,STextSeqLSearchAlternative,sIndent
+					ElseIf theSDInfoLst(SI)(SD_SCRIPT) = SCRIPT_INTERVAL Then
+						WriteSText theOutStream,STextIntLSearchAlternative,sIndent
+					End If
 				End If
 
 				Build = ""
@@ -607,31 +922,19 @@ End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "C" Then
 					Build = theSDInfoLst(SI)(SD_P1)
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "D" Then
-If OutFileOption = optOutFileBas Then
-					Build = "DataTableValue(Array("+theSDInfoLst(SI)(SD_P1)
-ElseIf OutFileOption = optOutFileLua Then
-					Build = "DataTableValue({"+theSDInfoLst(SI)(SD_P1)
-ElseIf OutFileOption = optOutFileVbs Then
-					Build = "DataTableValue(Array("+theSDInfoLst(SI)(SD_P1)
-End If
+					Build = "DataTableValue("+STextArrayStart+theSDInfoLst(SI)(SD_P1)
 					Dim DI
 					For DI = SI+1 To UBound(theSDInfoLst)
 						If theSDInfoLst(DI)(SD_STAT) <> theStat Or theSDInfoLst(DI)(SD_TYPE) <> "" Then
 							Exit For
 						End If
-						Build = Build+","+theSDInfoLst(DI)(SD_P1)
+						Build = Build+STextArraySep+theSDInfoLst(DI)(SD_P1)
 					Next
-If OutFileOption = optOutFileBas Then
-						Build = Build+")"
-ElseIf OutFileOption = optOutFileLua Then
-						Build = Build+"}"
-ElseIf OutFileOption = optOutFileVbs Then
-						Build = Build+")"
-End If
+					Build = Build+STextArrayEnd
 					If theSDInfoLst(SI)(SD_LSTART) <> "" And theSDInfoLst(SI)(SD_LSTART) <> "1" Then
-						Build = Build+",L-"+CStr(theSDInfoLst(SI)(SD_LSTART)-1)+")"
+						Build = Build+","+STextDefineL+"-"+CStr(theSDInfoLst(SI)(SD_LSTART)-1)+")"
 					Else
-						Build = Build+",L)"
+						Build = Build+","+STextDefineL+")"
 					End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "E" Then
 					If theSDInfoLst(SI)(SD_LSTART) <> "" Then
@@ -640,9 +943,9 @@ End If
 						Build = "ExpFmod("+theSDInfoLst(SI)(SD_P1)+",1,"+theSDInfoLst(SI)(SD_P2)+","
 					End If
 					IF theSDInfoLst(SI)(SD_P3) <> "" Then
-						Build = Build+"L+"+theSDInfoLst(SI)(SD_P3)+")"
+						Build = Build+STextDefineL+"+"+theSDInfoLst(SI)(SD_P3)+")"
 					Else
-						Build = Build+"L)"
+						Build = Build+STextDefineL+")"
 					End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "F" Then
 					Build = theSDInfoLst(SI)(SD_P1)+"("
@@ -664,11 +967,11 @@ End If
 					Build = Build+")"
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "L" Then
 					If InStr(theSDInfoLst(SI)(SD_P1),"/") Or InStr(theSDInfoLst(SI)(SD_P1),"+") Or InStr(theSDInfoLst(SI)(SD_P1),"-") Then
-						Build = "("+theSDInfoLst(SI)(SD_P1)+")*L"
+						Build = "("+theSDInfoLst(SI)(SD_P1)+")*"+STextDefineL
 					ElseIf theSDInfoLst(SI)(SD_P1) = "1" Then
-						Build = "L"
+						Build = STextDefineL
 					Else
-						Build = theSDInfoLst(SI)(SD_P1)+"*L"
+						Build = theSDInfoLst(SI)(SD_P1)+"*"+STextDefineL
 					End If
 					If theSDInfoLst(SI)(SD_P2) <> "" Then
 						Build = Build+"+"+theSDInfoLst(SI)(SD_P2)
@@ -681,40 +984,34 @@ End If
 						ElseIf theSDInfoLst(SI)(SD_P2) <> "1" Then
 							Build = Build+theSDInfoLst(SI)(SD_P2)+"*"
 						End If
-						Build = Build+"CalcStat("""+theSDInfoLst(SI)(SD_P1)+""","+theSDInfoLst(SI)(SD_P4)+",N),"
+						Build = Build+"CalcStat("""+theSDInfoLst(SI)(SD_P1)+""","+theSDInfoLst(SI)(SD_P4)+","+STextDefineN+"),"
 						If InStr(theSDInfoLst(SI)(SD_P3),"/") Or InStr(theSDInfoLst(SI)(SD_P3),"+") Or InStr(theSDInfoLst(SI)(SD_P3),"-") Then
 							Build = Build+"("+theSDInfoLst(SI)(SD_P3)+")*"
 						ElseIf theSDInfoLst(SI)(SD_P3) <> "1" Then
 							Build = Build+theSDInfoLst(SI)(SD_P3)+"*"
 						End If
-						Build = Build+"CalcStat("""+theSDInfoLst(SI)(SD_P1)+""","+theSDInfoLst(SI)(SD_P5)+",N),"
-						Build = Build+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+",L"
-If OutFileOption = optOutFileVbs Then
-						Build = Build+",Nothing"
-End If 
-						Build = Build+")/CalcStat("""+theSDInfoLst(SI)(SD_P1)+""",L,N)"
+						Build = Build+"CalcStat("""+theSDInfoLst(SI)(SD_P1)+""","+theSDInfoLst(SI)(SD_P5)+","+STextDefineN+"),"
+						Build = Build+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+","+STextDefineL
+						Build = Build+STextDefinePNULL
+						Build = Build+")/CalcStat("""+theSDInfoLst(SI)(SD_P1)+""","+STextDefineL+","+STextDefineN+")"
 					Else
 						Build = theSDInfoLst(SI)(SD_P2)
 					End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "N" Then
 					If theSDInfoLst(SI)(SD_LSTART) <> "" And theSDInfoLst(SI)(SD_LSTART) <> "1" Then
-						Build = "NamedRangeValue("""+theSDInfoLst(SI)(SD_P1)+""",L-"+CStr(theSDInfoLst(SI)(SD_LSTART)-1)+","+theSDInfoLst(SI)(SD_P2)+")"
+						Build = "NamedRangeValue("""+theSDInfoLst(SI)(SD_P1)+""","+STextDefineL+"-"+CStr(theSDInfoLst(SI)(SD_LSTART)-1)+","+theSDInfoLst(SI)(SD_P2)+")"
 					Else
-						Build = "NamedRangeValue("""+theSDInfoLst(SI)(SD_P1)+""",L,"+theSDInfoLst(SI)(SD_P2)+")"
+						Build = "NamedRangeValue("""+theSDInfoLst(SI)(SD_P1)+""","+STextDefineL+","+theSDInfoLst(SI)(SD_P2)+")"
 					End If
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "P" Then
-					Build = "CalcPercAB("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+",N)"
+					Build = "CalcPercAB("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+STextDefineN+")"
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "R" Then
-					Build = "CalcRatAB("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+",N)"
+					Build = "CalcRatAB("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+STextDefineN+")"
 				ElseIf theSDInfoLst(SI)(SD_TYPE) = "T" Then
 					If theSDInfoLst(SI)(SD_P6) <> "" Then
-						Build = "LinFmod("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+",L,"+theSDInfoLst(SI)(SD_P6)+")"
+						Build = "LinFmod("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+","+STextDefineL+","+theSDInfoLst(SI)(SD_P6)+")"
 					Else
-If OutFileOption = optOutFileVbs Then
-						Build = "LinFmod("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+",L,Nothing)"
-Else
-						Build = "LinFmod("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+",L)"
-End If 
+						Build = "LinFmod("+theSDInfoLst(SI)(SD_P1)+","+theSDInfoLst(SI)(SD_P2)+","+theSDInfoLst(SI)(SD_P3)+","+theSDInfoLst(SI)(SD_P4)+","+theSDInfoLst(SI)(SD_P5)+","+STextDefineL+STextDefinePNULL+")"
 					End If
 				End If
 
@@ -723,96 +1020,49 @@ End If
 					If Ucase(theSDInfoLst(SI)(SD_USEN)) <> "N" And InStr("CDEFLNT",theSDInfoLst(SI)(SD_TYPE)) Then
 						If Build = "0" Then
 						ElseIf Build = "1" Then
-							Build = "N"
+							Build = STextDefineN
 						ElseIf InStr("DEFNT",theSDInfoLst(SI)(SD_TYPE)) Then
-							Build = Build+"*N"
+							Build = Build+"*"+STextDefineN
 						ElseIf InStr(Build,"+") Or InStr(Build,"-") Or InStr(Build,"/") Then
-							Build = "("+Build+")*N"
+							Build = "("+Build+")*"+STextDefineN
 						Else
-							Build = Build+"*N"
+							Build = Build+"*"+STextDefineN
 						End If
 					End If
 
 					If theSDInfoLst(SI)(SD_DECIMALS) <> "" Then
 						If theSDInfoLst(SI)(SD_DECIMALS) = "0" Then
-If OutFileOption = optOutFileVbs Then
-							Build = "RoundDbl("+Build+",Nothing)"
-Else
-							Build = "RoundDbl("+Build+")"
-End If
+							Build = "RoundDbl("+Build+STextDefinePNULL+")"
 						Else
 							Build = "RoundDbl("+Build+","+theSDInfoLst(SI)(SD_DECIMALS)+")"
 						End If
 					End If
 	
-					Build = Replace(Replace(Build,"!",""""),"|",",")
-	
+					Build = Replace(Build,"!","""")
+					Build = Replace(Build,"|",",")
 					Build = Replace(Build,"+-","-")
 					Build = Replace(Build,"--","+")
-If OutFileOption <> optOutFileVbs Then
-					Build = Replace(Build,",Nothing","")
-End If
 					Build = ReplStatRefs(Build)
 
 					If theSDInfoLst(SI)(SD_LEND) <> "" Or theSDInfoLst(SI)(SD_LSTART) <> "" Then
-If theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"		CalcStat = "+Build, adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"	return "+Build+";", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"	CalcStat = "+Build, adWriteLine
-End If
-ElseIf theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_INTERVAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"	CalcStat = "+Build, adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"	return "+Build+";", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"	CalcStat = "+Build, adWriteLine
-End If
-End If
+						If theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
+							WriteSText theOutStream,ReplSText(STextSeqLSearchResult,STV_CALC,Build),sIndent
+						ElseIf theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_INTERVAL Then
+							WriteSText theOutStream,ReplSText(STextIntLSearchResult,STV_CALC,Build),sIndent
+						End If
 					Else
-If theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"CalcStat = "+Build, adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"return "+Build+";", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"CalcStat = "+Build, adWriteLine
-End If
-ElseIf theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_INTERVAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"	CalcStat = "+Build, adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"	return "+Build+";", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"	CalcStat = "+Build, adWriteLine
-End If
-End If
+						WriteSText theOutStream,ReplSText(STextSNSearchResult,STV_CALC,Build),sIndent
 					End If
 
 				End If
 			Next	
 
 			If theSDInfoLst(StatPos)(SD_LSTART) <> "" Or theSDInfoLst(StatPos)(SD_LEND) <> "" Then
-If theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"End Select", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"end", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"End If", adWriteLine
-End If
-ElseIf theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_INTERVAL Then
-If OutFileOption = optOutFileBas Then
-.WriteText sIndent+"End If", adWriteLine
-ElseIf OutFileOption = optOutFileLua Then
-.WriteText sIndent+"end", adWriteLine
-ElseIf OutFileOption = optOutFileVbs Then
-.WriteText sIndent+"End If", adWriteLine
-End If
-End If
+				If theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_SEQUENTIAL Then
+					WriteSText theOutStream,STextSeqLSearchEnd,sIndent
+				ElseIf theSDInfoLst(StatPos)(SD_SCRIPT) = SCRIPT_INTERVAL Then
+					WriteSText theOutStream,STextIntLSearchEnd,sIndent
+				End If
 			End If
 
 		End If
@@ -888,8 +1138,8 @@ Function ReplStatRefs(ByVal theBuild)
 				Next
 			End If
 			If sLevel = "" Then
-				Result = Left(Result,nSearch-1)+",L"+Right(Result,Len(Result)-nSearch+1)
-				nSearch = nSearch+Len(",L")
+				Result = Left(Result,nSearch-1)+","+STextDefineL+Right(Result,Len(Result)-nSearch+1)
+				nSearch = nSearch+Len(","+STextDefineL)
 			Else
 				Result = Left(Result,nSearch-1)+","+sLevel+Right(Result,Len(Result)-nSearch+1-Len(sLevel))
 				nSearch = nSearch+Len(","+sLevel)
@@ -929,20 +1179,15 @@ Function ReplStatRefs(ByVal theBuild)
 					Next
 				End If
 				If sNumber = "" Then
-					Result = Left(Result,nSearch-1)+",N)"+Right(Result,Len(Result)-nSearch+1)
-					nSearch = nSearch+Len(",N)")
+					Result = Left(Result,nSearch-1)+","+STextDefineN+")"+Right(Result,Len(Result)-nSearch+1)
+					nSearch = nSearch+Len(","+STextDefineN+")")
 				Else
 					Result = Left(Result,nSearch-1)+","+sNumber+")"+Right(Result,Len(Result)-nSearch+1-Len(sNumber))
 					nSearch = nSearch+Len(","+sNumber+")")
 				End If
 			Else
-If OutFileOption = optOutFileVbs Then
-				Result = Left(Result,nSearch-1)+",Nothing)"+Right(Result,Len(Result)-nSearch+1)
-				nSearch = nSearch+Len(",Nothing)")
-Else
-				Result = Left(Result,nSearch-1)+")"+Right(Result,Len(Result)-nSearch+1)
-				nSearch = nSearch+Len(")")
-End If
+				Result = Left(Result,nSearch-1)+STextDefinePNULL+")"+Right(Result,Len(Result)-nSearch+1)
+				nSearch = nSearch+Len(STextDefinePNULL+")")
 			End If
 
 		End If
@@ -954,7 +1199,7 @@ End If
 
 End Function
 
-Sub ReadSDFile(ByVal theInFile, ByRef theSDInfoLst)
+Sub ReadSDFile(ByVal theInFileName, ByRef theSDInfoLst)
 
 	Dim InStream
 	Set InStream = CreateObject("ADODB.Stream")
@@ -963,7 +1208,7 @@ Sub ReadSDFile(ByVal theInFile, ByRef theSDInfoLst)
 		.CharSet = "UTF-8"
 		.LineSeparator = adLF
 		.Open
-		.LoadFromFile theInFile
+		.LoadFromFile theInFileName
 
 		Dim ReadError
 		ReadError = False

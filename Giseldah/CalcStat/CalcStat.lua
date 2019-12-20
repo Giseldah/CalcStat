@@ -1,6 +1,6 @@
 _G.CalcStat = function(sname, slvl, sparam)
 
-	local sn = string.upper(string.match(sname,"(%w+)"));
+	local SN = string.upper(string.match(sname,"(%w+)"));
 
 	local L = slvl;
 	local N = 1;
@@ -14,20 +14,20 @@ _G.CalcStat = function(sname, slvl, sparam)
 		end
 	end
 
-	if sn < "PARTBLOCKPRATPC" then
-		if sn < "EVADEPRATPCAPR" then
-			if sn < "CRITDEFPRATPA" then
-				if sn < "BPEPPRAT" then
-					if sn < "BLOCKPBONUS" then
-						if sn < "ARMOURLOWRAW" then
-							if sn < "ADJTRAITPROGRATINGS" then
-								if sn == "-VERSION" then
-									return "1.2.0p";
+	if SN < "PARTBLOCKPRATPC" then
+		if SN < "EVADEPRATPCAPR" then
+			if SN < "CRITDEFPRATPA" then
+				if SN < "BPEPPRAT" then
+					if SN < "BLOCKPBONUS" then
+						if SN < "ARMOURLOWRAW" then
+							if SN < "ADJTRAITPROGRATINGS" then
+								if SN == "-VERSION" then
+									return "1.3.0p";
 								else
 									return 0;
 								end
-							elseif sn > "ADJTRAITPROGRATINGS" then
-								if sn == "ARMCATMP" then
+							elseif SN > "ADJTRAITPROGRATINGS" then
+								if SN == "ARMCATMP" then
 									if L-DblCalcDev <= 0 then
 										return 0;
 									elseif L-DblCalcDev <= 1 then
@@ -53,9 +53,9 @@ _G.CalcStat = function(sname, slvl, sparam)
 									return 0.9;
 								end
 							end
-						elseif sn > "ARMOURLOWRAW" then
-							if sn < "ARMPROGMP" then
-								if sn == "ARMPROG" then
+						elseif SN > "ARMOURLOWRAW" then
+							if SN < "ARMPROGMP" then
+								if SN == "ARMPROG" then
 									if L-DblCalcDev <= 400 then
 										return CalcStat("ItemProg",L,N)/CalcStat("StdProg",75,N);
 									elseif L-DblCalcDev <= 449 then
@@ -66,9 +66,9 @@ _G.CalcStat = function(sname, slvl, sparam)
 								else
 									return 0;
 								end
-							elseif sn > "ARMPROGMP" then
-								if sn > "ARMQTYLOWMP" then
-									if sn == "ARMTYPEMP" then
+							elseif SN > "ARMPROGMP" then
+								if SN > "ARMQTYLOWMP" then
+									if SN == "ARMTYPEMP" then
 										if L-DblCalcDev <= 0 then
 											return 0;
 										else
@@ -77,7 +77,7 @@ _G.CalcStat = function(sname, slvl, sparam)
 									else
 										return 0;
 									end
-								elseif sn == "ARMQTYLOWMP" then
+								elseif SN == "ARMQTYLOWMP" then
 									if L-DblCalcDev <= 0 then
 										return 0;
 									else
@@ -100,16 +100,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("ArmTypeMP",ArmCodeIndex(C,2))*CalcStat("ArmQtyLowMP",ArmCodeIndex(C,2))*CalcStat("ArmCatMP",ArmCodeIndex(C,1))*CalcStat("ArmProgMP",ArmCodeIndex(C,1),L);
 						end
-					elseif sn > "BLOCKPBONUS" then
-						if sn < "BLOCKPRATPB" then
-							if sn < "BLOCKPRATP" then
-								if sn == "BLOCKPPRAT" then
+					elseif SN > "BLOCKPBONUS" then
+						if SN < "BLOCKPRATPB" then
+							if SN < "BLOCKPRATP" then
+								if SN == "BLOCKPPRAT" then
 									return CalcStat("BPEPPRat",L,N);
 								else
 									return 0;
 								end
-							elseif sn > "BLOCKPRATP" then
-								if sn == "BLOCKPRATPA" then
+							elseif SN > "BLOCKPRATP" then
+								if SN == "BLOCKPRATPA" then
 									return CalcStat("BPEPRatPA",L);
 								else
 									return 0;
@@ -117,21 +117,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("BPEPRatP",L,N);
 							end
-						elseif sn > "BLOCKPRATPB" then
-							if sn < "BLOCKPRATPCAP" then
-								if sn == "BLOCKPRATPC" then
+						elseif SN > "BLOCKPRATPB" then
+							if SN < "BLOCKPRATPCAP" then
+								if SN == "BLOCKPRATPC" then
 									return CalcStat("BPEPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "BLOCKPRATPCAP" then
-								if sn > "BLOCKPRATPCAPR" then
-									if sn == "BPEPBONUS" then
+							elseif SN > "BLOCKPRATPCAP" then
+								if SN > "BLOCKPRATPCAPR" then
+									if SN == "BPEPBONUS" then
 										return 0;
 									else
 										return 0;
 									end
-								elseif sn == "BLOCKPRATPCAPR" then
+								elseif SN == "BLOCKPRATPCAPR" then
 									return CalcStat("BPEPRatPCapR",L);
 								else
 									return 0;
@@ -145,17 +145,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return CalcStat("BPEPBonus",L);
 					end
-				elseif sn > "BPEPPRAT" then
-					if sn < "BRATMASTERY" then
-						if sn < "BPEPRATPC" then
-							if sn < "BPEPRATPA" then
-								if sn == "BPEPRATP" then
+				elseif SN > "BPEPPRAT" then
+					if SN < "BRATMASTERY" then
+						if SN < "BPEPRATPC" then
+							if SN < "BPEPRATPA" then
+								if SN == "BPEPRATP" then
 									return CalcPercAB(CalcStat("BPEPRatPA",L),CalcStat("BPEPRatPB",L),CalcStat("BPEPRatPCap",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "BPEPRATPA" then
-								if sn == "BPEPRATPB" then
+							elseif SN > "BPEPRATPA" then
+								if SN == "BPEPRATPB" then
 									return CalcStat("BratLow",L);
 								else
 									return 0;
@@ -163,21 +163,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 26;
 							end
-						elseif sn > "BPEPRATPC" then
-							if sn < "BPEPRATPCAPR" then
-								if sn == "BPEPRATPCAP" then
+						elseif SN > "BPEPRATPC" then
+							if SN < "BPEPRATPCAPR" then
+								if SN == "BPEPRATPCAP" then
 									return 13;
 								else
 									return 0;
 								end
-							elseif sn > "BPEPRATPCAPR" then
-								if sn > "BRATHIGH" then
-									if sn == "BRATLOW" then
+							elseif SN > "BPEPRATPCAPR" then
+								if SN > "BRATHIGH" then
+									if SN == "BRATLOW" then
 										return CalcStat("BratProg",L,CalcStat("ProgBLow",L));
 									else
 										return 0;
 									end
-								elseif sn == "BRATHIGH" then
+								elseif SN == "BRATHIGH" then
 									return CalcStat("BratProg",L,CalcStat("ProgBHigh",L));
 								else
 									return 0;
@@ -188,16 +188,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return 1;
 						end
-					elseif sn > "BRATMASTERY" then
-						if sn < "BRATMITMEDIUM" then
-							if sn < "BRATMITHEAVY" then
-								if sn == "BRATMEDIUM" then
+					elseif SN > "BRATMASTERY" then
+						if SN < "BRATMITMEDIUM" then
+							if SN < "BRATMITHEAVY" then
+								if SN == "BRATMEDIUM" then
 									return CalcStat("BratProg",L,CalcStat("ProgBMedium",L));
 								else
 									return 0;
 								end
-							elseif sn > "BRATMITHEAVY" then
-								if sn == "BRATMITLIGHT" then
+							elseif SN > "BRATMITHEAVY" then
+								if SN == "BRATMITLIGHT" then
 									return CalcStat("BratProg",L,CalcStat("ProgBMitLight",L));
 								else
 									return 0;
@@ -205,9 +205,9 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("BratProg",L,CalcStat("ProgBMitHeavy",L));
 							end
-						elseif sn > "BRATMITMEDIUM" then
-							if sn < "CRITDEFPBONUS" then
-								if sn == "BRATPROG" then
+						elseif SN > "BRATMITMEDIUM" then
+							if SN < "CRITDEFPBONUS" then
+								if SN == "BRATPROG" then
 									if L-DblCalcDev <= 75 then
 										return LinFmod(RoundDbl(N),1,75,1,75,L);
 									elseif L-DblCalcDev <= 76 then
@@ -238,14 +238,14 @@ _G.CalcStat = function(sname, slvl, sparam)
 								else
 									return 0;
 								end
-							elseif sn > "CRITDEFPBONUS" then
-								if sn > "CRITDEFPPRAT" then
-									if sn == "CRITDEFPRATP" then
+							elseif SN > "CRITDEFPBONUS" then
+								if SN > "CRITDEFPPRAT" then
+									if SN == "CRITDEFPRATP" then
 										return CalcPercAB(CalcStat("CritDefPRatPA",L),CalcStat("CritDefPRatPB",L),CalcStat("CritDefPRatPCap",L),N);
 									else
 										return 0;
 									end
-								elseif sn == "CRITDEFPPRAT" then
+								elseif SN == "CRITDEFPPRAT" then
 									return CalcRatAB(CalcStat("CritDefPRatPA",L),CalcStat("CritDefPRatPB",L),CalcStat("CritDefPRatPCapR",L),N);
 								else
 									return 0;
@@ -262,18 +262,18 @@ _G.CalcStat = function(sname, slvl, sparam)
 				else
 					return CalcRatAB(CalcStat("BPEPRatPA",L),CalcStat("BPEPRatPB",L),CalcStat("BPEPRatPCapR",L),N);
 				end
-			elseif sn > "CRITDEFPRATPA" then
-				if sn < "CRITMAGNPRATPC" then
-					if sn < "CRITHITPRATPB" then
-						if sn < "CRITDEFPRATPCAPR" then
-							if sn < "CRITDEFPRATPC" then
-								if sn == "CRITDEFPRATPB" then
+			elseif SN > "CRITDEFPRATPA" then
+				if SN < "CRITMAGNPRATPC" then
+					if SN < "CRITHITPRATPB" then
+						if SN < "CRITDEFPRATPCAPR" then
+							if SN < "CRITDEFPRATPC" then
+								if SN == "CRITDEFPRATPB" then
 									return CalcStat("BratLow",L);
 								else
 									return 0;
 								end
-							elseif sn > "CRITDEFPRATPC" then
-								if sn == "CRITDEFPRATPCAP" then
+							elseif SN > "CRITDEFPRATPC" then
+								if SN == "CRITDEFPRATPCAP" then
 									return 80;
 								else
 									return 0;
@@ -281,21 +281,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 1;
 							end
-						elseif sn > "CRITDEFPRATPCAPR" then
-							if sn < "CRITHITPPRAT" then
-								if sn == "CRITHITPBONUS" then
+						elseif SN > "CRITDEFPRATPCAPR" then
+							if SN < "CRITHITPPRAT" then
+								if SN == "CRITHITPBONUS" then
 									return 0;
 								else
 									return 0;
 								end
-							elseif sn > "CRITHITPPRAT" then
-								if sn > "CRITHITPRATP" then
-									if sn == "CRITHITPRATPA" then
+							elseif SN > "CRITHITPPRAT" then
+								if SN > "CRITHITPRATP" then
+									if SN == "CRITHITPRATPA" then
 										return 50;
 									else
 										return 0;
 									end
-								elseif sn == "CRITHITPRATP" then
+								elseif SN == "CRITHITPRATP" then
 									return CalcPercAB(CalcStat("CritHitPRatPA",L),CalcStat("CritHitPRatPB",L),CalcStat("CritHitPRatPCap",L),N);
 								else
 									return 0;
@@ -306,16 +306,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("CritDefPRatPB",L)*CalcStat("CritDefPRatPC",L);
 						end
-					elseif sn > "CRITHITPRATPB" then
-						if sn < "CRITMAGNPBONUS" then
-							if sn < "CRITHITPRATPCAP" then
-								if sn == "CRITHITPRATPC" then
+					elseif SN > "CRITHITPRATPB" then
+						if SN < "CRITMAGNPBONUS" then
+							if SN < "CRITHITPRATPCAP" then
+								if SN == "CRITHITPRATPC" then
 									return 1;
 								else
 									return 0;
 								end
-							elseif sn > "CRITHITPRATPCAP" then
-								if sn == "CRITHITPRATPCAPR" then
+							elseif SN > "CRITHITPRATPCAP" then
+								if SN == "CRITHITPRATPCAPR" then
 									return CalcStat("CritHitPRatPB",L)*CalcStat("CritHitPRatPC",L);
 								else
 									return 0;
@@ -323,21 +323,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 25;
 							end
-						elseif sn > "CRITMAGNPBONUS" then
-							if sn < "CRITMAGNPRATP" then
-								if sn == "CRITMAGNPPRAT" then
+						elseif SN > "CRITMAGNPBONUS" then
+							if SN < "CRITMAGNPRATP" then
+								if SN == "CRITMAGNPPRAT" then
 									return CalcRatAB(CalcStat("CritMagnPRatPA",L),CalcStat("CritMagnPRatPB",L),CalcStat("CritMagnPRatPCapR",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "CRITMAGNPRATP" then
-								if sn > "CRITMAGNPRATPA" then
-									if sn == "CRITMAGNPRATPB" then
+							elseif SN > "CRITMAGNPRATP" then
+								if SN > "CRITMAGNPRATPA" then
+									if SN == "CRITMAGNPRATPB" then
 										return CalcStat("BratHigh",L);
 									else
 										return 0;
 									end
-								elseif sn == "CRITMAGNPRATPA" then
+								elseif SN == "CRITMAGNPRATPA" then
 									if L-DblCalcDev <= 120 then
 										return 200;
 									elseif L-DblCalcDev <= 127 then
@@ -357,11 +357,11 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return CalcStat("BratLow",L);
 					end
-				elseif sn > "CRITMAGNPRATPC" then
-					if sn < "DEVHITPRATPCAP" then
-						if sn < "DEVHITPPRAT" then
-							if sn < "CRITMAGNPRATPCAPR" then
-								if sn == "CRITMAGNPRATPCAP" then
+				elseif SN > "CRITMAGNPRATPC" then
+					if SN < "DEVHITPRATPCAP" then
+						if SN < "DEVHITPPRAT" then
+							if SN < "CRITMAGNPRATPCAPR" then
+								if SN == "CRITMAGNPRATPCAP" then
 									if L-DblCalcDev <= 120 then
 										return 100;
 									else
@@ -370,8 +370,8 @@ _G.CalcStat = function(sname, slvl, sparam)
 								else
 									return 0;
 								end
-							elseif sn > "CRITMAGNPRATPCAPR" then
-								if sn == "DEVHITPBONUS" then
+							elseif SN > "CRITMAGNPRATPCAPR" then
+								if SN == "DEVHITPBONUS" then
 									return 0;
 								else
 									return 0;
@@ -379,21 +379,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("CritMagnPRatPB",L)*CalcStat("CritMagnPRatPC",L);
 							end
-						elseif sn > "DEVHITPPRAT" then
-							if sn < "DEVHITPRATPA" then
-								if sn == "DEVHITPRATP" then
+						elseif SN > "DEVHITPPRAT" then
+							if SN < "DEVHITPRATPA" then
+								if SN == "DEVHITPRATP" then
 									return CalcPercAB(CalcStat("DevHitPRatPA",L),CalcStat("DevHitPRatPB",L),CalcStat("DevHitPRatPCap",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "DEVHITPRATPA" then
-								if sn > "DEVHITPRATPB" then
-									if sn == "DEVHITPRATPC" then
+							elseif SN > "DEVHITPRATPA" then
+								if SN > "DEVHITPRATPB" then
+									if SN == "DEVHITPRATPC" then
 										return 1;
 									else
 										return 0;
 									end
-								elseif sn == "DEVHITPRATPB" then
+								elseif SN == "DEVHITPRATPB" then
 									return CalcStat("BratMedium",L);
 								else
 									return 0;
@@ -404,16 +404,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcRatAB(CalcStat("DevHitPRatPA",L),CalcStat("DevHitPRatPB",L),CalcStat("DevHitPRatPCapR",L),N);
 						end
-					elseif sn > "DEVHITPRATPCAP" then
-						if sn < "EVADEPRATP" then
-							if sn < "EVADEPBONUS" then
-								if sn == "DEVHITPRATPCAPR" then
+					elseif SN > "DEVHITPRATPCAP" then
+						if SN < "EVADEPRATP" then
+							if SN < "EVADEPBONUS" then
+								if SN == "DEVHITPRATPCAPR" then
 									return CalcStat("DevHitPRatPB",L)*CalcStat("DevHitPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "EVADEPBONUS" then
-								if sn == "EVADEPPRAT" then
+							elseif SN > "EVADEPBONUS" then
+								if SN == "EVADEPPRAT" then
 									return CalcStat("BPEPPRat",L,N);
 								else
 									return 0;
@@ -421,21 +421,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("BPEPBonus",L);
 							end
-						elseif sn > "EVADEPRATP" then
-							if sn < "EVADEPRATPB" then
-								if sn == "EVADEPRATPA" then
+						elseif SN > "EVADEPRATP" then
+							if SN < "EVADEPRATPB" then
+								if SN == "EVADEPRATPA" then
 									return CalcStat("BPEPRatPA",L);
 								else
 									return 0;
 								end
-							elseif sn > "EVADEPRATPB" then
-								if sn > "EVADEPRATPC" then
-									if sn == "EVADEPRATPCAP" then
+							elseif SN > "EVADEPRATPB" then
+								if SN > "EVADEPRATPC" then
+									if SN == "EVADEPRATPCAP" then
 										return CalcStat("BPEPRatPCap",L);
 									else
 										return 0;
 									end
-								elseif sn == "EVADEPRATPC" then
+								elseif SN == "EVADEPRATPC" then
 									return CalcStat("BPEPRatPC",L);
 								else
 									return 0;
@@ -455,19 +455,19 @@ _G.CalcStat = function(sname, slvl, sparam)
 			else
 				return 160;
 			end
-		elseif sn > "EVADEPRATPCAPR" then
-			if sn < "MITMEDIUMPPRAT" then
-				if sn < "ITEMPROG" then
-					if sn < "ILVLTOLVL" then
-						if sn < "FINESSEPRATPA" then
-							if sn < "FINESSEPPRAT" then
-								if sn == "FINESSEPBONUS" then
+		elseif SN > "EVADEPRATPCAPR" then
+			if SN < "MITMEDIUMPPRAT" then
+				if SN < "ITEMPROG" then
+					if SN < "ILVLTOLVL" then
+						if SN < "FINESSEPRATPA" then
+							if SN < "FINESSEPPRAT" then
+								if SN == "FINESSEPBONUS" then
 									return 0;
 								else
 									return 0;
 								end
-							elseif sn > "FINESSEPPRAT" then
-								if sn == "FINESSEPRATP" then
+							elseif SN > "FINESSEPPRAT" then
+								if SN == "FINESSEPRATP" then
 									return CalcPercAB(CalcStat("FinessePRatPA",L),CalcStat("FinessePRatPB",L),CalcStat("FinessePRatPCap",L),N);
 								else
 									return 0;
@@ -475,21 +475,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcRatAB(CalcStat("FinessePRatPA",L),CalcStat("FinessePRatPB",L),CalcStat("FinessePRatPCapR",L),N);
 							end
-						elseif sn > "FINESSEPRATPA" then
-							if sn < "FINESSEPRATPC" then
-								if sn == "FINESSEPRATPB" then
+						elseif SN > "FINESSEPRATPA" then
+							if SN < "FINESSEPRATPC" then
+								if SN == "FINESSEPRATPB" then
 									return CalcStat("BratLow",L);
 								else
 									return 0;
 								end
-							elseif sn > "FINESSEPRATPC" then
-								if sn > "FINESSEPRATPCAP" then
-									if sn == "FINESSEPRATPCAPR" then
+							elseif SN > "FINESSEPRATPC" then
+								if SN > "FINESSEPRATPCAP" then
+									if SN == "FINESSEPRATPCAPR" then
 										return CalcStat("FinessePRatPB",L)*CalcStat("FinessePRatPC",L);
 									else
 										return 0;
 									end
-								elseif sn == "FINESSEPRATPCAP" then
+								elseif SN == "FINESSEPRATPCAP" then
 									return 50;
 								else
 									return 0;
@@ -500,16 +500,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return 100;
 						end
-					elseif sn > "ILVLTOLVL" then
-						if sn < "INHEALPRATPA" then
-							if sn < "INHEALPPRAT" then
-								if sn == "INHEALPBONUS" then
+					elseif SN > "ILVLTOLVL" then
+						if SN < "INHEALPRATPA" then
+							if SN < "INHEALPPRAT" then
+								if SN == "INHEALPBONUS" then
 									return 0;
 								else
 									return 0;
 								end
-							elseif sn > "INHEALPPRAT" then
-								if sn == "INHEALPRATP" then
+							elseif SN > "INHEALPPRAT" then
+								if SN == "INHEALPRATP" then
 									return CalcPercAB(CalcStat("InHealPRatPA",L),CalcStat("InHealPRatPB",L),CalcStat("InHealPRatPCap",L),N);
 								else
 									return 0;
@@ -517,21 +517,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcRatAB(CalcStat("InHealPRatPA",L),CalcStat("InHealPRatPB",L),CalcStat("InHealPRatPCapR",L),N);
 							end
-						elseif sn > "INHEALPRATPA" then
-							if sn < "INHEALPRATPC" then
-								if sn == "INHEALPRATPB" then
+						elseif SN > "INHEALPRATPA" then
+							if SN < "INHEALPRATPC" then
+								if SN == "INHEALPRATPB" then
 									return CalcStat("BratLow",L);
 								else
 									return 0;
 								end
-							elseif sn > "INHEALPRATPC" then
-								if sn > "INHEALPRATPCAP" then
-									if sn == "INHEALPRATPCAPR" then
+							elseif SN > "INHEALPRATPC" then
+								if SN > "INHEALPRATPCAP" then
+									if SN == "INHEALPRATPCAPR" then
 										return CalcStat("InHealPRatPB",L)*CalcStat("InHealPRatPC",L);
 									else
 										return 0;
 									end
-								elseif sn == "INHEALPRATPCAP" then
+								elseif SN == "INHEALPRATPCAP" then
 									return 25;
 								else
 									return 0;
@@ -571,17 +571,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 							return LinFmod(1,131,140,450,499,L)*N;
 						end
 					end
-				elseif sn > "ITEMPROG" then
-					if sn < "MITLIGHTPBONUS" then
-						if sn < "MITHEAVYPRATPA" then
-							if sn < "MITHEAVYPPRAT" then
-								if sn == "MITHEAVYPBONUS" then
+				elseif SN > "ITEMPROG" then
+					if SN < "MITLIGHTPBONUS" then
+						if SN < "MITHEAVYPRATPA" then
+							if SN < "MITHEAVYPPRAT" then
+								if SN == "MITHEAVYPBONUS" then
 									return 0;
 								else
 									return 0;
 								end
-							elseif sn > "MITHEAVYPPRAT" then
-								if sn == "MITHEAVYPRATP" then
+							elseif SN > "MITHEAVYPPRAT" then
+								if SN == "MITHEAVYPRATP" then
 									return CalcPercAB(CalcStat("MitHeavyPRatPA",L),CalcStat("MitHeavyPRatPB",L),CalcStat("MitHeavyPRatPCap",L),N);
 								else
 									return 0;
@@ -589,21 +589,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcRatAB(CalcStat("MitHeavyPRatPA",L),CalcStat("MitHeavyPRatPB",L),CalcStat("MitHeavyPRatPCapR",L),N);
 							end
-						elseif sn > "MITHEAVYPRATPA" then
-							if sn < "MITHEAVYPRATPC" then
-								if sn == "MITHEAVYPRATPB" then
+						elseif SN > "MITHEAVYPRATPA" then
+							if SN < "MITHEAVYPRATPC" then
+								if SN == "MITHEAVYPRATPB" then
 									return CalcStat("BratMitHeavy",L);
 								else
 									return 0;
 								end
-							elseif sn > "MITHEAVYPRATPC" then
-								if sn > "MITHEAVYPRATPCAP" then
-									if sn == "MITHEAVYPRATPCAPR" then
+							elseif SN > "MITHEAVYPRATPC" then
+								if SN > "MITHEAVYPRATPCAP" then
+									if SN == "MITHEAVYPRATPCAPR" then
 										return CalcStat("MitHeavyPRatPB",L)*CalcStat("MitHeavyPRatPC",L);
 									else
 										return 0;
 									end
-								elseif sn == "MITHEAVYPRATPCAP" then
+								elseif SN == "MITHEAVYPRATPCAP" then
 									return 60;
 								else
 									return 0;
@@ -614,16 +614,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return 110;
 						end
-					elseif sn > "MITLIGHTPBONUS" then
-						if sn < "MITLIGHTPRATPB" then
-							if sn < "MITLIGHTPRATP" then
-								if sn == "MITLIGHTPPRAT" then
+					elseif SN > "MITLIGHTPBONUS" then
+						if SN < "MITLIGHTPRATPB" then
+							if SN < "MITLIGHTPRATP" then
+								if SN == "MITLIGHTPPRAT" then
 									return CalcRatAB(CalcStat("MitLightPRatPA",L),CalcStat("MitLightPRatPB",L),CalcStat("MitLightPRatPCapR",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "MITLIGHTPRATP" then
-								if sn == "MITLIGHTPRATPA" then
+							elseif SN > "MITLIGHTPRATP" then
+								if SN == "MITLIGHTPRATPA" then
 									return 65;
 								else
 									return 0;
@@ -631,21 +631,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcPercAB(CalcStat("MitLightPRatPA",L),CalcStat("MitLightPRatPB",L),CalcStat("MitLightPRatPCap",L),N);
 							end
-						elseif sn > "MITLIGHTPRATPB" then
-							if sn < "MITLIGHTPRATPCAP" then
-								if sn == "MITLIGHTPRATPC" then
+						elseif SN > "MITLIGHTPRATPB" then
+							if SN < "MITLIGHTPRATPCAP" then
+								if SN == "MITLIGHTPRATPC" then
 									return 1.6;
 								else
 									return 0;
 								end
-							elseif sn > "MITLIGHTPRATPCAP" then
-								if sn > "MITLIGHTPRATPCAPR" then
-									if sn == "MITMEDIUMPBONUS" then
+							elseif SN > "MITLIGHTPRATPCAP" then
+								if SN > "MITLIGHTPRATPCAPR" then
+									if SN == "MITMEDIUMPBONUS" then
 										return 0;
 									else
 										return 0;
 									end
-								elseif sn == "MITLIGHTPRATPCAPR" then
+								elseif SN == "MITLIGHTPRATPCAPR" then
 									return CalcStat("MitLightPRatPB",L)*CalcStat("MitLightPRatPC",L);
 								else
 									return 0;
@@ -662,18 +662,18 @@ _G.CalcStat = function(sname, slvl, sparam)
 				else
 					return CalcStat("StatProg",CalcStat("ILvlToLvl",L),N);
 				end
-			elseif sn > "MITMEDIUMPPRAT" then
-				if sn < "PARRYPRATPA" then
-					if sn < "OUTHEALPRATP" then
-						if sn < "MITMEDIUMPRATPC" then
-							if sn < "MITMEDIUMPRATPA" then
-								if sn == "MITMEDIUMPRATP" then
+			elseif SN > "MITMEDIUMPPRAT" then
+				if SN < "PARRYPRATPA" then
+					if SN < "OUTHEALPRATP" then
+						if SN < "MITMEDIUMPRATPC" then
+							if SN < "MITMEDIUMPRATPA" then
+								if SN == "MITMEDIUMPRATP" then
 									return CalcPercAB(CalcStat("MitMediumPRatPA",L),CalcStat("MitMediumPRatPB",L),CalcStat("MitMediumPRatPCap",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "MITMEDIUMPRATPA" then
-								if sn == "MITMEDIUMPRATPB" then
+							elseif SN > "MITMEDIUMPRATPA" then
+								if SN == "MITMEDIUMPRATPB" then
 									return CalcStat("BratMitMedium",L);
 								else
 									return 0;
@@ -681,21 +681,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 85;
 							end
-						elseif sn > "MITMEDIUMPRATPC" then
-							if sn < "MITMEDIUMPRATPCAPR" then
-								if sn == "MITMEDIUMPRATPCAP" then
+						elseif SN > "MITMEDIUMPRATPC" then
+							if SN < "MITMEDIUMPRATPCAPR" then
+								if SN == "MITMEDIUMPRATPCAP" then
 									return 50;
 								else
 									return 0;
 								end
-							elseif sn > "MITMEDIUMPRATPCAPR" then
-								if sn > "OUTHEALPBONUS" then
-									if sn == "OUTHEALPPRAT" then
+							elseif SN > "MITMEDIUMPRATPCAPR" then
+								if SN > "OUTHEALPBONUS" then
+									if SN == "OUTHEALPPRAT" then
 										return CalcRatAB(CalcStat("OutHealPRatPA",L),CalcStat("OutHealPRatPB",L),CalcStat("OutHealPRatPCapR",L),N);
 									else
 										return 0;
 									end
-								elseif sn == "OUTHEALPBONUS" then
+								elseif SN == "OUTHEALPBONUS" then
 									return 0;
 								else
 									return 0;
@@ -706,16 +706,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return 10/7;
 						end
-					elseif sn > "OUTHEALPRATP" then
-						if sn < "OUTHEALPRATPCAP" then
-							if sn < "OUTHEALPRATPB" then
-								if sn == "OUTHEALPRATPA" then
+					elseif SN > "OUTHEALPRATP" then
+						if SN < "OUTHEALPRATPCAP" then
+							if SN < "OUTHEALPRATPB" then
+								if SN == "OUTHEALPRATPA" then
 									return 140;
 								else
 									return 0;
 								end
-							elseif sn > "OUTHEALPRATPB" then
-								if sn == "OUTHEALPRATPC" then
+							elseif SN > "OUTHEALPRATPB" then
+								if SN == "OUTHEALPRATPC" then
 									return 1;
 								else
 									return 0;
@@ -723,21 +723,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("BratMedium",L);
 							end
-						elseif sn > "OUTHEALPRATPCAP" then
-							if sn < "PARRYPBONUS" then
-								if sn == "OUTHEALPRATPCAPR" then
+						elseif SN > "OUTHEALPRATPCAP" then
+							if SN < "PARRYPBONUS" then
+								if SN == "OUTHEALPRATPCAPR" then
 									return CalcStat("OutHealPRatPB",L)*CalcStat("OutHealPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARRYPBONUS" then
-								if sn > "PARRYPPRAT" then
-									if sn == "PARRYPRATP" then
+							elseif SN > "PARRYPBONUS" then
+								if SN > "PARRYPPRAT" then
+									if SN == "PARRYPRATP" then
 										return CalcStat("BPEPRatP",L,N);
 									else
 										return 0;
 									end
-								elseif sn == "PARRYPPRAT" then
+								elseif SN == "PARRYPPRAT" then
 									return CalcStat("BPEPPRat",L,N);
 								else
 									return 0;
@@ -751,17 +751,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return CalcPercAB(CalcStat("OutHealPRatPA",L),CalcStat("OutHealPRatPB",L),CalcStat("OutHealPRatPCap",L),N);
 					end
-				elseif sn > "PARRYPRATPA" then
-					if sn < "PARTBLOCKMITPRATPB" then
-						if sn < "PARRYPRATPCAPR" then
-							if sn < "PARRYPRATPC" then
-								if sn == "PARRYPRATPB" then
+				elseif SN > "PARRYPRATPA" then
+					if SN < "PARTBLOCKMITPRATPB" then
+						if SN < "PARRYPRATPCAPR" then
+							if SN < "PARRYPRATPC" then
+								if SN == "PARRYPRATPB" then
 									return CalcStat("BPEPRatPB",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARRYPRATPC" then
-								if sn == "PARRYPRATPCAP" then
+							elseif SN > "PARRYPRATPC" then
+								if SN == "PARRYPRATPCAP" then
 									return CalcStat("BPEPRatPCap",L);
 								else
 									return 0;
@@ -769,21 +769,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("BPEPRatPC",L);
 							end
-						elseif sn > "PARRYPRATPCAPR" then
-							if sn < "PARTBLOCKMITPPRAT" then
-								if sn == "PARTBLOCKMITPBONUS" then
+						elseif SN > "PARRYPRATPCAPR" then
+							if SN < "PARTBLOCKMITPPRAT" then
+								if SN == "PARTBLOCKMITPBONUS" then
 									return CalcStat("PartMitPBonus",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTBLOCKMITPPRAT" then
-								if sn > "PARTBLOCKMITPRATP" then
-									if sn == "PARTBLOCKMITPRATPA" then
+							elseif SN > "PARTBLOCKMITPPRAT" then
+								if SN > "PARTBLOCKMITPRATP" then
+									if SN == "PARTBLOCKMITPRATPA" then
 										return CalcStat("PartMitPRatPA",L);
 									else
 										return 0;
 									end
-								elseif sn == "PARTBLOCKMITPRATP" then
+								elseif SN == "PARTBLOCKMITPRATP" then
 									return CalcStat("PartMitPRatP",L,N);
 								else
 									return 0;
@@ -794,16 +794,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("BPEPRatPCapR",L);
 						end
-					elseif sn > "PARTBLOCKMITPRATPB" then
-						if sn < "PARTBLOCKPBONUS" then
-							if sn < "PARTBLOCKMITPRATPCAP" then
-								if sn == "PARTBLOCKMITPRATPC" then
+					elseif SN > "PARTBLOCKMITPRATPB" then
+						if SN < "PARTBLOCKPBONUS" then
+							if SN < "PARTBLOCKMITPRATPCAP" then
+								if SN == "PARTBLOCKMITPRATPC" then
 									return CalcStat("PartMitPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTBLOCKMITPRATPCAP" then
-								if sn == "PARTBLOCKMITPRATPCAPR" then
+							elseif SN > "PARTBLOCKMITPRATPCAP" then
+								if SN == "PARTBLOCKMITPRATPCAPR" then
 									return CalcStat("PartMitPRatPCapR",L);
 								else
 									return 0;
@@ -811,21 +811,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("PartMitPRatPCap",L);
 							end
-						elseif sn > "PARTBLOCKPBONUS" then
-							if sn < "PARTBLOCKPRATP" then
-								if sn == "PARTBLOCKPPRAT" then
+						elseif SN > "PARTBLOCKPBONUS" then
+							if SN < "PARTBLOCKPRATP" then
+								if SN == "PARTBLOCKPPRAT" then
 									return CalcStat("PartBPEPPRat",L,N);
 								else
 									return 0;
 								end
-							elseif sn > "PARTBLOCKPRATP" then
-								if sn > "PARTBLOCKPRATPA" then
-									if sn == "PARTBLOCKPRATPB" then
+							elseif SN > "PARTBLOCKPRATP" then
+								if SN > "PARTBLOCKPRATPA" then
+									if SN == "PARTBLOCKPRATPB" then
 										return CalcStat("PartBPEPRatPB",L);
 									else
 										return 0;
 									end
-								elseif sn == "PARTBLOCKPRATPA" then
+								elseif SN == "PARTBLOCKPRATPA" then
 									return CalcStat("PartBPEPRatPA",L);
 								else
 									return 0;
@@ -848,20 +848,20 @@ _G.CalcStat = function(sname, slvl, sparam)
 		else
 			return CalcStat("BPEPRatPCapR",L);
 		end
-	elseif sn > "PARTBLOCKPRATPC" then
-		if sn < "PHYMITLPRATPC" then
-			if sn < "PARTPARRYMITPPRAT" then
-				if sn < "PARTEVADEMITPRATPCAPR" then
-					if sn < "PARTBPEPRATPCAP" then
-						if sn < "PARTBPEPPRAT" then
-							if sn < "PARTBLOCKPRATPCAPR" then
-								if sn == "PARTBLOCKPRATPCAP" then
+	elseif SN > "PARTBLOCKPRATPC" then
+		if SN < "PHYMITLPRATPC" then
+			if SN < "PARTPARRYMITPPRAT" then
+				if SN < "PARTEVADEMITPRATPCAPR" then
+					if SN < "PARTBPEPRATPCAP" then
+						if SN < "PARTBPEPPRAT" then
+							if SN < "PARTBLOCKPRATPCAPR" then
+								if SN == "PARTBLOCKPRATPCAP" then
 									return CalcStat("PartBPEPRatPCap",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTBLOCKPRATPCAPR" then
-								if sn == "PARTBPEPBONUS" then
+							elseif SN > "PARTBLOCKPRATPCAPR" then
+								if SN == "PARTBPEPBONUS" then
 									return 0;
 								else
 									return 0;
@@ -869,21 +869,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("PartBPEPRatPCapR",L);
 							end
-						elseif sn > "PARTBPEPPRAT" then
-							if sn < "PARTBPEPRATPA" then
-								if sn == "PARTBPEPRATP" then
+						elseif SN > "PARTBPEPPRAT" then
+							if SN < "PARTBPEPRATPA" then
+								if SN == "PARTBPEPRATP" then
 									return CalcPercAB(CalcStat("PartBPEPRatPA",L),CalcStat("PartBPEPRatPB",L),CalcStat("PartBPEPRatPCap",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "PARTBPEPRATPA" then
-								if sn > "PARTBPEPRATPB" then
-									if sn == "PARTBPEPRATPC" then
+							elseif SN > "PARTBPEPRATPA" then
+								if SN > "PARTBPEPRATPB" then
+									if SN == "PARTBPEPRATPC" then
 										return 1;
 									else
 										return 0;
 									end
-								elseif sn == "PARTBPEPRATPB" then
+								elseif SN == "PARTBPEPRATPB" then
 									return CalcStat("BratMedium",L);
 								else
 									return 0;
@@ -894,16 +894,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcRatAB(CalcStat("PartBPEPRatPA",L),CalcStat("PartBPEPRatPB",L),CalcStat("PartBPEPRatPCapR",L),N);
 						end
-					elseif sn > "PARTBPEPRATPCAP" then
-						if sn < "PARTEVADEMITPRATP" then
-							if sn < "PARTEVADEMITPBONUS" then
-								if sn == "PARTBPEPRATPCAPR" then
+					elseif SN > "PARTBPEPRATPCAP" then
+						if SN < "PARTEVADEMITPRATP" then
+							if SN < "PARTEVADEMITPBONUS" then
+								if SN == "PARTBPEPRATPCAPR" then
 									return CalcStat("PartBPEPRatPB",L)*CalcStat("PartBPEPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTEVADEMITPBONUS" then
-								if sn == "PARTEVADEMITPPRAT" then
+							elseif SN > "PARTEVADEMITPBONUS" then
+								if SN == "PARTEVADEMITPPRAT" then
 									return CalcStat("PartMitPPRat",L,N);
 								else
 									return 0;
@@ -915,21 +915,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 									return CalcStat("PartMitPBonus",L);
 								end
 							end
-						elseif sn > "PARTEVADEMITPRATP" then
-							if sn < "PARTEVADEMITPRATPB" then
-								if sn == "PARTEVADEMITPRATPA" then
+						elseif SN > "PARTEVADEMITPRATP" then
+							if SN < "PARTEVADEMITPRATPB" then
+								if SN == "PARTEVADEMITPRATPA" then
 									return CalcStat("PartMitPRatPA",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTEVADEMITPRATPB" then
-								if sn > "PARTEVADEMITPRATPC" then
-									if sn == "PARTEVADEMITPRATPCAP" then
+							elseif SN > "PARTEVADEMITPRATPB" then
+								if SN > "PARTEVADEMITPRATPC" then
+									if SN == "PARTEVADEMITPRATPCAP" then
 										return CalcStat("PartMitPRatPCap",L);
 									else
 										return 0;
 									end
-								elseif sn == "PARTEVADEMITPRATPC" then
+								elseif SN == "PARTEVADEMITPRATPC" then
 									return CalcStat("PartMitPRatPC",L);
 								else
 									return 0;
@@ -943,17 +943,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return 35;
 					end
-				elseif sn > "PARTEVADEMITPRATPCAPR" then
-					if sn < "PARTMITPBONUS" then
-						if sn < "PARTEVADEPRATPA" then
-							if sn < "PARTEVADEPPRAT" then
-								if sn == "PARTEVADEPBONUS" then
+				elseif SN > "PARTEVADEMITPRATPCAPR" then
+					if SN < "PARTMITPBONUS" then
+						if SN < "PARTEVADEPRATPA" then
+							if SN < "PARTEVADEPPRAT" then
+								if SN == "PARTEVADEPBONUS" then
 									return CalcStat("PartBPEPBonus",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTEVADEPPRAT" then
-								if sn == "PARTEVADEPRATP" then
+							elseif SN > "PARTEVADEPPRAT" then
+								if SN == "PARTEVADEPRATP" then
 									return CalcStat("PartBPEPRatP",L,N);
 								else
 									return 0;
@@ -961,21 +961,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("PartBPEPPRat",L,N);
 							end
-						elseif sn > "PARTEVADEPRATPA" then
-							if sn < "PARTEVADEPRATPC" then
-								if sn == "PARTEVADEPRATPB" then
+						elseif SN > "PARTEVADEPRATPA" then
+							if SN < "PARTEVADEPRATPC" then
+								if SN == "PARTEVADEPRATPB" then
 									return CalcStat("PartBPEPRatPB",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTEVADEPRATPC" then
-								if sn > "PARTEVADEPRATPCAP" then
-									if sn == "PARTEVADEPRATPCAPR" then
+							elseif SN > "PARTEVADEPRATPC" then
+								if SN > "PARTEVADEPRATPCAP" then
+									if SN == "PARTEVADEPRATPCAPR" then
 										return CalcStat("PartBPEPRatPCapR",L);
 									else
 										return 0;
 									end
-								elseif sn == "PARTEVADEPRATPCAP" then
+								elseif SN == "PARTEVADEPRATPCAP" then
 									return CalcStat("PartBPEPRatPCap",L);
 								else
 									return 0;
@@ -986,16 +986,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("PartBPEPRatPA",L);
 						end
-					elseif sn > "PARTMITPBONUS" then
-						if sn < "PARTMITPRATPB" then
-							if sn < "PARTMITPRATP" then
-								if sn == "PARTMITPPRAT" then
+					elseif SN > "PARTMITPBONUS" then
+						if SN < "PARTMITPRATPB" then
+							if SN < "PARTMITPRATP" then
+								if SN == "PARTMITPPRAT" then
 									return CalcRatAB(CalcStat("PartMitPRatPA",L),CalcStat("PartMitPRatPB",L),CalcStat("PartMitPRatPCapR",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "PARTMITPRATP" then
-								if sn == "PARTMITPRATPA" then
+							elseif SN > "PARTMITPRATP" then
+								if SN == "PARTMITPRATPA" then
 									return 100;
 								else
 									return 0;
@@ -1003,21 +1003,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcPercAB(CalcStat("PartMitPRatPA",L),CalcStat("PartMitPRatPB",L),CalcStat("PartMitPRatPCap",L),N);
 							end
-						elseif sn > "PARTMITPRATPB" then
-							if sn < "PARTMITPRATPCAP" then
-								if sn == "PARTMITPRATPC" then
+						elseif SN > "PARTMITPRATPB" then
+							if SN < "PARTMITPRATPCAP" then
+								if SN == "PARTMITPRATPC" then
 									return 1;
 								else
 									return 0;
 								end
-							elseif sn > "PARTMITPRATPCAP" then
-								if sn > "PARTMITPRATPCAPR" then
-									if sn == "PARTPARRYMITPBONUS" then
+							elseif SN > "PARTMITPRATPCAP" then
+								if SN > "PARTMITPRATPCAPR" then
+									if SN == "PARTPARRYMITPBONUS" then
 										return CalcStat("PartMitPBonus",L);
 									else
 										return 0;
 									end
-								elseif sn == "PARTMITPRATPCAPR" then
+								elseif SN == "PARTMITPRATPCAPR" then
 									return CalcStat("PartMitPRatPB",L)*CalcStat("PartMitPRatPC",L);
 								else
 									return 0;
@@ -1034,18 +1034,18 @@ _G.CalcStat = function(sname, slvl, sparam)
 				else
 					return CalcStat("PartMitPRatPCapR",L);
 				end
-			elseif sn > "PARTPARRYMITPPRAT" then
-				if sn < "PHYDMGPRATPA" then
-					if sn < "PARTPARRYPRATP" then
-						if sn < "PARTPARRYMITPRATPC" then
-							if sn < "PARTPARRYMITPRATPA" then
-								if sn == "PARTPARRYMITPRATP" then
+			elseif SN > "PARTPARRYMITPPRAT" then
+				if SN < "PHYDMGPRATPA" then
+					if SN < "PARTPARRYPRATP" then
+						if SN < "PARTPARRYMITPRATPC" then
+							if SN < "PARTPARRYMITPRATPA" then
+								if SN == "PARTPARRYMITPRATP" then
 									return CalcStat("PartMitPRatP",L,N);
 								else
 									return 0;
 								end
-							elseif sn > "PARTPARRYMITPRATPA" then
-								if sn == "PARTPARRYMITPRATPB" then
+							elseif SN > "PARTPARRYMITPRATPA" then
+								if SN == "PARTPARRYMITPRATPB" then
 									return CalcStat("PartMitPRatPB",L);
 								else
 									return 0;
@@ -1053,21 +1053,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("PartMitPRatPA",L);
 							end
-						elseif sn > "PARTPARRYMITPRATPC" then
-							if sn < "PARTPARRYMITPRATPCAPR" then
-								if sn == "PARTPARRYMITPRATPCAP" then
+						elseif SN > "PARTPARRYMITPRATPC" then
+							if SN < "PARTPARRYMITPRATPCAPR" then
+								if SN == "PARTPARRYMITPRATPCAP" then
 									return CalcStat("PartMitPRatPCap",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTPARRYMITPRATPCAPR" then
-								if sn > "PARTPARRYPBONUS" then
-									if sn == "PARTPARRYPPRAT" then
+							elseif SN > "PARTPARRYMITPRATPCAPR" then
+								if SN > "PARTPARRYPBONUS" then
+									if SN == "PARTPARRYPPRAT" then
 										return CalcStat("PartBPEPPRat",L,N);
 									else
 										return 0;
 									end
-								elseif sn == "PARTPARRYPBONUS" then
+								elseif SN == "PARTPARRYPBONUS" then
 									return CalcStat("PartBPEPBonus",L);
 								else
 									return 0;
@@ -1078,16 +1078,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("PartMitPRatPC",L);
 						end
-					elseif sn > "PARTPARRYPRATP" then
-						if sn < "PARTPARRYPRATPCAP" then
-							if sn < "PARTPARRYPRATPB" then
-								if sn == "PARTPARRYPRATPA" then
+					elseif SN > "PARTPARRYPRATP" then
+						if SN < "PARTPARRYPRATPCAP" then
+							if SN < "PARTPARRYPRATPB" then
+								if SN == "PARTPARRYPRATPA" then
 									return CalcStat("PartBPEPRatPA",L);
 								else
 									return 0;
 								end
-							elseif sn > "PARTPARRYPRATPB" then
-								if sn == "PARTPARRYPRATPC" then
+							elseif SN > "PARTPARRYPRATPB" then
+								if SN == "PARTPARRYPRATPC" then
 									return CalcStat("PartBPEPRatPC",L);
 								else
 									return 0;
@@ -1095,21 +1095,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("PartBPEPRatPB",L);
 							end
-						elseif sn > "PARTPARRYPRATPCAP" then
-							if sn < "PHYDMGPBONUS" then
-								if sn == "PARTPARRYPRATPCAPR" then
+						elseif SN > "PARTPARRYPRATPCAP" then
+							if SN < "PHYDMGPBONUS" then
+								if SN == "PARTPARRYPRATPCAPR" then
 									return CalcStat("PartBPEPRatPCapR",L);
 								else
 									return 0;
 								end
-							elseif sn > "PHYDMGPBONUS" then
-								if sn > "PHYDMGPPRAT" then
-									if sn == "PHYDMGPRATP" then
+							elseif SN > "PHYDMGPBONUS" then
+								if SN > "PHYDMGPPRAT" then
+									if SN == "PHYDMGPRATP" then
 										return CalcPercAB(CalcStat("PhyDmgPRatPA",L),CalcStat("PhyDmgPRatPB",L),CalcStat("PhyDmgPRatPCap",L),N);
 									else
 										return 0;
 									end
-								elseif sn == "PHYDMGPPRAT" then
+								elseif SN == "PHYDMGPPRAT" then
 									return CalcRatAB(CalcStat("PhyDmgPRatPA",L),CalcStat("PhyDmgPRatPB",L),CalcStat("PhyDmgPRatPCapR",L),N);
 								else
 									return 0;
@@ -1123,17 +1123,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return CalcStat("PartBPEPRatP",L,N);
 					end
-				elseif sn > "PHYDMGPRATPA" then
-					if sn < "PHYMITHPRATPB" then
-						if sn < "PHYDMGPRATPCAPR" then
-							if sn < "PHYDMGPRATPC" then
-								if sn == "PHYDMGPRATPB" then
+				elseif SN > "PHYDMGPRATPA" then
+					if SN < "PHYMITHPRATPB" then
+						if SN < "PHYDMGPRATPCAPR" then
+							if SN < "PHYDMGPRATPC" then
+								if SN == "PHYDMGPRATPB" then
 									return CalcStat("BratMastery",L);
 								else
 									return 0;
 								end
-							elseif sn > "PHYDMGPRATPC" then
-								if sn == "PHYDMGPRATPCAP" then
+							elseif SN > "PHYDMGPRATPC" then
+								if SN == "PHYDMGPRATPCAP" then
 									return 200;
 								else
 									return 0;
@@ -1141,21 +1141,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 1;
 							end
-						elseif sn > "PHYDMGPRATPCAPR" then
-							if sn < "PHYMITHPPRAT" then
-								if sn == "PHYMITHPBONUS" then
+						elseif SN > "PHYDMGPRATPCAPR" then
+							if SN < "PHYMITHPPRAT" then
+								if SN == "PHYMITHPBONUS" then
 									return CalcStat("MitHeavyPBonus",L);
 								else
 									return 0;
 								end
-							elseif sn > "PHYMITHPPRAT" then
-								if sn > "PHYMITHPRATP" then
-									if sn == "PHYMITHPRATPA" then
+							elseif SN > "PHYMITHPPRAT" then
+								if SN > "PHYMITHPRATP" then
+									if SN == "PHYMITHPRATPA" then
 										return CalcStat("MitHeavyPRatPA",L);
 									else
 										return 0;
 									end
-								elseif sn == "PHYMITHPRATP" then
+								elseif SN == "PHYMITHPRATP" then
 									return CalcStat("MitHeavyPRatP",L,N);
 								else
 									return 0;
@@ -1166,16 +1166,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("PhyDmgPRatPB",L)*CalcStat("PhyDmgPRatPC",L);
 						end
-					elseif sn > "PHYMITHPRATPB" then
-						if sn < "PHYMITLPBONUS" then
-							if sn < "PHYMITHPRATPCAP" then
-								if sn == "PHYMITHPRATPC" then
+					elseif SN > "PHYMITHPRATPB" then
+						if SN < "PHYMITLPBONUS" then
+							if SN < "PHYMITHPRATPCAP" then
+								if SN == "PHYMITHPRATPC" then
 									return CalcStat("MitHeavyPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "PHYMITHPRATPCAP" then
-								if sn == "PHYMITHPRATPCAPR" then
+							elseif SN > "PHYMITHPRATPCAP" then
+								if SN == "PHYMITHPRATPCAPR" then
 									return CalcStat("MitHeavyPRatPCapR",L);
 								else
 									return 0;
@@ -1183,21 +1183,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("MitHeavyPRatPCap",L);
 							end
-						elseif sn > "PHYMITLPBONUS" then
-							if sn < "PHYMITLPRATP" then
-								if sn == "PHYMITLPPRAT" then
+						elseif SN > "PHYMITLPBONUS" then
+							if SN < "PHYMITLPRATP" then
+								if SN == "PHYMITLPPRAT" then
 									return CalcStat("MitLightPPRat",L,N);
 								else
 									return 0;
 								end
-							elseif sn > "PHYMITLPRATP" then
-								if sn > "PHYMITLPRATPA" then
-									if sn == "PHYMITLPRATPB" then
+							elseif SN > "PHYMITLPRATP" then
+								if SN > "PHYMITLPRATPA" then
+									if SN == "PHYMITLPRATPB" then
 										return CalcStat("MitLightPRatPB",L);
 									else
 										return 0;
 									end
-								elseif sn == "PHYMITLPRATPA" then
+								elseif SN == "PHYMITLPRATPA" then
 									return CalcStat("MitLightPRatPA",L);
 								else
 									return 0;
@@ -1217,19 +1217,19 @@ _G.CalcStat = function(sname, slvl, sparam)
 			else
 				return CalcStat("PartMitPPRat",L,N);
 			end
-		elseif sn > "PHYMITLPRATPC" then
-			if sn < "TACDMGPPRAT" then
-				if sn < "PROGBMITMEDIUM" then
-					if sn < "PHYMITMPRATPCAP" then
-						if sn < "PHYMITMPPRAT" then
-							if sn < "PHYMITLPRATPCAPR" then
-								if sn == "PHYMITLPRATPCAP" then
+		elseif SN > "PHYMITLPRATPC" then
+			if SN < "TACDMGPPRAT" then
+				if SN < "PROGBMITMEDIUM" then
+					if SN < "PHYMITMPRATPCAP" then
+						if SN < "PHYMITMPPRAT" then
+							if SN < "PHYMITLPRATPCAPR" then
+								if SN == "PHYMITLPRATPCAP" then
 									return CalcStat("MitLightPRatPCap",L);
 								else
 									return 0;
 								end
-							elseif sn > "PHYMITLPRATPCAPR" then
-								if sn == "PHYMITMPBONUS" then
+							elseif SN > "PHYMITLPRATPCAPR" then
+								if SN == "PHYMITMPBONUS" then
 									return CalcStat("MitMediumPBonus",L);
 								else
 									return 0;
@@ -1237,21 +1237,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("MitLightPRatPCapR",L);
 							end
-						elseif sn > "PHYMITMPPRAT" then
-							if sn < "PHYMITMPRATPA" then
-								if sn == "PHYMITMPRATP" then
+						elseif SN > "PHYMITMPPRAT" then
+							if SN < "PHYMITMPRATPA" then
+								if SN == "PHYMITMPRATP" then
 									return CalcStat("MitMediumPRatP",L,N);
 								else
 									return 0;
 								end
-							elseif sn > "PHYMITMPRATPA" then
-								if sn > "PHYMITMPRATPB" then
-									if sn == "PHYMITMPRATPC" then
+							elseif SN > "PHYMITMPRATPA" then
+								if SN > "PHYMITMPRATPB" then
+									if SN == "PHYMITMPRATPC" then
 										return CalcStat("MitMediumPRatPC",L);
 									else
 										return 0;
 									end
-								elseif sn == "PHYMITMPRATPB" then
+								elseif SN == "PHYMITMPRATPB" then
 									return CalcStat("MitMediumPRatPB",L);
 								else
 									return 0;
@@ -1262,16 +1262,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("MitMediumPPRat",L,N);
 						end
-					elseif sn > "PHYMITMPRATPCAP" then
-						if sn < "PROGBLOW" then
-							if sn < "PNTMPDEFENCE" then
-								if sn == "PHYMITMPRATPCAPR" then
+					elseif SN > "PHYMITMPRATPCAP" then
+						if SN < "PROGBLOW" then
+							if SN < "PNTMPDEFENCE" then
+								if SN == "PHYMITMPRATPCAPR" then
 									return CalcStat("MitMediumPRatPCapR",L);
 								else
 									return 0;
 								end
-							elseif sn > "PNTMPDEFENCE" then
-								if sn == "PROGBHIGH" then
+							elseif SN > "PNTMPDEFENCE" then
+								if SN == "PROGBHIGH" then
 									return 500;
 								else
 									return 0;
@@ -1279,21 +1279,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 351/13000;
 							end
-						elseif sn > "PROGBLOW" then
-							if sn < "PROGBMEDIUM" then
-								if sn == "PROGBMASTERY" then
+						elseif SN > "PROGBLOW" then
+							if SN < "PROGBMEDIUM" then
+								if SN == "PROGBMASTERY" then
 									return 270;
 								else
 									return 0;
 								end
-							elseif sn > "PROGBMEDIUM" then
-								if sn > "PROGBMITHEAVY" then
-									if sn == "PROGBMITLIGHT" then
+							elseif SN > "PROGBMEDIUM" then
+								if SN > "PROGBMITHEAVY" then
+									if SN == "PROGBMITLIGHT" then
 										return 280/3;
 									else
 										return 0;
 									end
-								elseif sn == "PROGBMITHEAVY" then
+								elseif SN == "PROGBMITHEAVY" then
 									return 174;
 								else
 									return 0;
@@ -1307,17 +1307,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return CalcStat("MitMediumPRatPCap",L);
 					end
-				elseif sn > "PROGBMITMEDIUM" then
-					if sn < "RESISTPRATPCAPR" then
-						if sn < "RESISTPRATP" then
-							if sn < "RESISTPBONUS" then
-								if sn == "RATDEFENCET" then
+				elseif SN > "PROGBMITMEDIUM" then
+					if SN < "RESISTPRATPCAPR" then
+						if SN < "RESISTPRATP" then
+							if SN < "RESISTPBONUS" then
+								if SN == "RATDEFENCET" then
 									return CalcStat("PntMPDefence",L)*CalcStat("TraitProg",L,CalcStat("ProgBMedium",L))*CalcStat("AdjTraitProgRatings",L,CalcStat("ProgBMedium",L))*N;
 								else
 									return 0;
 								end
-							elseif sn > "RESISTPBONUS" then
-								if sn == "RESISTPPRAT" then
+							elseif SN > "RESISTPBONUS" then
+								if SN == "RESISTPPRAT" then
 									return CalcRatAB(CalcStat("ResistPRatPA",L),CalcStat("ResistPRatPB",L),CalcStat("ResistPRatPCapR",L),N);
 								else
 									return 0;
@@ -1325,21 +1325,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 0;
 							end
-						elseif sn > "RESISTPRATP" then
-							if sn < "RESISTPRATPB" then
-								if sn == "RESISTPRATPA" then
+						elseif SN > "RESISTPRATP" then
+							if SN < "RESISTPRATPB" then
+								if SN == "RESISTPRATPA" then
 									return 100;
 								else
 									return 0;
 								end
-							elseif sn > "RESISTPRATPB" then
-								if sn > "RESISTPRATPC" then
-									if sn == "RESISTPRATPCAP" then
+							elseif SN > "RESISTPRATPB" then
+								if SN > "RESISTPRATPC" then
+									if SN == "RESISTPRATPCAP" then
 										return 50;
 									else
 										return 0;
 									end
-								elseif sn == "RESISTPRATPC" then
+								elseif SN == "RESISTPRATPC" then
 									return 1;
 								else
 									return 0;
@@ -1350,16 +1350,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcPercAB(CalcStat("ResistPRatPA",L),CalcStat("ResistPRatPB",L),CalcStat("ResistPRatPCap",L),N);
 						end
-					elseif sn > "RESISTPRATPCAPR" then
-						if sn < "T2PENARMOUR" then
-							if sn < "STATPROG" then
-								if sn == "RESISTT" then
+					elseif SN > "RESISTPRATPCAPR" then
+						if SN < "T2PENARMOUR" then
+							if SN < "STATPROG" then
+								if SN == "RESISTT" then
 									return CalcStat("RatDefenceT",L,N);
 								else
 									return 0;
 								end
-							elseif sn > "STATPROG" then
-								if sn == "STDPROG" then
+							elseif SN > "STATPROG" then
+								if SN == "STDPROG" then
 									if L-DblCalcDev <= 75 then
 										return LinFmod(N,1,75,1,75,L);
 									elseif L-DblCalcDev <= 76 then
@@ -1399,9 +1399,9 @@ _G.CalcStat = function(sname, slvl, sparam)
 									return CalcStat("StdProg",L,N);
 								end
 							end
-						elseif sn > "T2PENARMOUR" then
-							if sn < "T2PENMIT" then
-								if sn == "T2PENBPE" then
+						elseif SN > "T2PENARMOUR" then
+							if SN < "T2PENMIT" then
+								if SN == "T2PENBPE" then
 									if L-DblCalcDev <= 115 then
 										return (-40)*L;
 									elseif L-DblCalcDev <= 116 then
@@ -1420,14 +1420,14 @@ _G.CalcStat = function(sname, slvl, sparam)
 								else
 									return 0;
 								end
-							elseif sn > "T2PENMIT" then
-								if sn > "T2PENRESIST" then
-									if sn == "TACDMGPBONUS" then
+							elseif SN > "T2PENMIT" then
+								if SN > "T2PENRESIST" then
+									if SN == "TACDMGPBONUS" then
 										return 0;
 									else
 										return 0;
 									end
-								elseif sn == "T2PENRESIST" then
+								elseif SN == "T2PENRESIST" then
 									if L-DblCalcDev <= 115 then
 										return (-90)*L;
 									elseif L-DblCalcDev <= 116 then
@@ -1472,18 +1472,18 @@ _G.CalcStat = function(sname, slvl, sparam)
 				else
 					return 382/3;
 				end
-			elseif sn > "TACDMGPPRAT" then
-				if sn < "TACMITLPRATPA" then
-					if sn < "TACMITHPRATP" then
-						if sn < "TACDMGPRATPC" then
-							if sn < "TACDMGPRATPA" then
-								if sn == "TACDMGPRATP" then
+			elseif SN > "TACDMGPPRAT" then
+				if SN < "TACMITLPRATPA" then
+					if SN < "TACMITHPRATP" then
+						if SN < "TACDMGPRATPC" then
+							if SN < "TACDMGPRATPA" then
+								if SN == "TACDMGPRATP" then
 									return CalcPercAB(CalcStat("TacDmgPRatPA",L),CalcStat("TacDmgPRatPB",L),CalcStat("TacDmgPRatPCap",L),N);
 								else
 									return 0;
 								end
-							elseif sn > "TACDMGPRATPA" then
-								if sn == "TACDMGPRATPB" then
+							elseif SN > "TACDMGPRATPA" then
+								if SN == "TACDMGPRATPB" then
 									return CalcStat("BratMastery",L);
 								else
 									return 0;
@@ -1491,21 +1491,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return 400;
 							end
-						elseif sn > "TACDMGPRATPC" then
-							if sn < "TACDMGPRATPCAPR" then
-								if sn == "TACDMGPRATPCAP" then
+						elseif SN > "TACDMGPRATPC" then
+							if SN < "TACDMGPRATPCAPR" then
+								if SN == "TACDMGPRATPCAP" then
 									return 200;
 								else
 									return 0;
 								end
-							elseif sn > "TACDMGPRATPCAPR" then
-								if sn > "TACMITHPBONUS" then
-									if sn == "TACMITHPPRAT" then
+							elseif SN > "TACDMGPRATPCAPR" then
+								if SN > "TACMITHPBONUS" then
+									if SN == "TACMITHPPRAT" then
 										return CalcStat("MitHeavyPPRat",L,N);
 									else
 										return 0;
 									end
-								elseif sn == "TACMITHPBONUS" then
+								elseif SN == "TACMITHPBONUS" then
 									return CalcStat("MitHeavyPBonus",L);
 								else
 									return 0;
@@ -1516,16 +1516,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return 1;
 						end
-					elseif sn > "TACMITHPRATP" then
-						if sn < "TACMITHPRATPCAP" then
-							if sn < "TACMITHPRATPB" then
-								if sn == "TACMITHPRATPA" then
+					elseif SN > "TACMITHPRATP" then
+						if SN < "TACMITHPRATPCAP" then
+							if SN < "TACMITHPRATPB" then
+								if SN == "TACMITHPRATPA" then
 									return CalcStat("MitHeavyPRatPA",L);
 								else
 									return 0;
 								end
-							elseif sn > "TACMITHPRATPB" then
-								if sn == "TACMITHPRATPC" then
+							elseif SN > "TACMITHPRATPB" then
+								if SN == "TACMITHPRATPC" then
 									return CalcStat("MitHeavyPRatPC",L);
 								else
 									return 0;
@@ -1533,21 +1533,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("MitHeavyPRatPB",L);
 							end
-						elseif sn > "TACMITHPRATPCAP" then
-							if sn < "TACMITLPBONUS" then
-								if sn == "TACMITHPRATPCAPR" then
+						elseif SN > "TACMITHPRATPCAP" then
+							if SN < "TACMITLPBONUS" then
+								if SN == "TACMITHPRATPCAPR" then
 									return CalcStat("MitHeavyPRatPCapR",L);
 								else
 									return 0;
 								end
-							elseif sn > "TACMITLPBONUS" then
-								if sn > "TACMITLPPRAT" then
-									if sn == "TACMITLPRATP" then
+							elseif SN > "TACMITLPBONUS" then
+								if SN > "TACMITLPPRAT" then
+									if SN == "TACMITLPRATP" then
 										return CalcStat("MitLightPRatP",L,N);
 									else
 										return 0;
 									end
-								elseif sn == "TACMITLPPRAT" then
+								elseif SN == "TACMITLPPRAT" then
 									return CalcStat("MitLightPPRat",L,N);
 								else
 									return 0;
@@ -1561,17 +1561,17 @@ _G.CalcStat = function(sname, slvl, sparam)
 					else
 						return CalcStat("MitHeavyPRatP",L,N);
 					end
-				elseif sn > "TACMITLPRATPA" then
-					if sn < "TACMITMPRATPB" then
-						if sn < "TACMITLPRATPCAPR" then
-							if sn < "TACMITLPRATPC" then
-								if sn == "TACMITLPRATPB" then
+				elseif SN > "TACMITLPRATPA" then
+					if SN < "TACMITMPRATPB" then
+						if SN < "TACMITLPRATPCAPR" then
+							if SN < "TACMITLPRATPC" then
+								if SN == "TACMITLPRATPB" then
 									return CalcStat("MitLightPRatPB",L);
 								else
 									return 0;
 								end
-							elseif sn > "TACMITLPRATPC" then
-								if sn == "TACMITLPRATPCAP" then
+							elseif SN > "TACMITLPRATPC" then
+								if SN == "TACMITLPRATPCAP" then
 									return CalcStat("MitLightPRatPCap",L);
 								else
 									return 0;
@@ -1579,21 +1579,21 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("MitLightPRatPC",L);
 							end
-						elseif sn > "TACMITLPRATPCAPR" then
-							if sn < "TACMITMPPRAT" then
-								if sn == "TACMITMPBONUS" then
+						elseif SN > "TACMITLPRATPCAPR" then
+							if SN < "TACMITMPPRAT" then
+								if SN == "TACMITMPBONUS" then
 									return CalcStat("MitMediumPBonus",L);
 								else
 									return 0;
 								end
-							elseif sn > "TACMITMPPRAT" then
-								if sn > "TACMITMPRATP" then
-									if sn == "TACMITMPRATPA" then
+							elseif SN > "TACMITMPPRAT" then
+								if SN > "TACMITMPRATP" then
+									if SN == "TACMITMPRATPA" then
 										return CalcStat("MitMediumPRatPA",L);
 									else
 										return 0;
 									end
-								elseif sn == "TACMITMPRATP" then
+								elseif SN == "TACMITMPRATP" then
 									return CalcStat("MitMediumPRatP",L,N);
 								else
 									return 0;
@@ -1604,16 +1604,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 						else
 							return CalcStat("MitLightPRatPCapR",L);
 						end
-					elseif sn > "TACMITMPRATPB" then
-						if sn < "TPENARMOUR" then
-							if sn < "TACMITMPRATPCAP" then
-								if sn == "TACMITMPRATPC" then
+					elseif SN > "TACMITMPRATPB" then
+						if SN < "TPENARMOUR" then
+							if SN < "TACMITMPRATPCAP" then
+								if SN == "TACMITMPRATPC" then
 									return CalcStat("MitMediumPRatPC",L);
 								else
 									return 0;
 								end
-							elseif sn > "TACMITMPRATPCAP" then
-								if sn == "TACMITMPRATPCAPR" then
+							elseif SN > "TACMITMPRATPCAP" then
+								if SN == "TACMITMPRATPCAPR" then
 									return CalcStat("MitMediumPRatPCapR",L);
 								else
 									return 0;
@@ -1621,16 +1621,16 @@ _G.CalcStat = function(sname, slvl, sparam)
 							else
 								return CalcStat("MitMediumPRatPCap",L);
 							end
-						elseif sn > "TPENARMOUR" then
-							if sn < "TPENCHOICE" then
-								if sn == "TPENBPE" then
+						elseif SN > "TPENARMOUR" then
+							if SN < "TPENCHOICE" then
+								if SN == "TPENBPE" then
 									return CalcStat("TpenChoice",N)*CalcStat("RatDefenceT",L);
 								else
 									return 0;
 								end
-							elseif sn > "TPENCHOICE" then
-								if sn > "TPENRESIST" then
-									if sn == "TRAITPROG" then
+							elseif SN > "TPENCHOICE" then
+								if SN > "TPENRESIST" then
+									if SN == "TRAITPROG" then
 										if L-DblCalcDev <= 105 then
 											return LinFmod(1,CalcStat("StatProg",1,N),CalcStat("StatProg",105,N),1,105,L);
 										else
@@ -1639,7 +1639,7 @@ _G.CalcStat = function(sname, slvl, sparam)
 									else
 										return 0;
 									end
-								elseif sn == "TPENRESIST" then
+								elseif SN == "TPENRESIST" then
 									return CalcStat("TpenChoice",N)*CalcStat("ResistT",L,2);
 								else
 									return 0;
@@ -1664,6 +1664,243 @@ _G.CalcStat = function(sname, slvl, sparam)
 		end
 	else
 		return CalcStat("PartBPEPRatPC",L);
+	end
+
+end
+
+-- Support functions for CalcStat. These consist of implementations of more complex calculation types, decode methods for parameter "C" and rounding/min/max/compare functions for floating point numbers.
+-- Created by Giseldah
+
+-- Floating point numbers bring errors into the calculation, both inside the Lotro-client and in this function collection. This is why a 100% match with the stats in Lotro is impossible.
+-- Anyway, to compensate for some errors, we use a calculation deviation correction value. This makes for instance 24.49999999 round to 25, as it's assumed that 24.5 was intended as outcome of a formula.
+DblCalcDev = 0.00000001;
+
+-- ****************** Calculation Type support functions ******************
+
+-- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+-- DataTableValue: Takes a value from an array table.
+
+function DataTableValue(vDataArray, Index)
+
+	lI = Index;
+	if lI < 1 then
+		lI = 1;
+	end
+	if lI > #vDataArray then
+		lI = #vDataArray;
+	end
+
+	return vDataArray[lI];
+
+end
+
+-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+-- ExpFmod: Exponential function based on percentage.
+-- Common percentage values are around ~5.5% for between levels and ~20% jumps between level segments.
+
+function ExpFmod(dVal, dLstart, dPlvl, dLvl)
+
+	if SmallerDbl(dLvl,dLstart) then
+		return dVal;
+	else
+		return dVal*(1+dPlvl/100)^(dLvl-dLstart+1);
+	end
+
+end
+
+-- NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+-- NamedRangeValue: Takes a value from a named spreadsheet table.
+-- This function doesn't have a meaning outside a spreadsheet and so is not implemented here.
+
+function NamedRangeValue(RName, RowIndex, ColIndex)
+
+	return 0;
+
+end
+
+-- PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+-- CalcPercAB: Calculates the percentage out of a rating based on the AB formula.
+
+function CalcPercAB(dA, dB, dPCap, dR)
+
+	if dR <= 0 then
+		return 0;
+	else
+		return MinDbl(dA/(1+dB/dR),dPCap);
+	end
+
+end
+
+-- RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+-- CalcRatAB: Calculates the rating out of a percentage based on the AB formula.
+
+function CalcRatAB(dA, dB, dCapR, dP)
+
+	if dP <= 0 then
+		return 0;
+	else
+		return MinDbl(dB/(dA/dP-1),dCapR);
+	end
+end
+
+-- TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+-- LinFmod: Linear line function between 2 points with some optional modifications.
+-- Connects point (dLstart,dVal*dFstart) with (dLend,dVal*dFend).
+-- Usually used with dVal=1 and dFstart/dFend containing unrelated points or dVal=# and dFstart/dFend containing multiplier factors.
+-- Modification for in-between points on the line: rounding (in general to multiples of dRound=10).
+
+function LinFmod(dVal, dFstart, dFend, dLstart, dLend, dLvl, dRound)
+
+	if IsDbl(dLvl,dLstart) then
+		return dVal*dFstart;
+	elseif IsDbl(dLvl,dLend) then
+		return dVal*dFend;
+	elseif dRound == nil then
+		return dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/(dLend-dLstart);
+	else
+		return RoundDbl((dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/((dLend-dLstart)*dRound)))*dRound;
+	end
+
+end
+
+-- ****************** Parameter "C" decode support functions ******************
+
+-- ArmCodeIndex: returns a specified index from an Armour Code.
+-- acode string:
+-- 1st position: H=heavy, M=medium, L=light
+-- 2nd position: H=head, S=shoulders, CL=cloak/back, C=chest, G=gloves, L=leggings, B=boots, Sh=shield
+-- 3rd position: W=white/common, Y=yellow/uncommon, P=purple/rare, T=teal/blue/incomparable, G=gold/legendary/epic
+-- Note: no such thing exists as a heavy, medium or light cloak, so no H/M/L in cloak codes (cloaks go automatically in the M class since U23, although historically this was L)
+
+function ArmCodeIndex(acode, ii)
+
+	local armourcode = string.upper(string.match(acode,"(%a+)"));
+
+	-- get positional codes and make some corrections
+	local sarmclass = string.sub(armourcode,1,1);
+	local sarmtype = string.sub(armourcode,2,2);
+	local sarmcol = string.sub(armourcode,3,3);
+	if sarmtype == "S" and sarmcol == "H" then
+		sarmtype = "SH";
+		sarmcol = string.sub(armourcode,4,4);
+	elseif sarmclass == "C" and sarmtype == "L" then
+		sarmclass = "M";
+		sarmtype = "CL";
+	else
+		sarmtype = " "..sarmtype;
+	end
+	
+	if ii == 1 then
+		return string.find("HML",sarmclass);
+	elseif ii == 2 then
+		return (string.find(" H SCL C G L BSH",sarmtype)+1)/2;
+	elseif ii == 3 then
+		return string.find("WYPTG",sarmcol);
+	end
+	
+	return 0;
+	
+end
+
+-- RomanRankDecode: converts a string with a Roman number in characters, to an integer number.
+-- used for Legendary Item Title calculation.
+
+local RomanCharsToValues = {["M"]=1000,["CM"]=900,["D"]=500,["CD"]=400,["C"]=100,["XC"]=90,["L"]=50,["XL"]=40,["X"]=10,["IX"]=9,["V"]=5,["IV"]=4,["I"]=1};
+
+function RomanRankDecode(srank)
+
+	if srank ~= nil then
+		if srank ~= "" then
+			for schars, ivalue in pairs(RomanCharsToValues) do
+				if string.sub(string.upper(srank),1,string.len(schars)) == schars then
+					return ivalue+RomanRankDecode(string.sub(srank,string.len(schars)+1));
+				end
+			end
+		end
+	end
+	
+	return 0;
+	
+end
+
+-- ****************** Misc. floating point support functions ******************
+
+-- Misc. functions for floating point: rounding etc.
+-- For roundings: iDec is number of decimals.
+
+function RoundDbl(dNum, iDec)
+
+	if iDec == nil then
+		iDec = 0;
+	end
+	if iDec == 0 then
+		return math.floor(dNum+0.5+DblCalcDev);
+	else
+		return math.floor(dNum*10^iDec+0.5+DblCalcDev)/10^iDec;
+	end
+	
+end
+
+function CeilDbl(dNum, iDec)
+
+	if iDec == nil then
+		iDec = 0;
+	end
+	if iDec == 0 then
+		return math.floor(dNum+1-DblCalcDev);
+	else
+		return math.floor(dNum*10^iDec+1-DblCalcDev)/10^iDec;
+	end
+	
+end
+
+function FloorDbl(dNum, iDec)
+
+	if iDec == nil then
+		iDec = 0;
+	end
+	if iDec == 0 then
+		return math.floor(dNum+DblCalcDev);
+	else
+		return math.floor(dNum*10^iDec+DblCalcDev)/10^iDec;
+	end
+
+end
+
+function IsDbl(dNum1, dNum2)
+
+	return (math.abs(dNum1-dNum2) <= DblCalcDev);
+
+end
+
+function SmallerDbl(dNum1, dNum2)
+
+	return ((dNum2-dNum1) > DblCalcDev);
+
+end
+
+function GreaterDbl(dNum1, dNum2)
+
+	return ((dNum1-dNum2) > DblCalcDev);
+
+end
+
+function MinDbl(dNum1, dNum2)
+
+	if dNum1 <= dNum2 then
+		return dNum1;
+	else
+		return dNum2;
+	end
+
+end
+
+function MaxDbl(dNum1, dNum2)
+
+	if dNum1 >= dNum2 then
+		return dNum1;
+	else
+		return dNum2;
 	end
 
 end

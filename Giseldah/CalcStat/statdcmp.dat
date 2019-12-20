@@ -1,0 +1,1248 @@
+2
+StarBasic
+CalcStat.bas
+22
+Function CalcStat(ByVal SName As String, ByVal SLvl As Double, Optional SParam As Variant) As Variant
+
+	Dim SN As String
+	Dim L As Double
+	Dim N As Double
+	Dim C As String
+
+	SN = UCase(LTrim(RTrim(SName)))
+
+	L = SLvl
+
+	If IsMissing(SParam) Then
+		N = 1#
+		C = ""
+	ElseIf IsNumeric(SParam) Then
+		N = SParam
+		C = ""
+	Else
+		N = 1#
+		C = SParam
+	EndIf
+
+286
+
+End Function
+
+' Support functions for CalcStat. These consist of implementations of more complex calculation types, decode methods for parameter "C" and rounding/min/max/compare functions for floating point numbers.
+' Created by Giseldah
+
+' Floating point numbers bring errors into the calculation, both inside the Lotro-client and in this function collection. This is why a 100% match with the stats in Lotro is impossible.
+' Anyway, to compensate for some errors, we use a calculation deviation correction value. This makes for instance 24.49999999 round to 25, as it's assumed that 24.5 was intended as outcome of a formula.
+Global Const DblCalcDev = 0.00000001#
+
+' ****************** Calculation Type support functions ******************
+
+' DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+' DataTableValue: Takes a value from an array table.
+
+Function DataTableValue(ByVal vDataArray as Variant, ByVal lIndex As Long) As Variant
+
+	Dim lI As Long
+	lI = lIndex-1
+	If lI < LBound(vDataArray) Then
+		lI = LBound(vDataArray)
+	EndIf
+	If lI > UBound(vDataArray) Then
+		lI = UBound(vDataArray)
+	EndIf
+
+	DataTableValue = vDataArray(lI)
+
+End Function
+
+' EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+' ExpFmod: Exponential function based on percentage.
+' Common percentage values are around ~5.5% for between levels and ~20% jumps between level segments.
+
+Function ExpFmod(ByVal dVal As Double, ByVal dLstart As Double, ByVal dPlvl As Double, ByVal dLvl As Double) As Double
+
+	Dim Result As Double
+
+	If SmallerDbl(dLvl,dLstart) Then
+		Result = dVal
+	Else
+		Result = dVal*(1#+dPlvl/100#)^(dLvl-dLstart+1#)
+	End If
+
+	ExpFmod = Result
+
+End Function
+
+' NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+' NamedRangeValue: Takes a value from a named spreadsheet table.
+
+Function NamedRangeValue(ByVal RName As String, ByVal RowIndex As Long, ByVal ColIndex As Long) As Variant
+
+	Dim vDataArray As Variant
+	vDataArray = ThisComponent.NamedRanges.getByName(RName).getReferredCells().getDataArray()
+	
+	Dim lRI As Long
+	lRI = RowIndex-1
+	If lRI < LBound(vDataArray) Then
+		lRI = LBound(vDataArray)
+	EndIf
+	If lRI > UBound(vDataArray) Then
+		lRI = UBound(vDataArray)
+	EndIf
+
+	Dim lCI As Long
+	lCI = ColIndex-1
+	If lCI < LBound(vDataArray(lRI)) Then
+		lCI = LBound(vDataArray(lRI))
+	EndIf
+	If lCI > UBound(vDataArray(lRI)) Then
+		lCI = UBound(vDataArray(lRI))
+	EndIf
+
+	NamedRangeValue = vDataArray(lRI)(lCI)
+
+End Function
+
+' PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+' CalcPercAB: Calculates the percentage out of a rating based on the AB formula.
+
+Function CalcPercAB(ByVal dA As Double, ByVal dB As Double, ByVal dPCap As Double, ByVal dR As Double) As Double
+
+	Dim Result As Double
+
+	If dR <= 0 Then
+		Result = 0
+	Else
+		Result = MinDbl(dA/(1+dB/dR),dPCap)
+	End If
+
+	CalcPercAB = Result
+
+End Function
+
+' RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+' CalcRatAB: Calculates the rating out of a percentage based on the AB formula.
+
+Function CalcRatAB(ByVal dA As Double, ByVal dB As Double, ByVal dCapR As Double, ByVal dP As Double) As Double
+
+	Dim Result As Double
+
+	If dP <= 0 Then
+		Result = 0
+	Else
+		Result = MinDbl(dB/(dA/dP-1),dCapR)
+	End If
+
+	CalcRatAB = Result
+
+End Function
+
+' TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+' LinFmod: Linear line function between 2 points with some optional modifications.
+' Connects point (dLstart,dVal*dFstart) with (dLend,dVal*dFend).
+' Usually used with dVal=1 and dFstart/dFend containing unrelated points or dVal=# and dFstart/dFend containing multiplier factors.
+' Modification for in-between points on the line: rounding (in general to multiples of dRound=10).
+
+Function LinFmod(ByVal dVal As Double, ByVal dFstart As Double, ByVal dFend As Double, ByVal dLstart As Double, ByVal dLend As Double, ByVal dLvl As Double, Optional dRound As Variant) As Double
+
+	Dim Result As Double
+
+	If IsDbl(dLvl,dLstart) Then
+		Result = dVal*dFstart
+	ElseIf IsDbl(dLvl,dLend) Then
+		Result = dVal*dFend
+	ElseIf IsMissing(dRound) Then
+		Result = dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/(dLend-dLstart)
+	Else
+		Result = RoundDbl((dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/((dLend-dLstart)*dRound)))*dRound
+	End If
+
+	LinFmod = Result
+
+End Function
+
+' ****************** Parameter "C" decode support functions ******************
+
+' ArmCodeIndex: returns a specified index from an Armour Code.
+' acode string:
+' 1st position: H=heavy, M=medium, L=light
+' 2nd position: H=head, S=shoulders, CL=cloak/back, C=chest, G=gloves, L=leggings, B=boots, Sh=shield
+' 3rd position: W=white/common, Y=yellow/uncommon, P=purple/rare, T=teal/blue/incomparable, G=gold/legendary/epic
+' Note: no such thing exists as a heavy, medium or light cloak, so no H/M/L in cloak codes (cloaks go automatically in the M class since U23, although historically this was L)
+
+Function ArmCodeIndex(ByVal ACode As String, ByVal iI As Integer) As Integer
+
+	Dim ArmourCode As String
+	ArmourCode = UCase(LTrim(RTrim(ACode)))
+
+	Dim sArmClass As String
+	Dim sArmType As String
+	Dim sArmCol As String
+	sArmClass = Left(ArmourCode,1)
+	sArmType = Mid(ArmourCode,2,1)
+	sArmCol = Mid(ArmourCode,3,1)
+	If sArmType = "S" AND sArmCol = "H" Then
+		sArmType = "SH"
+		sArmCol = Mid(ArmourCode,4,1)
+	ElseIf sArmClass = "C" AND sArmType = "L" Then
+		sArmClass = "M"
+		sArmType = "CL"
+		sArmCol = Mid(ArmourCode,3,1)
+	Else
+		sArmType = " "+sArmType
+	EndIf
+	
+	Select Case iI
+		Case 1
+			ArmCodeIndex = InStr("HML",sArmClass)
+		Case 2
+			ArmCodeIndex = (InStr(" H SCL C G L BSH",sArmType)+1)/2
+		Case 3
+			ArmCodeIndex = InStr("WYPTG",sArmCol)
+		Case Else
+			ArmCodeIndex = 0
+	End Select
+	
+End Function
+
+' RomanRankDecode: converts a string with a Roman number in characters, to an integer number.
+' used for Legendary Item Title calculation.
+
+Function RomanRankDecode(ByVal number As String) As Integer
+
+	Dim sLetters
+	sLetters = Array("M","CM","D","CD","C","XC","L","XL","X", "IX","V","IV","I")
+	Dim iValues
+	iValues = Array(1000,900,500,400,100,90,50,40,10,9,5,4,1)
+	Dim Result
+	Result = 0
+
+	If number <> "" Then
+		For I = LBound(sLetters) To UBound(sLetters)
+			If Left(UCase(number),Len(sLetters(I))) = sLetters(I) Then
+				Result = iValues(I)+RomanRankDecode(Right(number,Len(number)-Len(sLetters(I)))
+				Exit For
+			End If
+		Next I
+	End If
+
+	RomanRankDecode = Result
+
+End Function
+
+' ****************** Misc. floating point support functions ******************
+
+' Misc. functions for floating point: rounding etc.
+' For roundings: iDec is number of decimals.
+
+Function RoundDbl(ByVal dNum As Double, Optional ByVal iDec As Integer) As Double
+
+	If IsMissing(iDec) Then
+		iDec = 0
+	End If
+	If iDec = 0 Then
+		RoundDbl = INT(dNum+0.5#+DblCalcDev)
+	Else
+		RoundDbl = INT(dNum*10^iDec+0.5#+DblCalcDev)/10^iDec
+	End If
+	
+End Function
+
+Function CeilDbl(ByVal dNum As Double, Optional ByVal iDec As Integer) As Double
+
+	If IsMissing(iDec) Then
+		iDec = 0
+	End If
+	If iDec = 0 Then
+		CeilDbl = INT(dNum+1#-DblCalcDev)
+	Else
+		CeilDbl = INT(dNum*10^iDec+1#-DblCalcDev)/10^iDec
+	End If
+	
+End Function
+
+Function FloorDbl(ByVal dNum As Double, Optional ByVal iDec As Integer) As Double
+
+	If IsMissing(iDec) Then
+		iDec = 0
+	End If
+	If iDec = 0 Then
+		FloorDbl = INT(dNum+DblCalcDev)
+	Else
+		FloorDbl = INT(dNum*10^iDec+DblCalcDev)/10^iDec
+	End If
+
+End Function
+
+Function IsDbl(ByVal dNum1 As Double, ByVal dNum2 As Double) As Boolean
+
+	IsDbl = (ABS(dNum1-dNum2) <= DblCalcDev)
+
+End Function
+
+Function SmallerDbl(ByVal dNum1 As Double, ByVal dNum2 As Double) As Boolean
+
+	SmallerDbl = ((dNum2-dNum1) > DblCalcDev)
+
+End Function
+
+Function GreaterDbl(ByVal dNum1 As Double, ByVal dNum2 As Double) As Boolean
+
+	GreaterDbl = ((dNum1-dNum2) > DblCalcDev)
+
+End Function
+
+Function MinDbl(ByVal dNum1 As Double, ByVal dNum2 As Double) As Double
+
+	If dNum1 <= dNum2 Then
+		MinDbl = dNum1
+	Else
+		MinDbl = dNum2
+	EndIf
+
+End Function
+
+Function MaxDbl(ByVal dNum1 As Double, ByVal dNum2 As Double) As Double
+
+	If dNum1 >= dNum2 Then
+		MaxDbl = dNum1
+	Else
+		MaxDbl = dNum2
+	EndIf
+
+End Function
+1
+	If SN < "$STATNAME" Then
+1
+	ElseIf SN < "$STATNAME" Then
+1
+	If SN = "$STATNAME" Then
+1
+	ElseIf SN = "$STATNAME" Then
+1
+	If SN > "$STATNAME" Then
+1
+	ElseIf SN > "$STATNAME" Then
+1
+	Else
+1
+	End If
+1
+		CalcStat = $CALC
+2
+		Select Case L-DblCalcDev
+			Case <= $LEVEL#
+1
+			Case <= $LEVEL#
+1
+			Case Else
+1
+		End Select
+1
+				CalcStat = $CALC
+1
+		If $LVLSTART <= L+DblCalcDev And L-DblCalcDev <= $LVLEND Then
+1
+		ElseIf $LVLSTART <= L+DblCalcDev And L-DblCalcDev <= $LVLEND Then
+1
+		Else
+1
+		End If
+1
+			CalcStat = $CALC
+C
+L
+N
+
+SN
+Array(
+,
+)
+Lua-script <- for plugins
+CalcStat.lua
+16
+_G.CalcStat = function(sname, slvl, sparam)
+
+	local SN = string.upper(string.match(sname,"(%w+)"));
+
+	local L = slvl;
+	local N = 1;
+	local C = "";
+
+	if sparam ~= nil then
+		if type(sparam) == "number" then
+			N = sparam;
+		else
+			C = sparam;
+		end
+	end
+
+239
+
+end
+
+-- Support functions for CalcStat. These consist of implementations of more complex calculation types, decode methods for parameter "C" and rounding/min/max/compare functions for floating point numbers.
+-- Created by Giseldah
+
+-- Floating point numbers bring errors into the calculation, both inside the Lotro-client and in this function collection. This is why a 100% match with the stats in Lotro is impossible.
+-- Anyway, to compensate for some errors, we use a calculation deviation correction value. This makes for instance 24.49999999 round to 25, as it's assumed that 24.5 was intended as outcome of a formula.
+DblCalcDev = 0.00000001;
+
+-- ****************** Calculation Type support functions ******************
+
+-- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+-- DataTableValue: Takes a value from an array table.
+
+function DataTableValue(vDataArray, Index)
+
+	lI = Index;
+	if lI < 1 then
+		lI = 1;
+	end
+	if lI > #vDataArray then
+		lI = #vDataArray;
+	end
+
+	return vDataArray[lI];
+
+end
+
+-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+-- ExpFmod: Exponential function based on percentage.
+-- Common percentage values are around ~5.5% for between levels and ~20% jumps between level segments.
+
+function ExpFmod(dVal, dLstart, dPlvl, dLvl)
+
+	if SmallerDbl(dLvl,dLstart) then
+		return dVal;
+	else
+		return dVal*(1+dPlvl/100)^(dLvl-dLstart+1);
+	end
+
+end
+
+-- NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+-- NamedRangeValue: Takes a value from a named spreadsheet table.
+-- This function doesn't have a meaning outside a spreadsheet and so is not implemented here.
+
+function NamedRangeValue(RName, RowIndex, ColIndex)
+
+	return 0;
+
+end
+
+-- PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+-- CalcPercAB: Calculates the percentage out of a rating based on the AB formula.
+
+function CalcPercAB(dA, dB, dPCap, dR)
+
+	if dR <= 0 then
+		return 0;
+	else
+		return MinDbl(dA/(1+dB/dR),dPCap);
+	end
+
+end
+
+-- RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+-- CalcRatAB: Calculates the rating out of a percentage based on the AB formula.
+
+function CalcRatAB(dA, dB, dCapR, dP)
+
+	if dP <= 0 then
+		return 0;
+	else
+		return MinDbl(dB/(dA/dP-1),dCapR);
+	end
+end
+
+-- TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+-- LinFmod: Linear line function between 2 points with some optional modifications.
+-- Connects point (dLstart,dVal*dFstart) with (dLend,dVal*dFend).
+-- Usually used with dVal=1 and dFstart/dFend containing unrelated points or dVal=# and dFstart/dFend containing multiplier factors.
+-- Modification for in-between points on the line: rounding (in general to multiples of dRound=10).
+
+function LinFmod(dVal, dFstart, dFend, dLstart, dLend, dLvl, dRound)
+
+	if IsDbl(dLvl,dLstart) then
+		return dVal*dFstart;
+	elseif IsDbl(dLvl,dLend) then
+		return dVal*dFend;
+	elseif dRound == nil then
+		return dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/(dLend-dLstart);
+	else
+		return RoundDbl((dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/((dLend-dLstart)*dRound)))*dRound;
+	end
+
+end
+
+-- ****************** Parameter "C" decode support functions ******************
+
+-- ArmCodeIndex: returns a specified index from an Armour Code.
+-- acode string:
+-- 1st position: H=heavy, M=medium, L=light
+-- 2nd position: H=head, S=shoulders, CL=cloak/back, C=chest, G=gloves, L=leggings, B=boots, Sh=shield
+-- 3rd position: W=white/common, Y=yellow/uncommon, P=purple/rare, T=teal/blue/incomparable, G=gold/legendary/epic
+-- Note: no such thing exists as a heavy, medium or light cloak, so no H/M/L in cloak codes (cloaks go automatically in the M class since U23, although historically this was L)
+
+function ArmCodeIndex(acode, ii)
+
+	local armourcode = string.upper(string.match(acode,"(%a+)"));
+
+	-- get positional codes and make some corrections
+	local sarmclass = string.sub(armourcode,1,1);
+	local sarmtype = string.sub(armourcode,2,2);
+	local sarmcol = string.sub(armourcode,3,3);
+	if sarmtype == "S" and sarmcol == "H" then
+		sarmtype = "SH";
+		sarmcol = string.sub(armourcode,4,4);
+	elseif sarmclass == "C" and sarmtype == "L" then
+		sarmclass = "M";
+		sarmtype = "CL";
+	else
+		sarmtype = " "..sarmtype;
+	end
+	
+	if ii == 1 then
+		return string.find("HML",sarmclass);
+	elseif ii == 2 then
+		return (string.find(" H SCL C G L BSH",sarmtype)+1)/2;
+	elseif ii == 3 then
+		return string.find("WYPTG",sarmcol);
+	end
+	
+	return 0;
+	
+end
+
+-- RomanRankDecode: converts a string with a Roman number in characters, to an integer number.
+-- used for Legendary Item Title calculation.
+
+local RomanCharsToValues = {["M"]=1000,["CM"]=900,["D"]=500,["CD"]=400,["C"]=100,["XC"]=90,["L"]=50,["XL"]=40,["X"]=10,["IX"]=9,["V"]=5,["IV"]=4,["I"]=1};
+
+function RomanRankDecode(srank)
+
+	if srank ~= nil then
+		if srank ~= "" then
+			for schars, ivalue in pairs(RomanCharsToValues) do
+				if string.sub(string.upper(srank),1,string.len(schars)) == schars then
+					return ivalue+RomanRankDecode(string.sub(srank,string.len(schars)+1));
+				end
+			end
+		end
+	end
+	
+	return 0;
+	
+end
+
+-- ****************** Misc. floating point support functions ******************
+
+-- Misc. functions for floating point: rounding etc.
+-- For roundings: iDec is number of decimals.
+
+function RoundDbl(dNum, iDec)
+
+	if iDec == nil then
+		iDec = 0;
+	end
+	if iDec == 0 then
+		return math.floor(dNum+0.5+DblCalcDev);
+	else
+		return math.floor(dNum*10^iDec+0.5+DblCalcDev)/10^iDec;
+	end
+	
+end
+
+function CeilDbl(dNum, iDec)
+
+	if iDec == nil then
+		iDec = 0;
+	end
+	if iDec == 0 then
+		return math.floor(dNum+1-DblCalcDev);
+	else
+		return math.floor(dNum*10^iDec+1-DblCalcDev)/10^iDec;
+	end
+	
+end
+
+function FloorDbl(dNum, iDec)
+
+	if iDec == nil then
+		iDec = 0;
+	end
+	if iDec == 0 then
+		return math.floor(dNum+DblCalcDev);
+	else
+		return math.floor(dNum*10^iDec+DblCalcDev)/10^iDec;
+	end
+
+end
+
+function IsDbl(dNum1, dNum2)
+
+	return (math.abs(dNum1-dNum2) <= DblCalcDev);
+
+end
+
+function SmallerDbl(dNum1, dNum2)
+
+	return ((dNum2-dNum1) > DblCalcDev);
+
+end
+
+function GreaterDbl(dNum1, dNum2)
+
+	return ((dNum1-dNum2) > DblCalcDev);
+
+end
+
+function MinDbl(dNum1, dNum2)
+
+	if dNum1 <= dNum2 then
+		return dNum1;
+	else
+		return dNum2;
+	end
+
+end
+
+function MaxDbl(dNum1, dNum2)
+
+	if dNum1 >= dNum2 then
+		return dNum1;
+	else
+		return dNum2;
+	end
+
+end
+1
+	if SN < "$STATNAME" then
+1
+	elseif SN < "$STATNAME" then
+1
+	if SN == "$STATNAME" then
+1
+	elseif SN == "$STATNAME" then
+1
+	if SN > "$STATNAME" then
+1
+	elseif SN > "$STATNAME" then
+1
+	else
+1
+	end
+1
+		return $CALC;
+1
+		if L-DblCalcDev <= $LEVEL then
+1
+		elseif L-DblCalcDev <= $LEVEL then
+1
+		else
+1
+		end
+1
+			return $CALC;
+1
+		if $LVLSTART <= L+DblCalcDev and L-DblCalcDev <= $LVLEND then
+1
+		elseif $LVLSTART <= L+DblCalcDev and L-DblCalcDev <= $LVLEND then
+1
+		else
+1
+		end
+1
+			return $CALC;
+C
+L
+N
+
+SN
+{
+,
+}
+VB-script
+CalcStat.vbs
+22
+Function CalcStat(ByVal SName, ByVal SLvl, ByVal SParam)
+
+	Dim SN
+	Dim L
+	Dim N
+	Dim C
+
+	SN = UCase(LTrim(RTrim(SName)))
+
+	L = SLvl
+
+	If VarType(SParam) = 9 Then
+		N = 1
+		C = ""
+	ElseIf VarType(SParam) <> 8 Then
+		N = SParam
+		C = ""
+	Else
+		N = 1
+		C = SParam
+	End If
+
+266
+
+End Function
+
+' Support functions for CalcStat. These consist of implementations of more complex calculation types, decode methods for parameter "C" and rounding/min/max/compare functions for floating point numbers.
+' Created by Giseldah
+
+' Floating point numbers bring errors into the calculation, both inside the Lotro-client and in this function collection. This is why a 100% match with the stats in Lotro is impossible.
+' Anyway, to compensate for some errors, we use a calculation deviation correction value. This makes for instance 24.49999999 round to 25, as it's assumed that 24.5 was intended as outcome of a formula.
+Const DblCalcDev = 0.00000001
+
+' ****************** Calculation Type support functions ******************
+
+' DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+' DataTableValue: Takes a value from an array table.
+
+Function DataTableValue(ByVal vDataArray, ByVal lIndex)
+
+	Dim lI
+	lI = lIndex-1
+	If lI < LBound(vDataArray) Then
+		lI = LBound(vDataArray)
+	End If
+	If lI > UBound(vDataArray) Then
+		lI = UBound(vDataArray)
+	End If
+
+	DataTableValue = vDataArray(lI)
+
+End Function
+
+' EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+' ExpFmod: Exponential function based on percentage.
+' Common percentage values are around ~5.5% for between levels and ~20% jumps between level segments.
+
+Function ExpFmod(ByVal dVal, ByVal dLstart, ByVal dPlvl, ByVal dLvl)
+
+	Dim Result
+
+	If SmallerDbl(dLvl,dLstart) Then
+		Result = dVal
+	Else
+		Result = dVal*(1+dPlvl/100)^(dLvl-dLstart+1)
+	End If
+
+	ExpFmod = Result
+
+End Function
+
+' NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+' NamedRangeValue: Takes a value from a named spreadsheet table.
+' This function doesn't have a meaning outside a spreadsheet and so is not implemented here.
+
+Function NamedRangeValue(ByVal RName, ByVal RowIndex, ByVal ColIndex)
+
+	NamedRangeValue = 0
+
+End Function
+
+' PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+' CalcPercAB: Calculates the percentage out of a rating based on the AB formula.
+
+Function CalcPercAB(ByVal dA, ByVal dB, ByVal dPCap, ByVal dR)
+
+	Dim Result
+
+	If dR <= 0 Then
+		Result = 0
+	Else
+		Result = MinDbl(dA/(1+dB/dR),dPCap)
+	End If
+
+	CalcPercAB = Result
+
+End Function
+
+' RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+' CalcRatAB: Calculates the rating out of a percentage based on the AB formula.
+
+Function CalcRatAB(ByVal dA, ByVal dB, ByVal dCapR, ByVal dP)
+
+	Dim Result
+
+	If dP <= 0 Then
+		Result = 0
+	Else
+		Result = MinDbl(dB/(dA/dP-1),dCapR)
+	End If
+
+	CalcRatAB = Result
+
+End Function
+
+' TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+' LinFmod: Linear line function between 2 points with some optional modifications.
+' Connects point (dLstart,dVal*dFstart) with (dLend,dVal*dFend).
+' Usually used with dVal=1 and dFstart/dFend containing unrelated points or dVal=# and dFstart/dFend containing multiplier factors.
+' Modification for in-between points on the line: rounding (in general to multiples of dRound=10).
+
+Function LinFmod(ByVal dVal, ByVal dFstart, ByVal dFend, ByVal dLstart, ByVal dLend, ByVal dLvl, ByVal dRound)
+
+	Dim Result
+
+	If IsDbl(dLvl,dLstart) Then
+		Result = dVal*dFstart
+	ElseIf IsDbl(dLvl,dLend) Then
+		Result = dVal*dFend
+	ElseIf VarType(dRound) = 9 Then
+		Result = dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/(dLend-dLstart)
+	Else
+		Result = RoundDbl((dVal*(dFstart*(dLend-dLvl)+(dLvl-dLstart)*dFend)/((dLend-dLstart)*dRound)),Nothing)*dRound
+	End If
+
+	LinFmod = Result
+
+End Function
+
+' ****************** Parameter "C" decode support functions ******************
+
+' ArmCodeIndex: returns a specified index from an Armour Code.
+' acode string:
+' 1st position: H=heavy, M=medium, L=light
+' 2nd position: H=head, S=shoulders, CL=cloak/back, C=chest, G=gloves, L=leggings, B=boots, Sh=shield
+' 3rd position: W=white/common, Y=yellow/uncommon, P=purple/rare, T=teal/blue/incomparable, G=gold/legendary/epic
+' Note: no such thing exists as a heavy, medium or light cloak, so no H/M/L in cloak codes (cloaks go automatically in the M class since U23, although historically this was L)
+
+Function ArmCodeIndex(ByVal ACode, ByVal iI)
+
+	Dim ArmourCode
+	ArmourCode = UCase(LTrim(RTrim(ACode)))
+
+	Dim sArmClass
+	Dim sArmType
+	Dim sArmCol
+	sArmClass = Left(ArmourCode,1)
+	sArmType = Mid(ArmourCode,2,1)
+	sArmCol = Mid(ArmourCode,3,1)
+	If sArmType = "S" AND sArmCol = "H" Then
+		sArmType = "SH"
+		sArmCol = Mid(ArmourCode,4,1)
+	ElseIf sArmClass = "C" AND sArmType = "L" Then
+		sArmClass = "M"
+		sArmType = "CL"
+		sArmCol = Mid(ArmourCode,3,1)
+	Else
+		sArmType = " "+sArmType
+	End If
+	
+	Select Case iI
+		Case 1
+			ArmCodeIndex = InStr("HML",sArmClass)
+		Case 2
+			ArmCodeIndex = (InStr(" H SCL C G L BSH",sArmType)+1)/2
+		Case 3
+			ArmCodeIndex = InStr("WYPTG",sArmCol)
+		Case Else
+			ArmCodeIndex = 0
+	End Select
+	
+End Function
+
+' RomanRankDecode: converts a string with a Roman number in characters, to an integer number.
+' used for Legendary Item Title calculation.
+
+Function RomanRankDecode(ByVal number)
+
+	Dim sLetters
+	sLetters = Array("M","CM","D","CD","C","XC","L","XL","X","IX","V","IV","I")
+	Dim iValues
+	iValues = Array(1000,900,500,400,100,90,50,40,10,9,5,4,1)
+	Dim Result
+	Result = 0
+
+	If number <> "" Then
+		For I = LBound(sLetters) To UBound(sLetters)
+			If Left(UCase(number),Len(sLetters(I))) = sLetters(I) Then
+				Result = iValues(I)+RomanRankDecode(Right(number,Len(number)-Len(sLetters(I))))
+				Exit For
+			End If
+		Next
+	End If
+
+	RomanRankDecode = Result
+
+End Function
+
+' ****************** Misc. floating point support functions ******************
+
+' Misc. functions for floating point: rounding etc.
+' For roundings: iDec is number of decimals.
+
+Function RoundDbl(ByVal dNum, ByVal iDec)
+
+	If VarType(iDec) = 9 Then
+		iDec = 0
+	End If
+	If iDec = 0 Then
+		RoundDbl = INT(dNum+0.5+DblCalcDev)
+	Else
+		RoundDbl = INT(dNum*10^iDec+0.5+DblCalcDev)/10^iDec
+	End If
+	
+End Function
+
+Function CeilDbl(ByVal dNum, ByVal iDec)
+
+	If VarType(iDec) = 9 Then
+		iDec = 0
+	End If
+	If iDec = 0 Then
+		CeilDbl = INT(dNum+1-DblCalcDev)
+	Else
+		CeilDbl = INT(dNum*10^iDec+1-DblCalcDev)/10^iDec
+	End If
+	
+End Function
+
+Function FloorDbl(ByVal dNum, ByVal iDec)
+
+	If VarType(iDec) = 9 Then
+		iDec = 0
+	End If
+	If iDec = 0 Then
+		FloorDbl = INT(dNum+DblCalcDev)
+	Else
+		FloorDbl = INT(dNum*10^iDec+DblCalcDev)/10^iDec
+	End If
+
+End Function
+
+Function IsDbl(ByVal dNum1, ByVal dNum2)
+
+	IsDbl = (ABS(dNum1-dNum2) <= DblCalcDev)
+
+End Function
+
+Function SmallerDbl(ByVal dNum1, ByVal dNum2)
+
+	SmallerDbl = ((dNum2-dNum1) > DblCalcDev)
+
+End Function
+
+Function GreaterDbl(ByVal dNum1, ByVal dNum2)
+
+	GreaterDbl = ((dNum1-dNum2) > DblCalcDev)
+
+End Function
+
+Function MinDbl(ByVal dNum1, ByVal dNum2)
+
+	If dNum1 <= dNum2 Then
+		MinDbl = dNum1
+	Else
+		MinDbl = dNum2
+	End If
+
+End Function
+
+Function MaxDbl(ByVal dNum1, ByVal dNum2)
+
+	If dNum1 >= dNum2 Then
+		MaxDbl = dNum1
+	Else
+		MaxDbl = dNum2
+	End If
+
+End Function
+1
+	If SN < "$STATNAME" Then
+1
+	ElseIf SN < "$STATNAME" Then
+1
+	If SN = "$STATNAME" Then
+1
+	ElseIf SN = "$STATNAME" Then
+1
+	If SN > "$STATNAME" Then
+1
+	ElseIf SN > "$STATNAME" Then
+1
+	Else
+1
+	End If
+1
+		CalcStat = $CALC
+1
+		If L-DblCalcDev <= $LEVEL Then
+1
+		ElseIf L-DblCalcDev <= $LEVEL Then
+1
+		Else
+1
+		End If
+1
+			CalcStat = $CALC
+1
+		If $LVLSTART <= L+DblCalcDev And L-DblCalcDev <= $LVLEND Then
+1
+		ElseIf $LVLSTART <= L+DblCalcDev And L-DblCalcDev <= $LVLEND Then
+1
+		Else
+1
+		End If
+1
+			CalcStat = $CALC
+C
+L
+N
+,Nothing
+SN
+Array(
+,
+)
+PHP-script
+calcstat.php
+15
+<?php
+function CalcStat($sname, $slvl, $sparam = 1)
+{
+	$SN = strtoupper(trim($sname));
+
+	$L = $slvl;
+
+	if (gettype($sparam) == "string") {
+		$N = 1;
+		$C = $sparam;
+	} else {
+		$N = $sparam;
+		$C = "";
+	}
+	
+180
+}
+
+// Support functions for CalcStat. These consist of implementations of more complex calculation types, decode methods for parameter "C" and rounding/min/max/compare functions for floating point numbers.
+// Created by Giseldah
+
+// Floating point numbers bring errors into the calculation, both inside the Lotro-client and in this function collection. This is why a 100% match with the stats in Lotro is impossible.
+// Anyway, to compensate for some errors, we use a calculation deviation correction value. This makes for instance 24.49999999 round to 25, as it's assumed that 24.5 was intended as outcome of a formula.
+const DblCalcDev = 0.00000001;
+
+// ****************** Calculation Type support functions ******************
+
+// DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+// DataTableValue: Takes a value from an array table.
+
+function DataTableValue($vDataArray, $Index)
+{
+	$lI = $Index;
+	if ($lI < 1) $lI = 1;
+	if ($lI > count($vDataArray)) $lI = count($vDataArray);
+
+	return $vDataArray[$lI-1];
+}
+
+// EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+// ExpFmod: Exponential function based on percentage.
+// Common percentage values are around ~5.5% for between levels and ~20% jumps between level segments.
+
+function ExpFmod($dVal, $dLstart, $dPlvl, $dLvl)
+{
+	return (SmallerDbl($dLvl,$dLstart) ? $dVal : $dVal*(1+$dPlvl/100)^($dLvl-$dLstart+1));
+}
+
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+// NamedRangeValue: Takes a value from a named spreadsheet table.
+// This function doesn't have a meaning outside a spreadsheet and so is not implemented here.
+
+function NamedRangeValue($RName, $RowIndex, $ColIndex)
+{
+	return 0;
+
+}
+
+// PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+// CalcPercAB: Calculates the percentage out of a rating based on the AB formula.
+
+function CalcPercAB($dA, $dB, $dPCap, $dR)
+{
+	return ($dR <= 0 ? 0 : MinDbl($dA/(1+$dB/$dR),$dPCap));
+}
+
+// RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+// CalcRatAB: Calculates the rating out of a percentage based on the AB formula.
+
+function CalcRatAB($dA, $dB, $dCapR, $dP)
+{
+	return ($dP <= 0 ? 0 : MinDbl($dB/($dA/$dP-1),$dCapR));
+}
+
+// TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+// LinFmod: Linear line function between 2 points with some optional modifications.
+// Connects point (dLstart,dVal*dFstart) with (dLend,dVal*dFend).
+// Usually used with dVal=1 and dFstart/dFend containing unrelated points or dVal=# and dFstart/dFend containing multiplier factors.
+// Modification for in-between points on the line: rounding (in general to multiples of dRound=10).
+
+function LinFmod($dVal, $dFstart, $dFend, $dLstart, $dLend, $dLvl, $dRound = NULL)
+{
+	if (IsDbl($dLvl,$dLstart))
+		return $dVal*$dFstart;
+	elseif (IsDbl($dLvl,$dLend))
+		return $dVal*$dFend;
+	elseif ($dRound === NULL)
+		return $dVal*($dFstart*($dLend-$dLvl)+($dLvl-$dLstart)*$dFend)/($dLend-$dLstart);
+	else
+		return RoundDbl($dVal*($dFstart*($dLend-$dLvl)+($dLvl-$dLstart)*$dFend)/(($dLend-$dLstart)*$dRound))*$dRound;
+}
+
+// ****************** Parameter "C" decode support functions ******************
+
+// ArmCodeIndex: returns a specified index from an Armour Code.
+// acode string:
+// 1st position: H=heavy, M=medium, L=light
+// 2nd position: H=head, S=shoulders, CL=cloak/back, C=chest, G=gloves, L=leggings, B=boots, Sh=shield
+// 3rd position: W=white/common, Y=yellow/uncommon, P=purple/rare, T=teal/blue/incomparable, G=gold/legendary/epic
+// Note: no such thing exists as a heavy, medium or light cloak, so no H/M/L in cloak codes (cloaks go automatically in the M class since U23, although historically this was L)
+
+function ArmCodeIndex($acode, $ii)
+{
+	$armourcode = strtoupper(trim($acode));
+
+	// get positional codes and make some corrections
+	$sarmclass = substr($armourcode,0,1);
+	$sarmtype = substr($armourcode,1,1);
+	$sarmcol = substr($armourcode,2,1);
+	if ($sarmtype == "S" and $sarmcol == "H") {
+		$sarmtype = "SH";
+		$sarmcol = substr($armourcode,3,1);
+	} elseif ($sarmclass == "C" and $sarmtype == "L") {
+		$sarmclass = "M";
+		$sarmtype = "CL";
+	} else
+		$sarmtype = " ".$sarmtype;
+	
+	if ($ii == 1) {
+		$ind = strpos("HML",$sarmclass);
+		return ($ind === false ? 0 : $ind+1);
+	} elseif ($ii == 2) {
+		$ind = strpos(" H SCL C G L BSH",$sarmtype);
+		return ($ind === false ? 0 : ($ind/2)+1);
+	} elseif ($ii == 3) {
+		$ind = strpos("WYPTG",$sarmcol);
+		return ($ind === false ? 0 : $ind+1);
+	} else
+		return 0;
+}
+
+// RomanRankDecode: converts a string with a Roman number in characters, to an integer number.
+// used for Legendary Item Title calculation.
+
+const RomanCharsToValues = array("M"=>1000,"CM"=>900,"D"=>500,"CD"=>400,"C"=>100,"XC"=>90,"L"=>50,"XL"=>40,"X"=>10,"IX"=>9,"V"=>5,"IV"=>4,"I"=>1);
+
+function RomanRankDecode($srank)
+{
+	if (!empty($srank))
+		foreach (RomanCharsToValues as $schars => $ivalue)
+			if (substr(strtoupper($srank),0,strlen($schars)) == $schars)
+				return $ivalue+RomanRankDecode(substr($srank,strlen($schars)));
+	
+	return 0;
+}
+
+// ****************** Misc. floating point support functions ******************
+
+// Misc. functions for floating point: rounding etc.
+// For roundings: iDec is number of decimals.
+
+function RoundDbl($dNum, $iDec = 0)
+{
+	return round($dNum+DblCalcDev,$iDec,PHP_ROUND_HALF_UP);
+}
+
+function CeilDbl($dNum, $iDec = 0)
+{
+	if ($dNum >= 0) 
+		return round($dNum+10^(-$iDec)/2-DblCalcDev,$iDec,PHP_ROUND_HALF_UP);
+	else
+		return round($dNum+10^(-$iDec)/2-DblCalcDev,$iDec,PHP_ROUND_HALF_DOWN);
+}
+
+function FloorDbl($dNum, $iDec = 0)
+{
+	if ($dNum >= 0) 
+		return round($dNum-10^(-$iDec)/2+DblCalcDev,$iDec,PHP_ROUND_HALF_UP);
+	else
+		return round($dNum-10^(-$iDec)/2+DblCalcDev,$iDec,PHP_ROUND_HALF_DOWN);
+}
+
+function IsDbl($dNum1, $dNum2)
+{
+	return (abs($dNum1-$dNum2) <= DblCalcDev);
+}
+
+function SmallerDbl($dNum1, $dNum2)
+{
+	return (($dNum2-$dNum1) > DblCalcDev);
+}
+
+function GreaterDbl($dNum1, $dNum2)
+{
+	return (($dNum1-$dNum2) > DblCalcDev);
+}
+
+function MinDbl($dNum1, $dNum2)
+{
+	return ($dNum1 <= $dNum2 ? $dNum1 : $dNum2);
+}
+
+function MaxDbl($dNum1, $dNum2)
+{
+	return ($dNum1 >= $dNum2 ? $dNum1 : $dNum2);
+}
+1
+	if ($SN < "$STATNAME") {
+1
+	} elseif ($SN < "$STATNAME") {
+1
+	if ($SN == "$STATNAME") {
+1
+	} elseif ($SN == "$STATNAME") {
+1
+	if ($SN > "$STATNAME") {
+1
+	} elseif ($SN > "$STATNAME") {
+1
+	} else {
+1
+	}
+1
+		return $CALC;
+1
+		if ($L-DblCalcDev <= $LEVEL) {
+1
+		} elseif ($L-DblCalcDev <= $LEVEL) {
+1
+		} else {
+1
+		}
+1
+			return $CALC;
+1
+		if ($LVLSTART <= $L+DblCalcDev and $L-DblCalcDev <= $LVLEND) {
+1
+		} elseif ($LVLSTART <= $L+DblCalcDev and $L-DblCalcDev <= $LVLEND) {
+1
+		} else {
+1
+		}
+1
+			return $CALC;
+$C
+$L
+$N
+
+$SN
+array(
+,
+)

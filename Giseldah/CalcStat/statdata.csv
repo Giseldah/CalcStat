@@ -1,5 +1,9 @@
 Stat,Script,Lstart,Lend,Type,UseN,Decimals,P1,P2,P3,P4,P5,P6,CompF,Notes
--VERSION,S,,,A,,,!1.2.0v!,,,,,,1,String with version information
+-VERSION,S,,,A,,,!1.3.0v!,,,,,,1,String with version information
+$ACI_CATEGORY,D,,,,,,ArmCodeIndex($C|1),,,,,,1,Armour Code Index – Category: C=armour code
+$ACI_QUALITY,D,,,,,,ArmCodeIndex($C|3),,,,,,1,Armour Code Index – Quality: C=armour code
+$ACI_TYPE,D,,,,,,ArmCodeIndex($C|2),,,,,,1,Armour Code Index – Type: C=armour code
+$ROMAN_RANK,D,,,,,,RomanRankDecode($C),,,,,,,Roman Rank: C=roman number
 ADJITEMPROGFOODRESIST,S,,400,C,N,,1,,,,,,,"Adjustment Item Progression Food Resistance: L=item level, N=progression base value"
 ADJITEMPROGFOODRESIST,S,400,449,M,,,ItemProg,1,0.9,400,449,,,"Adjustment Item Progression Food Resistance: L=item level, N=progression base value"
 ADJITEMPROGFOODRESIST,S,449,,C,N,,0.9,,,,,,,"Adjustment Item Progression Food Resistance: L=item level, N=progression base value"
@@ -16,14 +20,14 @@ ADJITEMPROGMORALE,S,400,449,M,,,ItemProg,22/35,20/35,400,449,,,"Adjustment Item 
 ADJITEMPROGMORALE,S,449,450,M,,,ItemProg,20/35,99/189,449,450,,,"Adjustment Item Progression Morale stats: L=item level, N=progression base value"
 ADJITEMPROGMORALE,S,450,499,M,,,ItemProg,99/189,20/35,450,499,,,"Adjustment Item Progression Morale stats: L=item level, N=progression base value"
 ADJITEMPROGMORALE,S,499,,C,N,,20/35,,,,,,,"Adjustment Item Progression Morale stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,,349,C,N,,1,,,,,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,349,350,M,,,ItemProg,1,120/110,349,350,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,350,399,M,,,ItemProg,120/110,0.8,350,399,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,399,400,M,,,ItemProg,0.8,22/35,399,400,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,400,449,M,,,ItemProg,22/35,20/35,400,449,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,449,450,M,,,ItemProg,20/35,99/189,449,450,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,450,499,M,,,ItemProg,99/189,96/189,450,499,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
-ADJITEMPROGMORREG,S,499,,C,N,,96/189,,,,,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,,79,M,,,ItemProg,1,1.04,1,79,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,79,80,M,,,ItemProg,1.04,1,79,80,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,80,349,C,N,,1,,,,,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,349,350,M,,,ItemProg,1,95/99,349,350,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,350,399,M,,,ItemProg,95/99,38/45,350,399,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,399,400,M,,,ItemProg,38/45,76/105,399,400,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,400,449,M,,,ItemProg,76/105,38/63,400,449,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
+ADJITEMPROGMORREG,S,449,,C,N,,38/63,,,,,,,"Adjustment Item Progression Morale Regeneration stats: L=item level, N=progression base value"
 ADJITEMPROGPOWER,S,,349,C,N,,1,,,,,,,"Adjustment Item Progression Power stats: L=item level, N=progression base value"
 ADJITEMPROGPOWER,S,349,350,M,,,ItemProg,1,120/110,349,350,,,"Adjustment Item Progression Power stats: L=item level, N=progression base value"
 ADJITEMPROGPOWER,S,350,399,M,,,ItemProg,120/110,0.8,350,399,,,"Adjustment Item Progression Power stats: L=item level, N=progression base value"
@@ -73,17 +77,17 @@ ARMCATMP,S,,0,C,N,,0,,,,,,1,Armour Category Multiplier: L=armour class index
 ARMCATMP,S,1,1,C,N,,14877/12350,,,,,,1,Armour Category Multiplier: L=armour class index
 ARMCATMP,S,2,2,C,N,,12415/12350,,,,,,1,Armour Category Multiplier: L=armour class index
 ARMCATMP,S,3,,C,N,,9880/12350,,,,,,1,Armour Category Multiplier: L=armour class index
-ARMOUR,S,,,A,,,FloorDbl(@ArmourRaw#{C}|Nothing),,,,,,,Armour value: needs to be rounded down for gear
-ARMOURLOW,S,,,A,,,FloorDbl(@ArmourLowRaw#{C}|Nothing),,,,,,,Armour value: needs to be rounded down for gear
-ARMOURLOWRAW,S,,,A,,,@ArmTypeMP{ArmCodeIndex(C|2)}*@ArmQtyLowMP{ArmCodeIndex(C|2)}*@ArmCatMP{ArmCodeIndex(C|1)}*@ArmProgMP{ArmCodeIndex(C|1)}#{L},,,,,,1,"Armour value calculation:  L=item level, C=armour code. “HS” etc"
-ARMOURRAW,S,,,A,,,@ArmTypeMP{ArmCodeIndex(C|2)}*@ArmQtyMP{ArmCodeIndex(C|3)}#{ArmCodeIndex(C|2)}*@ArmCatMP{ArmCodeIndex(C|1)}*@ArmProgMP{ArmCodeIndex(C|1)}#{L},,,,,,,"Armour value calculation:  L=item level, C=armour code. “HshT” etc"
+ARMOUR,S,,,A,,,FloorDbl(@ArmourRaw#{$C}$PNULL),,,,,,,Armour value: needs to be rounded down for gear
+ARMOURLOW,S,,,A,,,FloorDbl(@ArmourLowRaw#{$C}$PNULL),,,,,,,Armour value: needs to be rounded down for gear
+ARMOURLOWRAW,S,,,A,,,@ArmTypeMP{$ACI_TYPE}*@ArmQtyLowMP{$ACI_TYPE}*@ArmCatMP{$ACI_CATEGORY}*@ArmProgMP{$ACI_CATEGORY}#{$L},,,,,,1,"Armour value calculation:  L=item level, C=armour code. “HS” etc"
+ARMOURRAW,S,,,A,,,@ArmTypeMP{$ACI_TYPE}*@ArmQtyMP{$ACI_QUALITY}#{$ACI_TYPE}*@ArmCatMP{$ACI_CATEGORY}*@ArmProgMP{$ACI_CATEGORY}#{$L},,,,,,,"Armour value calculation:  L=item level, C=armour code. “HshT” etc"
 ARMPROG,S,,400,A,,,@ItemProg#/@StdProg75#,,,,,,1,"Armour Progression: L=item level, N=progression base"
 ARMPROG,S,400,449,T,N,,1,@ItemProg400#/@StdProg75#,0.9*(@ItemProg449#/@StdProg75#),400,449,,1,"Armour Progression: L=item level, N=progression base"
 ARMPROG,S,449,,A,,,0.9*(@ItemProg#/@StdProg75#),,,,,,1,"Armour Progression: L=item level, N=progression base"
 ARMPROGMP,S,,0,C,N,,0,,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
-ARMPROGMP,S,1,1,A,,,@ArmProg{N}#{@ProgBMitHeavy},,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
-ARMPROGMP,S,2,2,A,,,@ArmProg{N}#{@ProgBMitMedium},,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
-ARMPROGMP,S,3,,A,,,@ArmProg{N}#{@ProgBMitLight},,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
+ARMPROGMP,S,1,1,A,,,@ArmProg{$N}#{@ProgBMitHeavy},,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
+ARMPROGMP,S,2,2,A,,,@ArmProg{$N}#{@ProgBMitMedium},,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
+ARMPROGMP,S,3,,A,,,@ArmProg{$N}#{@ProgBMitLight},,,,,,1,"Armour Progression Multiplier: L=armour class index, N=item level"
 ARMQTYCOMMMP,S,,0,C,N,,0,,,,,,,Armour Common Quality Multiplier: L=armour type index
 ARMQTYCOMMMP,S,1,,D,N,,220/3,,,,,,,Armour Common Quality Multiplier: L=armour type index
 ARMQTYCOMMMP,S,,,,,,220/3,,,,,,,Armour Common Quality Multiplier: L=armour type index
@@ -121,11 +125,11 @@ ARMQTYLOWMP,S,1,,,,,49.8,,,,,,1,Armour Type Multiplier: L=armour type index
 ARMQTYLOWMP,S,1,,,,,50,,,,,,1,Armour Type Multiplier: L=armour type index
 ARMQTYLOWMP,S,1,,,,,50,,,,,,1,Armour Type Multiplier: L=armour type index
 ARMQTYMP,S,,0,C,N,,0,,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
-ARMQTYMP,S,1,1,A,,,@ArmQtyCommMP{N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
-ARMQTYMP,S,2,2,A,,,@ArmQtyUncomMP{N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
-ARMQTYMP,S,3,3,A,,,@ArmQtyRareMP{N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
-ARMQTYMP,S,4,4,A,,,@ArmQtyIncompMP{N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
-ARMQTYMP,S,5,,A,,,@ArmQtyLegendMP{N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
+ARMQTYMP,S,1,1,A,,,@ArmQtyCommMP{$N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
+ARMQTYMP,S,2,2,A,,,@ArmQtyUncomMP{$N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
+ARMQTYMP,S,3,3,A,,,@ArmQtyRareMP{$N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
+ARMQTYMP,S,4,4,A,,,@ArmQtyIncompMP{$N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
+ARMQTYMP,S,5,,A,,,@ArmQtyLegendMP{$N},,,,,,,"Armour Quality Multiplier: L=armour color index, N=armour type index"
 ARMQTYRAREMP,S,,0,C,N,,0,,,,,,,Armour Rare Quality Multiplier: L=armour type index
 ARMQTYRAREMP,S,1,,D,N,,260/3,,,,,,,Armour Rare Quality Multiplier: L=armour type index
 ARMQTYRAREMP,S,,,,,,260/3,,,,,,,Armour Rare Quality Multiplier: L=armour type index
@@ -154,13 +158,13 @@ ARMTYPEMP,S,1,,,,,25,,,,,,1,Armour Type Multiplier: L=armour type index
 ARMTYPEMP,S,1,,,,,12,,,,,,1,Armour Type Multiplier: L=armour type index
 ARMTYPEMP,S,1,,,,,37.5,,,,,,1,Armour Type Multiplier: L=armour type index
 AUDACITYMELDMGP,S,,120,L,N,,0.01,,,,,,,Audacity Melee Damage: L=Audacity lvl
-AUDACITYMELDMGP,S,121,,A,,,@AudacityMelDmgP{L-FloorDbl((L-1)/5|Nothing)*5+115},,,,,,,Audacity Tactical Damage: L=Audacity lvl
+AUDACITYMELDMGP,S,121,,A,,,@AudacityMelDmgP{$L-FloorDbl(($L-1)/5$PNULL)*5+115},,,,,,,Audacity Tactical Damage: L=Audacity lvl
 AUDACITYMELREDP,S,,,C,N,,-0.3,,,,,,,Audacity Incoming Melee Damage: L=Audacity lvl
 AUDACITYRNGDMGP,S,,120,L,N,,0.01,,,,,,,Audacity Ranged Damage: L=Audacity lvl
-AUDACITYRNGDMGP,S,121,,A,,,@AudacityRngDmgP{L-FloorDbl((L-1)/5|Nothing)*5+115},,,,,,,Audacity Tactical Damage: L=Audacity lvl
+AUDACITYRNGDMGP,S,121,,A,,,@AudacityRngDmgP{$L-FloorDbl(($L-1)/5$PNULL)*5+115},,,,,,,Audacity Tactical Damage: L=Audacity lvl
 AUDACITYRNGREDP,S,,,C,N,,-0.3,,,,,,,Audacity Incoming Ranged Damage: L=Audacity lvl
 AUDACITYTACDMGP,S,,120,L,N,,0.01,,,,,,,Audacity Tactical Damage: L=Audacity lvl
-AUDACITYTACDMGP,S,121,,A,,,@AudacityTacDmgP{L-FloorDbl((L-1)/5|Nothing)*5+115},,,,,,,Audacity Tactical Damage: L=Audacity lvl
+AUDACITYTACDMGP,S,121,,A,,,@AudacityTacDmgP{$L-FloorDbl(($L-1)/5$PNULL)*5+115},,,,,,,Audacity Tactical Damage: L=Audacity lvl
 AUDACITYTACREDP,S,,,C,N,,-0.3,,,,,,,Audacity Incoming Tactical Damage: L=Audacity lvl
 AWARDLVLTOILVL,S,,4,C,N,,1,,,,,,,Character Level to Item Level mapping for awarded items: L=character/instance level
 AWARDLVLTOILVL,S,5,50,L,N,,1,-4,,,,,,Character Level to Item Level mapping for awarded items: L=character/instance level
@@ -222,6 +226,7 @@ BEORNINGCDBASEVITALITY,S,,,A,,,@ClassBaseMainC,,,,,,,Beorning Class Base stats: 
 BEORNINGCDBASEWILL,S,,,A,,,@ClassBaseMainF,,,,,,,Beorning Class Base stats: L=character level
 BEORNINGCDCANBLOCK,S,,,C,N,,1,,,,,,,"Class can block? Yes=1, No=0"
 BEORNINGCDFATETOCRITHIT,S,,,C,N,,2.5,,,,,,,Beorning Fate stat contribution: L=stat index
+BEORNINGCDFATETOFINESSE,S,,,C,N,,0.5,,,,,,,Beorning Fate stat contribution: L=stat index
 BEORNINGCDFATETOICMR,S,,,C,N,,3,,,,,,,Beorning Fate stat contribution: L=stat index
 BEORNINGCDFATETORESIST,S,,,C,N,,1,,,,,,,Beorning Fate stat contribution: L=stat index
 BEORNINGCDFATETOTACMIT,S,,,C,N,,2,,,,,,,Beorning Fate stat contribution: L=stat index
@@ -273,8 +278,8 @@ BRATMEDIUM,S,,,A,,,@BratProg#{@ProgBMedium},,,,,,1,B-rating Medium
 BRATMITHEAVY,S,,,A,,,@BratProg#{@ProgBMitHeavy},,,,,,1,B-rating Heavy Mitigation
 BRATMITLIGHT,S,,,A,,,@BratProg#{@ProgBMitLight},,,,,,1,B-rating Light Mitigation
 BRATMITMEDIUM,S,,,A,,,@BratProg#{@ProgBMitMedium},,,,,,1,B-rating Medium Mitigation
-BRATPROG,S,,75,T,N,,RoundDbl(N|Nothing),1,75,1,75,,1,"B-rating progression scheme. L=character level, N=progression base value"
-BRATPROG,S,75,76,T,N,,1,RoundDbl(N|Nothing)*75,@StdProg76#,75,76,,1,"B-rating progression scheme. L=character level, N=progression base value"
+BRATPROG,S,,75,T,N,,RoundDbl($N$PNULL),1,75,1,75,,1,"B-rating progression scheme. L=character level, N=progression base value"
+BRATPROG,S,75,76,T,N,,1,RoundDbl($N$PNULL)*75,@StdProg76#,75,76,,1,"B-rating progression scheme. L=character level, N=progression base value"
 BRATPROG,S,76,100,T,N,,1,@StdProg76#,@StdProg100#,75,100,10,1,"B-rating progression scheme. L=character level, N=progression base value"
 BRATPROG,S,100,101,A,,,@StdProg#,,,,,,1,"B-rating progression scheme. L=character level, N=progression base value"
 BRATPROG,S,101,105,T,N,,1,@StdProg101#,@StdProg105#,100,105,10,1,"B-rating progression scheme. L=character level, N=progression base value"
@@ -293,7 +298,7 @@ BRGDEFTSTRIKESCHOICE,S,,,,,,2,,,,,,,"Champion Deft Strikes: Melee Critical Hit P
 BRGDEFTSTRIKESCHOICE,S,,,,,,3,,,,,,,"Champion Deft Strikes: Melee Critical Hit Percentage: L=character level, N=trait rank"
 BRGDEFTSTRIKESCHOICE,S,,,,,,4,,,,,,,"Champion Deft Strikes: Melee Critical Hit Percentage: L=character level, N=trait rank"
 BRGDEFTSTRIKESCHOICE,S,,,,,,5,,,,,,,"Champion Deft Strikes: Melee Critical Hit Percentage: L=character level, N=trait rank"
-BRGDEFTSTRIKESMELCRITP,S,,,A,,,@BrgDeftStrikesBase#{@BrgDeftStrikesChoice{N}},,,,,,,"Champion Deft Strikes: Melee Critical Hit Percentage: L=character level, N=trait rank"
+BRGDEFTSTRIKESMELCRITP,S,,,A,,,@BrgDeftStrikesBase#{@BrgDeftStrikesChoice{$N}},,,,,,,"Champion Deft Strikes: Melee Critical Hit Percentage: L=character level, N=trait rank"
 BRGFOOTPADSTEALTH,S,,,A,,,@BrgStealth#,,,,,,,"Champion Footpad: Stealth Level: L=character level, N=trait rank"
 BRGHEARTPRBASE,S,,,C,Y,,0.02,,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
 BRGHEARTPRCHOICE,S,,0,C,N,,0,,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
@@ -303,7 +308,7 @@ BRGHEARTPRCHOICE,S,1,5,,,,3,,,,,,,"Champion Heartening Prank: Morale Percentage:
 BRGHEARTPRCHOICE,S,1,5,,,,4,,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
 BRGHEARTPRCHOICE,S,1,5,,,,5,,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
 BRGHEARTPRCHOICE,S,6,,C,N,,2,,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
-BRGHEARTPRMORALEP,S,,,A,,,@BrgHeartPrBase#{@BrgHeartPrChoice{N}},,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
+BRGHEARTPRMORALEP,S,,,A,,,@BrgHeartPrBase#{@BrgHeartPrChoice{$N}},,,,,,,"Champion Heartening Prank: Morale Percentage: L=character level, N=trait rank"
 BRGLEAFWALKERSTEALTH,S,,,A,,,@BrgStealth#,,,,,,,"Champion Leaf Walker: Stealth Level: L=character level, N=trait rank"
 BRGRTDCRITBASE,S,,,C,Y,,0.025,,,,,,,"Champion Roll the Dice: Melee Critical Hit Percentage: L=character level, N=trait rank"
 BRGRTDCRITCHOICE,S,,5,C,N,,0,,,,,,,"Champion Roll the Dice: Melee Critical Hit Percentage: L=character level, N=trait rank"
@@ -316,9 +321,9 @@ BRGRTDDMGCHOICE,S,,,,,,2,,,,,,,"Champion Roll the Dice: Melee Damage Percentage:
 BRGRTDDMGCHOICE,S,,,,,,3,,,,,,,"Champion Roll the Dice: Melee Damage Percentage: L=character level, N=trait rank"
 BRGRTDDMGCHOICE,S,,,,,,4,,,,,,,"Champion Roll the Dice: Melee Damage Percentage: L=character level, N=trait rank"
 BRGRTDDMGCHOICE,S,,,,,,5,,,,,,,"Champion Roll the Dice: Melee Damage Percentage: L=character level, N=trait rank"
-BRGRTDMELCRITP,S,,,A,,,@BrgRtDCritBase#{@BrgRtDCritChoice{N}},,,,,,,"Champion Roll the Dice: Melee Critical Hit Percentage: L=character level, N=trait rank"
-BRGRTDMELDMGP,S,,,A,,,@BrgRtDDmgBase#{@BrgRtDDmgChoice{N}},,,,,,,"Champion Roll the Dice: Melee Damage Percentage: L=character level, N=trait rank"
-BRGSTEALTH,S,,,A,,,@BrgStealthBase#{@BrgStealthChoice{N}},,,,,,,"Champion Stealth Level traits: L=character level, N=trait rank"
+BRGRTDMELCRITP,S,,,A,,,@BrgRtDCritBase#{@BrgRtDCritChoice{$N}},,,,,,,"Champion Roll the Dice: Melee Critical Hit Percentage: L=character level, N=trait rank"
+BRGRTDMELDMGP,S,,,A,,,@BrgRtDDmgBase#{@BrgRtDDmgChoice{$N}},,,,,,,"Champion Roll the Dice: Melee Damage Percentage: L=character level, N=trait rank"
+BRGSTEALTH,S,,,A,,,@BrgStealthBase#{@BrgStealthChoice{$N}},,,,,,,"Champion Stealth Level traits: L=character level, N=trait rank"
 BRGSTEALTHBASE,S,,,C,Y,,1,,,,,,,"Champion Stealth Level traits: L=character level, N=trait rank"
 BRGSTEALTHCHOICE,S,,0,C,N,,0,,,,,,,"Champion Stealth Level traits: L=character level, N=trait rank"
 BRGSTEALTHCHOICE,S,1,,D,N,,1,,,,,,,"Champion Stealth Level traits: L=character level, N=trait rank"
@@ -333,7 +338,7 @@ BRGSTICKMOVECHOICE,S,,,,,,2,,,,,,,"Champion Stick and Move: Evade Percentage: L=
 BRGSTICKMOVECHOICE,S,,,,,,3,,,,,,,"Champion Stick and Move: Evade Percentage: L=character level, N=trait rank"
 BRGSTICKMOVECHOICE,S,,,,,,4,,,,,,,"Champion Stick and Move: Evade Percentage: L=character level, N=trait rank"
 BRGSTICKMOVECHOICE,S,,,,,,5,,,,,,,"Champion Stick and Move: Evade Percentage: L=character level, N=trait rank"
-BRGSTICKMOVEEVADEP,S,,,A,,,@BrgStickMoveBase#{@BrgStickMoveChoice{N}},,,,,,,"Champion Stick and Move: Evade Percentage: L=character level, N=trait rank"
+BRGSTICKMOVEEVADEP,S,,,A,,,@BrgStickMoveBase#{@BrgStickMoveChoice{$N}},,,,,,,"Champion Stick and Move: Evade Percentage: L=character level, N=trait rank"
 BURGLARCDAGILITYTOCRITHIT,S,,,C,N,,1,,,,,,,Burglar Agility stat contribution: L=stat index
 BURGLARCDAGILITYTOEVADE,S,,,C,N,,3,,,,,,,Burglar Agility stat contribution: L=stat index
 BURGLARCDAGILITYTOPARRY,S,,,C,N,,2,,,,,,,Burglar Agility stat contribution: L=stat index
@@ -450,6 +455,7 @@ CHAMPIONCDMIGHTTOPHYMAS,S,,,C,N,,3,,,,,,,Champion Might stat contribution: L=sta
 CHAMPIONCDMIGHTTOPHYMIT,S,,,C,N,,1,,,,,,,Champion Might stat contribution: L=stat index
 CHAMPIONCDPHYMITTOOFMIT,S,,,C,N,,1,,,,,,,Champion PhyMit stat contribution: L=stat index
 CHAMPIONCDTACMASTOOUTHEAL,S,,,C,N,,1,,,,,,,Champion TacMas stat contribution: L=stat index
+CHAMPIONCDVITALITYTOBLOCK,S,,,C,N,,1,,,,,,,Champion Vitality stat contribution: L=stat index
 CHAMPIONCDVITALITYTOMORALE,S,,,C,N,,4.5,,,,,,,Champion Vitality stat contribution: L=stat index
 CHAMPIONCDVITALITYTONCMR,S,,,C,N,,7.2,,,,,,,Champion Vitality stat contribution: L=stat index
 CHAMPIONCDVITALITYTORESIST,S,,,C,N,,1,,,,,,,Champion Vitality stat contribution: L=stat index
@@ -473,7 +479,7 @@ CHISELICPRL,S,41,70,C,N,,120,,,,,,,Rune-keeper Chisel: ICPR
 CHISELICPRL,S,71,100,C,N,,180,,,,,,,Rune-keeper Chisel: ICPR
 CHISELICPRL,S,101,,C,N,,240,,,,,,,Rune-keeper Chisel: ICPR
 CHISELRAWCRITHITH,S,,105,A,,,6*@ChiselRawLow,,,,,,,Rune-keeper Chisel: CritHit
-CHISELRAWCRITHITH,S,106,115,T,N,,RoundDbl(@ChiselRawCritHitH105|Nothing),2,4,106,115,10,,Rune-keeper Chisel: CritHit
+CHISELRAWCRITHITH,S,106,115,T,N,,RoundDbl(@ChiselRawCritHitH105$PNULL),2,4,106,115,10,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITH,S,116,116,E,N,,@ChiselRawCritHitH115,20,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITH,S,117,120,E,N,,@ChiselRawCritHitH116,5.501,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITH,S,121,121,E,N,,@ChiselRawCritHitH120,20,,,,,,Rune-keeper Chisel: CritHit
@@ -482,7 +488,7 @@ CHISELRAWCRITHITH,S,126,126,E,N,,@ChiselRawCritHitH125,20,,,,,,Rune-keeper Chise
 CHISELRAWCRITHITH,S,127,130,E,N,,@ChiselRawCritHitH126,5.501,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITH,S,131,,A,,,@ChiselRawCritHitH130,,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITL,S,,105,A,,,4*@ChiselRawLow,,,,,,,Rune-keeper Chisel: CritHit
-CHISELRAWCRITHITL,S,106,115,T,N,,RoundDbl(@ChiselRawCritHitL105|Nothing),2,4,106,115,10,,Rune-keeper Chisel: CritHit
+CHISELRAWCRITHITL,S,106,115,T,N,,RoundDbl(@ChiselRawCritHitL105$PNULL),2,4,106,115,10,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITL,S,116,116,E,N,,@ChiselRawCritHitL115,20,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITL,S,117,120,E,N,,@ChiselRawCritHitL116,5.5024,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITL,S,121,121,E,N,,@ChiselRawCritHitL120,20,,,,,,Rune-keeper Chisel: CritHit
@@ -491,7 +497,7 @@ CHISELRAWCRITHITL,S,126,126,E,N,,@ChiselRawCritHitL125,20,,,,,,Rune-keeper Chise
 CHISELRAWCRITHITL,S,127,130,E,N,,@ChiselRawCritHitL126,5.5,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWCRITHITL,S,131,,A,,,@ChiselRawCritHitL130,,,,,,,Rune-keeper Chisel: CritHit
 CHISELRAWFINESSEH,S,,105,A,,,2*@ChiselRawLow,,,,,,,Rune-keeper Chisel: Finesse
-CHISELRAWFINESSEH,S,106,115,T,N,,RoundDbl(@ChiselRawFinesseH105|Nothing),2,4,106,115,10,,Rune-keeper Chisel: Finesse
+CHISELRAWFINESSEH,S,106,115,T,N,,RoundDbl(@ChiselRawFinesseH105$PNULL),2,4,106,115,10,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEH,S,116,116,E,N,,@ChiselRawFinesseH115,20,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEH,S,117,120,E,N,,@ChiselRawFinesseH116,5.4975,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEH,S,121,121,E,N,,@ChiselRawFinesseH120,20,,,,,,Rune-keeper Chisel: Finesse
@@ -500,7 +506,7 @@ CHISELRAWFINESSEH,S,126,126,E,N,,@ChiselRawFinesseH125,20,,,,,,Rune-keeper Chise
 CHISELRAWFINESSEH,S,127,130,E,N,,@ChiselRawFinesseH126,5.504,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEH,S,131,,A,,,@ChiselRawFinesseH130,,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEL,S,,105,A,,,@ChiselRawLow,,,,,,,Rune-keeper Chisel: Finesse
-CHISELRAWFINESSEL,S,106,115,T,N,,RoundDbl(@ChiselRawFinesseL105|Nothing),2,4,106,115,10,,Rune-keeper Chisel: Finesse
+CHISELRAWFINESSEL,S,106,115,T,N,,RoundDbl(@ChiselRawFinesseL105$PNULL),2,4,106,115,10,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEL,S,116,116,E,N,,@ChiselRawFinesseL115,20,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEL,S,117,120,E,N,,@ChiselRawFinesseL116,5.4955,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEL,S,121,121,E,N,,@ChiselRawFinesseL120,20,,,,,,Rune-keeper Chisel: Finesse
@@ -509,13 +515,13 @@ CHISELRAWFINESSEL,S,126,126,E,N,,@ChiselRawFinesseL125,20,,,,,,Rune-keeper Chise
 CHISELRAWFINESSEL,S,127,130,E,N,,@ChiselRawFinesseL126,5.4955,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWFINESSEL,S,131,,A,,,@ChiselRawFinesseL130,,,,,,,Rune-keeper Chisel: Finesse
 CHISELRAWLOW,S,,,L,,,4.04,,,,,,,Rune-keeper Chisel: low stat base
-CLASSBASEICMRH,S,,50,A,,,(L/(L+22.5))*(500/3)+1820/141,,,,,,,Common Class Base stats: L=character level
+CLASSBASEICMRH,S,,50,A,,,($L/($L+22.5))*(500/3)+1820/141,,,,,,,Common Class Base stats: L=character level
 CLASSBASEICMRH,S,51,120,L,N,,0.75,90.625,,,,,,Common Class Base stats: L=character level
 CLASSBASEICMRH,S,121,,C,N,,150,,,,,,,Common Class Base stats: L=character level
-CLASSBASEICMRL,S,,50,A,,,(L/(L+22.5))*(392/3)+1331/141,,,,,,,Common Class Base stats: L=character level
+CLASSBASEICMRL,S,,50,A,,,($L/($L+22.5))*(392/3)+1331/141,,,,,,,Common Class Base stats: L=character level
 CLASSBASEICMRL,S,51,120,L,N,,0.6,69.615,,,,,,Common Class Base stats: L=character level
 CLASSBASEICMRL,S,121,,C,N,,150,,,,,,,Common Class Base stats: L=character level
-CLASSBASEICMRM,S,,50,A,,,(L/(L+22.5))*149.5+1500/141,,,,,,,Common Class Base stats: L=character level
+CLASSBASEICMRM,S,,50,A,,,($L/($L+22.5))*149.5+1500/141,,,,,,,Common Class Base stats: L=character level
 CLASSBASEICMRM,S,51,120,L,N,, 2/3,242/3,,,,,,Common Class Base stats: L=character level
 CLASSBASEICMRM,S,121,,C,N,,150,,,,,,,Common Class Base stats: L=character level
 CLASSBASEICPR,S,,,C,N,,240,,,,,,,Common Class Base stats: L=character level
@@ -750,14 +756,14 @@ FOODICMRH,S,120,121,E,,,3977.2,20,-1,,,,,Food in-combat morale regeneration – 
 FOODICMRH,S,122,125,E,,,5035.5,5.5,-1,,,,,Food in-combat morale regeneration – high: L=iLvl (superior N=1.1)
 FOODICMRH,S,126,130,E,,,7095.8,5.5,-1,,,,,Food in-combat morale regeneration – high: L=iLvl (superior N=1.1)
 FOODICMRH,S,131,,A,,,@FoodICMRH130#,,,,,,,Food in-combat morale regeneration – high: L=iLvl (superior N=1.1)
-FOODICMRL,S,,105,A,,,(FloorDbl((L-4)/6|Nothing)*(3.5-3.51)*6+L*3.51+5.43)*N,,,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
+FOODICMRL,S,,105,A,,,(FloorDbl(($L-4)/6$PNULL)*(3.5-3.51)*6+$L*3.51+5.43)*$N,,,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODICMRL,S,106,114,E,,,400.5,7.505,-1,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODICMRL,S,115,119,E,,,745.4,24.99,-1,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODICMRL,S,120,121,E,,,1986.8,20,-1,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODICMRL,S,122,125,E,,,2516,5.5,-1,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODICMRL,S,126,130,E,,,3544.85,5.5,-1,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODICMRL,S,131,,A,,,@FoodICMRL130#,,,,,,,Food in-combat morale regeneration – low: L=iLvl (superior N=1.1)
-FOODICMRM,S,,105,A,,,(FloorDbl((L-2)/9|Nothing)*(14/3-4.59)*9+L*4.59+7.75)*N,,,,,,,Food in-combat morale regeneration – medium: L=iLvl (superior N=1.1)
+FOODICMRM,S,,105,A,,,(FloorDbl(($L-2)/9$PNULL)*(14/3-4.59)*9+$L*4.59+7.75)*$N,,,,,,,Food in-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODICMRM,S,106,114,E,,,535,7.483,-1,,,,,Food in-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODICMRM,S,115,119,E,,,995,25,-1,,,,,Food in-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODICMRM,S,120,121,E,,,2653.2,20,-1,,,,,Food in-combat morale regeneration – medium: L=iLvl (superior N=1.1)
@@ -771,14 +777,14 @@ FOODICPRH,S,120,121,E,,,2906,20,-1,,,,,Food in-combat power regeneration – hig
 FOODICPRH,S,122,125,E,,,3678.5,5.5,-1,,,,,Food in-combat power regeneration – high: L=iLvl (superior N=1.1)
 FOODICPRH,S,126,130,E,,,5183,5.5,-1,,,,,Food in-combat power regeneration – high: L=iLvl (superior N=1.1)
 FOODICPRH,S,131,,A,,,@FoodICPRH130#,,,,,,,Food in-combat power regeneration – high: L=iLvl (superior N=1.1)
-FOODICPRL,S,,105,A,,,(FloorDbl((L-3)/6|Nothing)*(2.5-2.5336399999999)*6+L*2.5336399999999+9.831800000001)*N,,,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
+FOODICPRL,S,,105,A,,,(FloorDbl(($L-3)/6$PNULL)*(2.5-2.5336399999999)*6+$L*2.5336399999999+9.831800000001)*$N,,,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
 FOODICPRL,S,106,114,E,,,292.9,7.501,-1,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
 FOODICPRL,S,115,119,E,,,544.9,25,-1,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
 FOODICPRL,S,120,121,E,,,1453,20,-1,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
 FOODICPRL,S,122,125,E,,,1839.2,5.5,-1,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
 FOODICPRL,S,126,130,E,,,2591.4,5.504,-1,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
 FOODICPRL,S,131,,A,,,@FoodICPRL130#,,,,,,,Food in-combat power regeneration – low: L=iLvl (superior N=1.1)
-FOODICPRM,S,,105,A,,,(FloorDbl((L-6)/9|Nothing)*(10/3-3.28)*9+L*3.28+13.84)*N,,,,,,,Food in-combat power regeneration – medium: L=iLvl (superior N=1.1)
+FOODICPRM,S,,105,A,,,(FloorDbl(($L-6)/9$PNULL)*(10/3-3.28)*9+$L*3.28+13.84)*$N,,,,,,,Food in-combat power regeneration – medium: L=iLvl (superior N=1.1)
 FOODICPRM,S,106,114,E,,,390.65,7.51,-1,,,,,Food in-combat power regeneration – medium: L=iLvl (superior N=1.1)
 FOODICPRM,S,115,119,E,,,727,25,-1,,,,,Food in-combat power regeneration – medium: L=iLvl (superior N=1.1)
 FOODICPRM,S,120,121,E,,,1939.1,20,-1,,,,,Food in-combat power regeneration – medium: L=iLvl (superior N=1.1)
@@ -788,17 +794,17 @@ FOODICPRM,S,131,,A,,,@FoodICPRM130#,,,,,,,Food in-combat power regeneration – 
 FOODNCMRH,S,,50,L,,,70.2,210,,,,,,Food non-combat morale regeneration – high: L=iLvl (superior N=1.1)
 FOODNCMRH,S,51,52,A,,,@FoodNCMRH50#,,,,,,,Food non-combat morale regeneration – high: L=iLvl (superior N=1.1)
 FOODNCMRH,S,53,77,L,,,70.2,210-3*70.2,,,,,,Food non-combat morale regeneration – high: L=iLvl (superior N=1.1)
-FOODNCMRH,S,78,111,A,,,(RoundDbl((L+143)/3|Nothing)*70.2+210)*N,,,,,,,Food non-combat morale regeneration – high: L=iLvl (superior N=1.1)
+FOODNCMRH,S,78,111,A,,,(RoundDbl(($L+143)/3$PNULL)*70.2+210)*$N,,,,,,,Food non-combat morale regeneration – high: L=iLvl (superior N=1.1)
 FOODNCMRH,S,112,,A,,,@FoodNCMRH111#,,,,,,,Food non-combat morale regeneration – high: L=iLvl (superior N=1.1)
 FOODNCMRL,S,,50,L,,,42,108,,,,,,Food non-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODNCMRL,S,51,52,A,,,@FoodNCMRL50#,,,,,,,Food non-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODNCMRL,S,53,77,L,,,42,108-3*42,,,,,,Food non-combat morale regeneration – low: L=iLvl (superior N=1.1)
-FOODNCMRL,S,78,111,A,,,(RoundDbl((L+143)/3|Nothing)*42+108)*N,,,,,,,Food non-combat morale regeneration – low: L=iLvl (superior N=1.1)
+FOODNCMRL,S,78,111,A,,,(RoundDbl(($L+143)/3$PNULL)*42+108)*$N,,,,,,,Food non-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODNCMRL,S,112,,A,,,@FoodNCMRL111#,,,,,,,Food non-combat morale regeneration – low: L=iLvl (superior N=1.1)
 FOODNCMRM,S,,50,L,,,55.8,180,,,,,,Food non-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODNCMRM,S,51,52,A,,,@FoodNCMRM50#,,,,,,,Food non-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODNCMRM,S,53,77,L,,,55.8,180-3*55.8,,,,,,Food non-combat morale regeneration – medium: L=iLvl (superior N=1.1)
-FOODNCMRM,S,78,111,A,,,(RoundDbl((L+143)/3|Nothing)*55.8+180)*N,,,,,,,Food non-combat morale regeneration – medium: L=iLvl (superior N=1.1)
+FOODNCMRM,S,78,111,A,,,(RoundDbl(($L+143)/3$PNULL)*55.8+180)*$N,,,,,,,Food non-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODNCMRM,S,112,,A,,,@FoodNCMRM111#,,,,,,,Food non-combat morale regeneration – medium: L=iLvl (superior N=1.1)
 FOODNCPRH,S,,1,L,,,75,300,,,,,,Food non-combat power regeneration – high: L=iLvl (superior N=1.1)
 FOODNCPRH,S,2,6,L,,,75,285,,,,,,Food non-combat power regeneration – high: L=iLvl (superior N=1.1)
@@ -824,10 +830,10 @@ FOODNCPRM,S,49,61,C,,,3120,,,,,,,Food non-combat power regeneration – medium: 
 FOODNCPRM,S,62,66,C,,,3180,,,,,,,Food non-combat power regeneration – medium: L=iLvl (superior N=1.1)
 FOODNCPRM,S,67,72,C,,,3240,,,,,,,Food non-combat power regeneration – medium: L=iLvl (superior N=1.1)
 FOODNCPRM,S,73,,C,,,3300,,,,,,,Food non-combat power regeneration – medium: L=iLvl (superior N=1.1)
-FOODRESIST,S,,,A,,,@PntMPDefence*@ItemProg#{@ProgBMedium}*@AdjItemProgFoodResist#{@ProgBMedium}*N,,,,,,,Food Resistance rating: L=ilvl
+FOODRESIST,S,,,A,,,@PntMPDefence*@ItemProg#{@ProgBMedium}*@AdjItemProgFoodResist#{@ProgBMedium}*$N,,,,,,,Food Resistance rating: L=ilvl
 GRDCRITDEF,S,,,A,,,@CritDef,,,,,,,Guardian Critical Defence rating passive
 GRDPROTECTIONAVOID,S,,105,L,,,12.12,,,,,,,Guardian Protection skill BPE rating: L=character level
-GRDPROTECTIONAVOID,S,106,115,T,,,RoundDbl(@GrdProtectionAvoid105|Nothing),2,4,106,115,10,,Guardian Protection skill BPE rating: L=character level
+GRDPROTECTIONAVOID,S,106,115,T,,,RoundDbl(@GrdProtectionAvoid105$PNULL),2,4,106,115,10,,Guardian Protection skill BPE rating: L=character level
 GRDPROTECTIONAVOID,S,116,116,E,,,@GrdProtectionAvoid115,20,,,,,,Guardian Protection skill BPE rating: L=character level
 GRDPROTECTIONAVOID,S,117,,E,,,@GrdProtectionAvoid116,5.4999,,,,,,Guardian Protection skill BPE rating: L=character level
 GRDTENDERIZECHOICE,S,,0,C,N,,0,,,,,,,"Guardian Tenderize trait Critical Hit rating: L=character level, N=trait rank"
@@ -835,7 +841,7 @@ GRDTENDERIZECHOICE,S,1,,D,N,,0.2,,,,,,,"Guardian Tenderize trait Critical Hit ra
 GRDTENDERIZECHOICE,S,,,,,,0.4,,,,,,,"Guardian Tenderize trait Critical Hit rating: L=character level, N=trait rank"
 GRDTENDERIZECHOICE,S,,,,,,0.6,,,,,,,"Guardian Tenderize trait Critical Hit rating: L=character level, N=trait rank"
 GRDTENDERIZECHOICE,S,,,,,,0.8,,,,,,,"Guardian Tenderize trait Critical Hit rating: L=character level, N=trait rank"
-GRDTENDERIZECRITHIT,S,,,A,,,@CritHitT#{@GrdTenderizeChoice{N}},,,,,,,"Guardian Tenderize trait Critical Hit rating: L=character level, N=trait rank"
+GRDTENDERIZECRITHIT,S,,,A,,,@CritHitT#{@GrdTenderizeChoice{$N}},,,,,,,"Guardian Tenderize trait Critical Hit rating: L=character level, N=trait rank"
 GRDWARDTACTBASE,S,,,L,Y,,3.6,0.2,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GRDWARDTACTCHOICE,S,,0,C,N,,0,,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GRDWARDTACTCHOICE,S,1,,D,N,,5,,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
@@ -843,8 +849,8 @@ GRDWARDTACTCHOICE,S,,,,,,6,,,,,,,"Guardian’s Ward: Tactics trait Tactical Miti
 GRDWARDTACTCHOICE,S,,,,,,7,,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GRDWARDTACTCHOICE,S,,,,,,8,,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GRDWARDTACTCHOICE,S,,,,,,9,,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
-GRDWARDTACTTACMIT,S,,105,A,,,@GrdWardTactBase#{@GrdWardTactChoice{N}},,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
-GRDWARDTACTTACMIT,S,106,115,T,N,,RoundDbl(@GrdWardTactTacMit105#|Nothing),2,4,106,115,10,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
+GRDWARDTACTTACMIT,S,,105,A,,,@GrdWardTactBase#{@GrdWardTactChoice{$N}},,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
+GRDWARDTACTTACMIT,S,106,115,T,N,,RoundDbl(@GrdWardTactTacMit105#$PNULL),2,4,106,115,10,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GRDWARDTACTTACMIT,S,116,116,E,N,,@GrdWardTactTacMit115#,20,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GRDWARDTACTTACMIT,S,117,,E,N,,@GrdWardTactTacMit116#,5.5,,,,,,"Guardian’s Ward: Tactics trait Tactical Mitigation: L=character level, N=trait rank"
 GUARDIANCDAGILITYTOCRITHIT,S,,,C,N,,1,,,,,,,Guardian Agility stat contribution: L=stat index
@@ -902,7 +908,7 @@ HNTCRITEYECHOICE,S,,,,,,2,,,,,,,"Hunter Critical Eye: Ranged Critical Hit Percen
 HNTCRITEYECHOICE,S,,,,,,3,,,,,,,"Hunter Critical Eye: Ranged Critical Hit Percentage: L=character level, N=trait rank"
 HNTCRITEYECHOICE,S,,,,,,4,,,,,,,"Hunter Critical Eye: Ranged Critical Hit Percentage: L=character level, N=trait rank"
 HNTCRITEYECHOICE,S,,,,,,5,,,,,,,"Hunter Critical Eye: Ranged Critical Hit Percentage: L=character level, N=trait rank"
-HNTCRITEYERNGCRITP,S,,,A,,,@HntCritEyeBase#{@HntCritEyeChoice{N}},,,,,,,"Hunter Critical Eye: Ranged Critical Hit Percentage: L=character level, N=trait rank"
+HNTCRITEYERNGCRITP,S,,,A,,,@HntCritEyeBase#{@HntCritEyeChoice{$N}},,,,,,,"Hunter Critical Eye: Ranged Critical Hit Percentage: L=character level, N=trait rank"
 HNTELUSIVEEVADEP,S,,,A,,,@BrgStickMoveEvadeP#,,,,,,,"Hunter Elusive: Evade Percentage: L=character level, N=trait rank"
 HNTIMPARRBASE,S,,,C,Y,,0.01,,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
 HNTIMPARRCHOICE,S,,0,C,N,,0,,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
@@ -911,7 +917,7 @@ HNTIMPARRCHOICE,S,,,,,,2,,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: 
 HNTIMPARRCHOICE,S,,,,,,3,,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
 HNTIMPARRCHOICE,S,,,,,,4,,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
 HNTIMPARRCHOICE,S,,,,,,5,,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
-HNTIMPARRRNGDMGP,S,,,A,,,@HntImpArrBase#{@HntImpArrChoice{N}},,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
+HNTIMPARRRNGDMGP,S,,,A,,,@HntImpArrBase#{@HntImpArrChoice{$N}},,,,,,,"Hunter Impact Arrows: Ranged Damage Percentage: L=character level, N=trait rank"
 HNTSURVGEARBASE,S,,,C,Y,,0.01,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
 HNTSURVGEARCHOICE,S,,0,C,N,,0,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
 HNTSURVGEARCHOICE,S,1,,D,N,,1,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
@@ -921,7 +927,7 @@ HNTSURVGEARCHOICE,S,,,,,,4,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L
 HNTSURVGEARCHOICE,S,,,,,,5,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
 HNTSURVGEARCHOICE,S,,,,,,8,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
 HNTSURVGEARCHOICE,S,,,,,,15,,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
-HNTSURVGEARMITP,S,,,A,,,@HntSurvGearBase#{@HntSurvGearChoice{N}},,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
+HNTSURVGEARMITP,S,,,A,,,@HntSurvGearBase#{@HntSurvGearChoice{$N}},,,,,,,"Hunter Survival Gear: Mitigation Percentage: L=character level, N=trait rank"
 HNTSURVGEARPHYMITP,S,,,A,,,@HntSurvGearMitP#,,,,,,,"Hunter Survival Gear: Physical Mitigation Percentage: L=character level, N=trait rank"
 HNTSURVGEARTACMITP,S,,,A,,,@HntSurvGearMitP#,,,,,,,"Hunter Survival Gear: Tactical Mitigation Percentage: L=character level, N=trait rank"
 HOBBITRDPSVONEMIGHT,S,,,A,,,@RacialMain,,,,,,,Hobbit Racial Passive Trait One: L=stat index
@@ -993,8 +999,8 @@ HUNTERCDWILLTOOUTHEAL,S,,,C,N,,1,,,,,,,Hunter Will stat contribution: L=stat ind
 HUNTERCDWILLTORESIST,S,,,C,N,,2,,,,,,,Hunter Will stat contribution: L=stat index
 HUNTERCDWILLTOTACMAS,S,,,C,N,,1,,,,,,,Hunter Will stat contribution: L=stat index
 HUNTERCDWILLTOTACMIT,S,,,C,N,,1,,,,,,,Hunter Will stat contribution: L=stat index
-ICMR,S,,,A,,,@PntMPICMR*@ItemProg#{@ProgBVitals}*@AdjItemProgMorReg#{@ProgBVitals}*N,,,,,,,"Main In-combat Morale Regeneration calculation: L=item level, N=points"
-ICPR,S,,,A,,,@PntMPICPR*@ItemProg#{@ProgBVitals}*@AdjItemProgPowReg#{@ProgBVitals}*N,,,,,,,"Main In-combat Power Regeneration calculation: L=item level, N=points"
+ICMR,S,,,A,,,@PntMPICMR*@ItemProg#{@ProgBMorReg}*@AdjItemProgMorReg#{@ProgBMorReg}*$N,,,,,,,"Main In-combat Morale Regeneration calculation: L=item level, N=points"
+ICPR,S,,,A,,,@PntMPICPR*@ItemProg#{@ProgBPowReg}*@AdjItemProgPowReg#{@ProgBPowReg}*$N,,,,,,,"Main In-combat Power Regeneration calculation: L=item level, N=points"
 ILVLTOLVL,S,,79,T,,,1,1,75,1,79,,1,Item Level to Character Level mapping
 ILVLTOLVL,S,79,80,T,,,1,75,76,79,80,,1,Item Level to Character Level mapping
 ILVLTOLVL,S,80,200,T,,,1,76,100,80,200,,1,Item Level to Character Level mapping
@@ -1043,32 +1049,32 @@ INSTRRAWPOWER,S,121,121,E,N,,@InstrRawPower120,20,,,,,,Power as found on lower l
 INSTRRAWPOWER,S,122,125,E,N,,@InstrRawPower121,5.498,,,,,,Power as found on lower level instruments
 INSTRRAWPOWER,S,126,126,E,N,,@InstrRawPower125,20,,,,,,Power as found on lower level instruments
 INSTRRAWPOWER,S,127,,E,N,,@InstrRawPower126,5.5,,,,,,Power as found on lower level instruments
-ITEMMORALEADJPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl(N|Nothing)*37,1,39,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMMORALEADJPROG,S,39,40,T,N,,RoundDbl(N|Nothing),37,12.5,39,40,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMMORALEADJPROG,S,40,50,T,N,,RoundDbl(N|Nothing),12.5,45,40,50,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMMORALEADJPROG,S,50,80,T,N,,1,RoundDbl(N|Nothing)*45,@ItemProg80#,50,80,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMMORALEADJPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl($N$PNULL)*37,1,39,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMMORALEADJPROG,S,39,40,T,N,,RoundDbl($N$PNULL),37,12.5,39,40,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMMORALEADJPROG,S,40,50,T,N,,RoundDbl($N$PNULL),12.5,45,40,50,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMMORALEADJPROG,S,50,80,T,N,,1,RoundDbl($N$PNULL)*45,@ItemProg80#,50,80,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
 ITEMMORALEADJPROG,S,80,,A,,,@ItemProg#,,,,,,,"Item Morale progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMMORALEPROG,S,,50,T,N,,1,@ItemProg1#,RoundDbl(N|Nothing)*45,1,50,,,"Item Morale progression scheme. L=item level, N=progression base value"
-ITEMMORALEPROG,S,50,80,T,N,,1,RoundDbl(N|Nothing)*45,@ItemProg80#,50,80,,,"Item Morale progression scheme. L=item level, N=progression base value"
+ITEMMORALEPROG,S,,50,T,N,,1,@ItemProg1#,RoundDbl($N$PNULL)*45,1,50,,,"Item Morale progression scheme. L=item level, N=progression base value"
+ITEMMORALEPROG,S,50,80,T,N,,1,RoundDbl($N$PNULL)*45,@ItemProg80#,50,80,,,"Item Morale progression scheme. L=item level, N=progression base value"
 ITEMMORALEPROG,S,80,,A,,,@ItemProg#,,,,,,,"Item Morale progression scheme. L=item level, N=progression base value"
-ITEMMORALESMPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl(N|Nothing)*37,1,39,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
-ITEMMORALESMPROG,S,39,40,T,N,,RoundDbl(N|Nothing),37,37.5,39,40,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
-ITEMMORALESMPROG,S,40,50,T,N,,RoundDbl(N|Nothing),37.5,45,40,50,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
-ITEMMORALESMPROG,S,50,80,T,N,,1,RoundDbl(N|Nothing)*45,@ItemProg80#,50,80,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMMORALESMPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl($N$PNULL)*37,1,39,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMMORALESMPROG,S,39,40,T,N,,RoundDbl($N$PNULL),37,37.5,39,40,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMMORALESMPROG,S,40,50,T,N,,RoundDbl($N$PNULL),37.5,45,40,50,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMMORALESMPROG,S,50,80,T,N,,1,RoundDbl($N$PNULL)*45,@ItemProg80#,50,80,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
 ITEMMORALESMPROG,S,80,,A,,,@ItemProg#,,,,,,,"Item Morale progression scheme adjusted and smoothened. L=item level, N=progression base value"
 ITEMPROG,S,,,A,,,@StatProg{@ILvlToLvl}#,,,,,,1,"Item Stat progression scheme. L=item level, N=progression base value"
-ITEMVITALITYADJPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl(N|Nothing)*37,1,39,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMVITALITYADJPROG,S,39,40,T,N,,RoundDbl(N|Nothing),37,12.5,39,40,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMVITALITYADJPROG,S,40,50,T,N,,RoundDbl(N|Nothing),12.5,30,40,50,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMVITALITYADJPROG,S,50,80,T,N,,1,RoundDbl(N|Nothing)*30,@ItemProg80#,50,80,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMVITALITYADJPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl($N$PNULL)*37,1,39,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMVITALITYADJPROG,S,39,40,T,N,,RoundDbl($N$PNULL),37,12.5,39,40,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMVITALITYADJPROG,S,40,50,T,N,,RoundDbl($N$PNULL),12.5,30,40,50,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
+ITEMVITALITYADJPROG,S,50,80,T,N,,1,RoundDbl($N$PNULL)*30,@ItemProg80#,50,80,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
 ITEMVITALITYADJPROG,S,80,,A,,,@ItemProg#,,,,,,,"Item Vitality progression scheme adjusted for lower items. L=item level, N=progression base value"
-ITEMVITALITYPROG,S,,50,T,N,,1,@ItemProg1#,RoundDbl(N|Nothing)*30,1,50,,,"Item Vitality progression scheme. L=item level, N=progression base value"
-ITEMVITALITYPROG,S,50,80,T,N,,1,RoundDbl(N|Nothing)*30,@ItemProg80#,50,80,,,"Item Vitality progression scheme. L=item level, N=progression base value"
+ITEMVITALITYPROG,S,,50,T,N,,1,@ItemProg1#,RoundDbl($N$PNULL)*30,1,50,,,"Item Vitality progression scheme. L=item level, N=progression base value"
+ITEMVITALITYPROG,S,50,80,T,N,,1,RoundDbl($N$PNULL)*30,@ItemProg80#,50,80,,,"Item Vitality progression scheme. L=item level, N=progression base value"
 ITEMVITALITYPROG,S,80,,A,,,@ItemProg#,,,,,,,"Item Vitality progression scheme. L=item level, N=progression base value"
-ITEMVITALITYSMPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl(N|Nothing)*22.62,1,39,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
-ITEMVITALITYSMPROG,S,39,40,T,N,,RoundDbl(N|Nothing),22.62,23.2,39,40,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
-ITEMVITALITYSMPROG,S,40,50,T,N,,RoundDbl(N|Nothing),23.2,30,40,50,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
-ITEMVITALITYSMPROG,S,50,80,T,N,,1,RoundDbl(N|Nothing)*30,@ItemProg80#,50,80,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMVITALITYSMPROG,S,,39,T,N,,1,@ItemProg1#,RoundDbl($N$PNULL)*22.62,1,39,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMVITALITYSMPROG,S,39,40,T,N,,RoundDbl($N$PNULL),22.62,23.2,39,40,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMVITALITYSMPROG,S,40,50,T,N,,RoundDbl($N$PNULL),23.2,30,40,50,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
+ITEMVITALITYSMPROG,S,50,80,T,N,,1,RoundDbl($N$PNULL)*30,@ItemProg80#,50,80,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
 ITEMVITALITYSMPROG,S,80,,A,,,@ItemProg#,,,,,,,"Item Vitality progression scheme adjusted and smoothened. L=item level, N=progression base value"
 LMANCIENTWISDOMRAW,S,,105,L,N,,1.1,,,,,,,Lore-master Ancient Wisdom Will passive
 LMANCIENTWISDOMRAW,S,106,115,E,N,,@LMAncientWisdomRaw105,5.5,,,,,,Lore-master Ancient Wisdom Will passive
@@ -1087,14 +1093,14 @@ LMHEARTYDIETCHOICE,S,,,,,,3,,,,,,,"Lore-master Hearty Diet trait Morale: L=chara
 LMHEARTYDIETCHOICE,S,,,,,,4,,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
 LMHEARTYDIETCHOICE,S,,,,,,5,,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
 LMHEARTYDIETCHOICE,S,,,,,,6,,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
-LMHEARTYDIETMORALE,S,,105,A,,,@LmHeartyDietBase#{@LmHeartyDietChoice{N}},,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
+LMHEARTYDIETMORALE,S,,105,A,,,@LmHeartyDietBase#{@LmHeartyDietChoice{$N}},,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
 LMHEARTYDIETMORALE,S,106,115,E,N,,@LmHeartyDietMorale105#,5.5,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
 LMHEARTYDIETMORALE,S,116,116,E,N,,@LmHeartyDietMorale115#,20,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
 LMHEARTYDIETMORALE,S,117,,E,N,,@LmHeartyDietMorale116#,5.5,,,,,,"Lore-master Hearty Diet trait Morale: L=character level, N=trait rank"
 LMSWSTAFFBUGMORALE,S,,105,C,N,,6.64,-0.5,,,,,,"Lore-master Sword & Staff bug Morale, L=character level"
-LMSWSTAFFBUGMORALE,S,106,,E,N,,RoundDbl(@LMSwStaffBugMorale105|Nothing),5.5,,,,,,"Lore-master Sword & Staff bug Morale, L=character level"
+LMSWSTAFFBUGMORALE,S,106,,E,N,,RoundDbl(@LMSwStaffBugMorale105$PNULL),5.5,,,,,,"Lore-master Sword & Staff bug Morale, L=character level"
 LMSWSTAFFBUGPARRY,S,,105,L,N,,2000/45,-0.5,,,,,,"Lore-master Sword & Staff bug Parry rating, L=character level"
-LMSWSTAFFBUGPARRY,S,106,,T,N,,RoundDbl(@LMSwStaffBugParry105|Nothing),2,4,106,115,10,,"Lore-master Sword & Staff bug Parry rating, L=character level"
+LMSWSTAFFBUGPARRY,S,106,,T,N,,RoundDbl(@LMSwStaffBugParry105$PNULL),2,4,106,115,10,,"Lore-master Sword & Staff bug Parry rating, L=character level"
 LOE,S,,,C,,,2,,,,,,,
 LOEPASSIVE,S,,115,C,N,,0,,,,,,,"Light of Eärendil passive bonus, L=character level"
 LOEPASSIVE,S,116,119,L,N,,20,-2300,,,,,,"Light of Eärendil passive bonus, L=character level"
@@ -1153,10 +1159,10 @@ LVLTOILVL,S,120,121,T,,,1,399,400,120,121,,,Character Level to Item Level mappin
 LVLTOILVL,S,121,130,T,,,1,400,449,121,130,,,Character Level to Item Level mapping
 LVLTOILVL,S,130,131,T,,,1,449,450,130,131,,,Character Level to Item Level mapping
 LVLTOILVL,S,131,,T,,,1,450,499,131,140,,,Character Level to Item Level mapping
-MAIN,S,,,A,,,FloorDbl(@MainRaw#|Nothing),,,,,,,Main stats need to be rounded down
-MAINRAW,S,,,A,,,@PntMPMain*@ItemProg#{@ProgBMain}*@AdjItemProgMain#{@ProgBMain}*N,,,,,,,"Main main stats calculation: L=item level, N=points"
-MAINT,S,,,A,,,FloorDbl(@MainTRaw#|Nothing),,,,,,,Main trait stats need to be rounded down
-MAINTRAW,S,,,A,,,@PntMPMain*@TraitProg#{@ProgBMain}*@AdjTraitProgMain#{@ProgBMain}*N,,,,,,,"Main main trait stats calculation: L=item level, N=points"
+MAIN,S,,,A,,,FloorDbl(@MainRaw#$PNULL),,,,,,,Main stats need to be rounded down
+MAINRAW,S,,,A,,,@PntMPMain*@ItemProg#{@ProgBMain}*@AdjItemProgMain#{@ProgBMain}*$N,,,,,,,"Main main stats calculation: L=item level, N=points"
+MAINT,S,,,A,,,FloorDbl(@MainTRaw#$PNULL),,,,,,,Main trait stats need to be rounded down
+MAINTRAW,S,,,A,,,@PntMPMain*@TraitProg#{@ProgBMain}*@AdjTraitProgMain#{@ProgBMain}*$N,,,,,,,"Main main trait stats calculation: L=item level, N=points"
 MANRDPSVONENAME,S,,,A,,,!Man of the Fourth Age!,,,,,,,Man Racial Passive Trait One: L=stat index
 MANRDPSVONEWILL,S,,,A,,,@RacialMain,,,,,,,Man Racial Passive Trait One: L=stat index
 MANRDPSVTWOBLOCK,S,,,A,,,@BalanceOfManAvoid,,,,,,,Man Racial Passive Trait Two: L=stat index
@@ -1194,21 +1200,21 @@ MINCOMPOSURERESIST,S,27,33,L,,,20.3,-0.3,,,,,,Minstrel Anthem of Composure skill
 MINCOMPOSURERESIST,S,34,40,L,,,24.4,-1.75,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
 MINCOMPOSURERESIST,S,41,47,L,,,28.4,0.2,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
 MINCOMPOSURERESIST,S,48,105,L,,,32.505,-1.75,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
-MINCOMPOSURERESIST,S,106,115,T,,,RoundDbl(@MinComposureResist105|Nothing),2,4,106,115,10,,Minstrel Anthem of Composure skill Resistance: L=character level
-MINCOMPOSURERESIST,S,116,116,E,,,RoundDbl(@MinComposureResist115|Nothing),20,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
-MINCOMPOSURERESIST,S,117,,E,,,RoundDbl(@MinComposureResist116|Nothing),5.5,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
+MINCOMPOSURERESIST,S,106,115,T,,,RoundDbl(@MinComposureResist105$PNULL),2,4,106,115,10,,Minstrel Anthem of Composure skill Resistance: L=character level
+MINCOMPOSURERESIST,S,116,116,E,,,RoundDbl(@MinComposureResist115$PNULL),20,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
+MINCOMPOSURERESIST,S,117,,E,,,RoundDbl(@MinComposureResist116$PNULL),5.5,,,,,,Minstrel Anthem of Composure skill Resistance: L=character level
 MINCOMPOSURETACMIT,S,,105,L,,,50/3,,,,,,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
-MINCOMPOSURETACMIT,S,106,115,T,,,RoundDbl(@MinComposureTacMit105|Nothing),2,4,106,115,10,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
-MINCOMPOSURETACMIT,S,116,116,E,,,RoundDbl(@MinComposureTacMit115|Nothing),20,,,,,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
-MINCOMPOSURETACMIT,S,117,,E,,,RoundDbl(@MinComposureTacMit116|Nothing),5.4975,,,,,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
-MINENDMORALE,S,,,A,,,@Morale#{@MinEndMorChoice{N}},,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
+MINCOMPOSURETACMIT,S,106,115,T,,,RoundDbl(@MinComposureTacMit105$PNULL),2,4,106,115,10,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
+MINCOMPOSURETACMIT,S,116,116,E,,,RoundDbl(@MinComposureTacMit115$PNULL),20,,,,,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
+MINCOMPOSURETACMIT,S,117,,E,,,RoundDbl(@MinComposureTacMit116$PNULL),5.4975,,,,,,Minstrel Anthem of Composure skill Tactical Mitigation: L=character level
+MINENDMORALE,S,,,A,,,@Morale#{@MinEndMorChoice{$N}},,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
 MINENDMORCHOICE,S,,0,C,N,,0,,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
 MINENDMORCHOICE,S,1,,D,N,,2,,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
 MINENDMORCHOICE,S,,,,,,2.4,,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
 MINENDMORCHOICE,S,,,,,,3,,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
 MINENDMORCHOICE,S,,,,,,3.4,,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
 MINENDMORCHOICE,S,,,,,,4,,,,,,,"Minstrel Enduring Morale trait Morale: L=character level, N=trait rank"
-MINFINESSE,S,,,A,,,@FinesseT#{@MinFinesseChoice{N}},,,,,,,"Minstrel Finesse trait Finesse rating: L=character level, N=trait rank"
+MINFINESSE,S,,,A,,,@FinesseT#{@MinFinesseChoice{$N}},,,,,,,"Minstrel Finesse trait Finesse rating: L=character level, N=trait rank"
 MINFINESSECHOICE,S,,0,C,N,,0,,,,,,,"Minstrel Finesse trait Finesse rating: L=character level, N=trait rank"
 MINFINESSECHOICE,S,1,,D,N,,0.4,,,,,,,"Minstrel Finesse trait Finesse rating: L=character level, N=trait rank"
 MINFINESSECHOICE,S,,,,,,0.8,,,,,,,"Minstrel Finesse trait Finesse rating: L=character level, N=trait rank"
@@ -1220,9 +1226,9 @@ MINPROWESSARMOUR,S,106,115,T,,0,@MinProwessArmour105,2,4,106,115,10,,Minstrel An
 MINPROWESSARMOUR,S,116,116,E,,0,@MinProwessArmour115,20,,,,,,Minstrel Anthem of Prowess skill Armour buff: L=character level
 MINPROWESSARMOUR,S,117,,E,,0,@MinProwessArmour116,5.5025,,,,,,Minstrel Anthem of Prowess skill Armour buff: L=character level
 MINPROWESSEVADE,S,,105,L,,,20.2,,,,,,,Minstrel Anthem of Prowess skill Evade rating: L=character level
-MINPROWESSEVADE,S,106,115,T,,,RoundDbl(@MinProwessEvade105|Nothing),2,4,106,115,10,,Minstrel Anthem of Prowess skill Evade rating: L=character level
-MINPROWESSEVADE,S,116,116,E,,,RoundDbl(@MinProwessEvade115|Nothing),20,,,,,,Minstrel Anthem of Prowess skill Evade rating: L=character level
-MINPROWESSEVADE,S,117,,E,,,RoundDbl(@MinProwessEvade116|Nothing),5.501,,,,,,Minstrel Anthem of Prowess skill Evade rating: L=character level
+MINPROWESSEVADE,S,106,115,T,,,RoundDbl(@MinProwessEvade105$PNULL),2,4,106,115,10,,Minstrel Anthem of Prowess skill Evade rating: L=character level
+MINPROWESSEVADE,S,116,116,E,,,RoundDbl(@MinProwessEvade115$PNULL),20,,,,,,Minstrel Anthem of Prowess skill Evade rating: L=character level
+MINPROWESSEVADE,S,117,,E,,,RoundDbl(@MinProwessEvade116$PNULL),5.501,,,,,,Minstrel Anthem of Prowess skill Evade rating: L=character level
 MINRESOLUTEBLOCK,S,,,A,,,@BlockT#3.2,,,,,,,Minstrel Resolute tree-trait Block rating: L=character level
 MINSTRELCDAGILITYTOCRITHIT,S,,,C,N,,1,,,,,,,Minstrel Agility stat contribution: L=stat index
 MINSTRELCDAGILITYTOEVADE,S,,,C,N,,3,,,,,,,Minstrel Agility stat contribution: L=stat index
@@ -1267,7 +1273,7 @@ MINSTRELCDWILLTORESIST,S,,,C,N,,2,,,,,,,Minstrel Will stat contribution: L=stat 
 MINSTRELCDWILLTOTACMAS,S,,,C,N,,3,,,,,,,Minstrel Will stat contribution: L=stat index
 MINSTRELCDWILLTOTACMIT,S,,,C,N,,1,,,,,,,Minstrel Will stat contribution: L=stat index
 MINSTROFHHMAS,S,,,L,,,1.2*4,,,,,,,Minstrel Strength of Helm Hammerhand trait Mastery: L=character level
-MINTACMAS,S,,,A,,,@TacMasT#{@MinTacMasChoice{N}},,,,,,,"Minstrel Tactical Mastery trait Tactical Mastery: L=character level, N=trait rank"
+MINTACMAS,S,,,A,,,@TacMasT#{@MinTacMasChoice{$N}},,,,,,,"Minstrel Tactical Mastery trait Tactical Mastery: L=character level, N=trait rank"
 MINTACMASCHOICE,S,,0,C,N,,0,,,,,,,"Minstrel Tactical Mastery trait Tactical Mastery: L=character level, N=trait rank"
 MINTACMASCHOICE,S,1,,D,N,,0.4,,,,,,,"Minstrel Tactical Mastery trait Tactical Mastery: L=character level, N=trait rank"
 MINTACMASCHOICE,S,,,,,,0.8,,,,,,,"Minstrel Tactical Mastery trait Tactical Mastery: L=character level, N=trait rank"
@@ -1281,7 +1287,7 @@ MINTOTINHEALP,S,,,C,,,0.05,,,,,,,Minstrel Tale of Tales aura Incoming Healing pe
 MINTOTMAIN,S,,105,L,,0,0.9,,,,,,,Minstrel Tale of Tales aura main stats buff: L=character level
 MINTOTMAIN,S,106,,E,,0,@MinTotMain105,5.5,,,,,,Minstrel Tale of Tales aura main stats buff: L=character level
 MINTOTTACMIT,S,,105,L,,,7.575,,,,,,,Minstrel Tale of Tales aura Tactical Mitigation: L=character level
-MINTOTTACMIT,S,106,,T,,,RoundDbl(@MinTotTacMit105|Nothing),2,4,106,115,10,,Minstrel Tale of Tales aura Tactical Mitigation: L=character level
+MINTOTTACMIT,S,106,,T,,,RoundDbl(@MinTotTacMit105$PNULL),2,4,106,115,10,,Minstrel Tale of Tales aura Tactical Mitigation: L=character level
 MITHEAVYPBONUS,S,,,C,N,,0,,,,,,1,"Heavy Class Mitigation, Percentage Bonus"
 MITHEAVYPPRAT,S,,,R,,,@MitHeavyPRatPA,@MitHeavyPRatPB,@MitHeavyPRatPCapR,,,,1,"Heavy Class Mitigation, Percentage Rating: N=percentage"
 MITHEAVYPRATP,S,,,P,,,@MitHeavyPRatPA,@MitHeavyPRatPB,@MitHeavyPRatPCap,,,,1,"Heavy Class Mitigation, Rating Percentage: N=rating"
@@ -1306,11 +1312,11 @@ MITMEDIUMPRATPB,S,,,A,,,@BratMitMedium,,,,,,1,"Medium Class Mitigation, Rating P
 MITMEDIUMPRATPC,S,,,C,N,,10/7,,,,,,1,"Medium Class Mitigation, Rating Percentage C (curve constant)"
 MITMEDIUMPRATPCAP,S,,,C,N,,50,,,,,,1,"Medium Class Mitigation, Rating Percentage Cap"
 MITMEDIUMPRATPCAPR,S,,,A,,,@MitMediumPRatPB*@MitMediumPRatPC,,,,,,1,"Medium Class Mitigation, Rating Percentage Cap Rating"
-MORALE,S,,,A,,,@PntMPMorale*@ItemMoraleAdjProg#{@ProgBMorale}*@AdjItemProgMorale#{@ProgBMorale}*N,,,,,,,"Main Item Morale adjusted for lower iterms calculation: L=item level, N=points"
-MORALESM,S,,,A,,,@PntMPMorale*@ItemMoraleSmProg#{@ProgBMorale}*@AdjItemProgMorale#{@ProgBMorale}*N,,,,,,,"Main Item Morale adjusted and smoothened calculation: L=item level, N=points"
-MORALESTD,S,,,A,,,@PntMPMorale*@ItemMoraleProg#{@ProgBMorale}*@AdjItemProgMorale#{@ProgBMorale}*N,,,,,,,"Main Item Morale calculation: L=item level, N=points"
-NCMR,S,,,A,,,@PntMPNCMR*@ItemProg#{@ProgBVitals}*@AdjItemProgMorReg#{@ProgBVitals}*N,,,,,,,"Main Non-combat Morale Regeneration calculation: L=item level, N=points"
-NCPR,S,,,A,,,@PntMPNCPR*@ItemProg#{@ProgBVitals}*@AdjItemProgPowReg#{@ProgBVitals}*N,,,,,,,"Main Non-combat Power Regeneration calculation: L=item level, N=points"
+MORALE,S,,,A,,,@PntMPMorale*@ItemMoraleAdjProg#{@ProgBMorale}*@AdjItemProgMorale#{@ProgBMorale}*$N,,,,,,,"Main Item Morale adjusted for lower iterms calculation: L=item level, N=points"
+MORALESM,S,,,A,,,@PntMPMorale*@ItemMoraleSmProg#{@ProgBMorale}*@AdjItemProgMorale#{@ProgBMorale}*$N,,,,,,,"Main Item Morale adjusted and smoothened calculation: L=item level, N=points"
+MORALESTD,S,,,A,,,@PntMPMorale*@ItemMoraleProg#{@ProgBMorale}*@AdjItemProgMorale#{@ProgBMorale}*$N,,,,,,,"Main Item Morale calculation: L=item level, N=points"
+NCMR,S,,,A,,,@PntMPNCMR*@ItemProg#{@ProgBMorReg}*@AdjItemProgMorReg#{@ProgBMorReg}*$N,,,,,,,"Main Non-combat Morale Regeneration calculation: L=item level, N=points"
+NCPR,S,,,A,,,@PntMPNCPR*@ItemProg#{@ProgBPowReg}*@AdjItemProgPowReg#{@ProgBPowReg}*$N,,,,,,,"Main Non-combat Power Regeneration calculation: L=item level, N=points"
 OUTHEAL,S,,,A,,,@RatOutHeal#,,,,,,,Main Outgoing Healing rating on items calculation
 OUTHEALPBONUS,S,,,C,N,,0,,,,,,1,"Outgoing Healing, Percentage Bonus"
 OUTHEALPPRAT,S,,,R,,,@OutHealPRatPA,@OutHealPRatPB,@OutHealPRatPCapR,,,,1,"Outgoing Healing, Percentage Rating: N=percentage"
@@ -1458,19 +1464,19 @@ PHYMITMPRATPCAP,S,,,A,,,@MitMediumPRatPCap,,,,,,1,"Medium Class Physical Mitigat
 PHYMITMPRATPCAPR,S,,,A,,,@MitMediumPRatPCapR,,,,,,1,"Medium Class Physical Mitigation, Rating Percentage Cap Rating"
 PHYMITT,S,,,A,,,@RatMitigationT#,,,,,,,Main Physical Mitigation in traits/effects calculation
 PNTMPDEFENCE,S,,,C,N,,351/13000,,,,,,1,Stat Point Multiplier Defence ratings
-PNTMPICMR,S,,,C,N,,3900/13000,,,,,,,Stat Point Multiplier ICMR
+PNTMPICMR,S,,,C,N,,7800/13000,,,,,,,Stat Point Multiplier ICMR
 PNTMPICPR,S,,,C,N,,9750/13000,,,,,,,Stat Point Multiplier ICPR
 PNTMPMAIN,S,,,C,N,,351/13000,,,,,,,Stat Point Multiplier Main stats
 PNTMPMASTERY,S,,,C,N,,468/13000,,,,,,,Stat Point Multiplier Mastery ratings
 PNTMPMITIGATION,S,,,C,N,,27/380,,,,,,,Stat Point Multiplier Mitigation ratings
 PNTMPMORALE,S,,,C,N,,400/13000,,,,,,,Stat Point Multiplier Morale
-PNTMPNCMR,S,,,C,N,,39000/13000,,,,,,,Stat Point Multiplier NCMR
+PNTMPNCMR,S,,,C,N,,78000/13000,,,,,,,Stat Point Multiplier NCMR
 PNTMPNCPR,S,,,C,N,,39000/13000,,,,,,,Stat Point Multiplier NCPR
 PNTMPOFFENCE,S,,,C,N,,663/13000,,,,,,,Stat Point Multiplier Offence ratings
 PNTMPOUTHEAL,S,,,C,N,,780/13000,,,,,,,Stat Point Multiplier Outgoing Healing rating
 PNTMPPOWER,S,,,C,N,,650/13000,,,,,,,Stat Point Multiplier Power
 PNTMPVITALITY,S,,,C,N,,1625/13000,,,,,,,Stat Point Multiplier Vitality
-POWER,S,,,A,,,@PntMPPower*@ItemProg#{@ProgBVitals}*@AdjItemProgPower#{@ProgBVitals}*N,,,,,,,"Main Item Power calculation: L=item level, N=points"
+POWER,S,,,A,,,@PntMPPower*@ItemProg#{@ProgBPower}*@AdjItemProgPower#{@ProgBPower}*$N,,,,,,,"Main Item Power calculation: L=item level, N=points"
 PROGBHIGH,S,,,C,N,,500,,,,,,1,Standard Progression Base value High Ratings
 PROGBLOW,S,,,C,N,,200,,,,,,1,Standard Progression Base value Low Ratings
 PROGBMAIN,S,,,C,N,,40,,,,,,,Standard Progression Base value Main stats
@@ -1481,20 +1487,22 @@ PROGBMITIGATION,S,,,A,,,@ProgBMitMedium,,,,,,,Standard Progression Base value Mi
 PROGBMITLIGHT,S,,,C,N,,280/3,,,,,,1,Standard Progression Base value Light Mitigation
 PROGBMITMEDIUM,S,,,C,N,,382/3,,,,,,1,Standard Progression Base value Medium Mitigation
 PROGBMORALE,S,,,C,N,,130,,,,,,,Standard Progression Base value Morale
+PROGBMORREG,S,,,C,N,,10,,,,,,,Standard Progression Base value Morale Regeneration
+PROGBPOWER,S,,,C,N,,20,,,,,,,Standard Progression Base value Power
+PROGBPOWREG,S,,,C,N,,20,,,,,,,Standard Progression Base value Power Regeneration
 PROGBVITALITY,S,,,C,N,,10,,,,,,,Standard Progression Base value Vitality
-PROGBVITALS,S,,,C,N,,20,,,,,,,Standard Progression Base value Vital stats
 RACIALMAIN,S,,,A,,,@ScaleMain,,,,,,,Main calculation for main stats racial traits
-RACIALVITALITY,S,,,C,N,,20,,,,,,,Main calculation for vitality racial trait
-RATDEFENCE,S,,,A,,,@PntMPDefence*@ItemProg#{@ProgBMedium}*@AdjItemProgRatings#{@ProgBMedium}*N,,,,,,,"Common calculation for defence type ratings on items: L=item level, N=points"
-RATDEFENCET,S,,,A,,,@PntMPDefence*@TraitProg#{@ProgBMedium}*@AdjTraitProgRatings#{@ProgBMedium}*N,,,,,,1,"Common calculation for defence type ratings in traits/effects: L=item level, N=points"
-RATMASTERY,S,,,A,,,@PntMPMastery*@ItemProg#{@ProgBMastery}*@AdjItemProgRatings#{@ProgBMastery}*N,,,,,,,"Common calculation for mastery type ratings on items: L=item level, N=points"
-RATMASTERYT,S,,,A,,,@PntMPMastery*@TraitProg#{@ProgBMastery}*@AdjTraitProgRatings#{@ProgBMastery}*N,,,,,,,"Common calculation for mastery type ratings in traits/effects: L=item level, N=points"
-RATMITIGATION,S,,,A,,,@PntMPMitigation*@ItemProg#{@ProgBMitigation}*@AdjItemProgRatings#{@ProgBMitigation}*N,,,,,,,"Common calculation for mitigation type ratings on items: L=item level, N=points"
-RATMITIGATIONT,S,,,A,,,@PntMPMitigation*@TraitProg#{@ProgBMitigation}*@AdjTraitProgRatings#{@ProgBMitigation}*N,,,,,,,"Common calculation for mitigation type ratings in traits/effects: L=item level, N=points"
-RATOFFENCE,S,,,A,,,@PntMPOffence*@ItemProg#{@ProgBLow}*@AdjItemProgRatings#{@ProgBLow}*N,,,,,,,"Common calculation for offence type ratings on items: L=item level, N=points"
-RATOFFENCET,S,,,A,,,@PntMPOffence*@TraitProg#{@ProgBLow}*@AdjTraitProgRatings#{@ProgBLow}*N,,,,,,,"Common calculation for offence type ratings in traits/effects: L=item level, N=points"
-RATOUTHEAL,S,,,A,,,@PntMPOutHeal*@ItemProg#{@ProgBMedium}*@AdjItemProgRatings#{@ProgBMedium}*N,,,,,,,"Common calculation for outgoing healing type ratings on items: L=item level, N=points"
-RATOUTHEALT,S,,,A,,,@PntMPOutHeal*@TraitProg#{@ProgBMedium}*@AdjTraitProgRatings#{@ProgBMedium}*N,,,,,,,"Common calculation for outgoing healing type ratings in traits/effects: L=item level, N=points"
+RACIALVITALITY,S,,,A,,,@ScaleVitality,,,,,,,Main calculation for vitality racial trait
+RATDEFENCE,S,,,A,,,@PntMPDefence*@ItemProg#{@ProgBMedium}*@AdjItemProgRatings#{@ProgBMedium}*$N,,,,,,,"Common calculation for defence type ratings on items: L=item level, N=points"
+RATDEFENCET,S,,,A,,,@PntMPDefence*@TraitProg#{@ProgBMedium}*@AdjTraitProgRatings#{@ProgBMedium}*$N,,,,,,1,"Common calculation for defence type ratings in traits/effects: L=item level, N=points"
+RATMASTERY,S,,,A,,,@PntMPMastery*@ItemProg#{@ProgBMastery}*@AdjItemProgRatings#{@ProgBMastery}*$N,,,,,,,"Common calculation for mastery type ratings on items: L=item level, N=points"
+RATMASTERYT,S,,,A,,,@PntMPMastery*@TraitProg#{@ProgBMastery}*@AdjTraitProgRatings#{@ProgBMastery}*$N,,,,,,,"Common calculation for mastery type ratings in traits/effects: L=item level, N=points"
+RATMITIGATION,S,,,A,,,@PntMPMitigation*@ItemProg#{@ProgBMitigation}*@AdjItemProgRatings#{@ProgBMitigation}*$N,,,,,,,"Common calculation for mitigation type ratings on items: L=item level, N=points"
+RATMITIGATIONT,S,,,A,,,@PntMPMitigation*@TraitProg#{@ProgBMitigation}*@AdjTraitProgRatings#{@ProgBMitigation}*$N,,,,,,,"Common calculation for mitigation type ratings in traits/effects: L=item level, N=points"
+RATOFFENCE,S,,,A,,,@PntMPOffence*@ItemProg#{@ProgBLow}*@AdjItemProgRatings#{@ProgBLow}*$N,,,,,,,"Common calculation for offence type ratings on items: L=item level, N=points"
+RATOFFENCET,S,,,A,,,@PntMPOffence*@TraitProg#{@ProgBLow}*@AdjTraitProgRatings#{@ProgBLow}*$N,,,,,,,"Common calculation for offence type ratings in traits/effects: L=item level, N=points"
+RATOUTHEAL,S,,,A,,,@PntMPOutHeal*@ItemProg#{@ProgBMedium}*@AdjItemProgRatings#{@ProgBMedium}*$N,,,,,,,"Common calculation for outgoing healing type ratings on items: L=item level, N=points"
+RATOUTHEALT,S,,,A,,,@PntMPOutHeal*@TraitProg#{@ProgBMedium}*@AdjTraitProgRatings#{@ProgBMedium}*$N,,,,,,,"Common calculation for outgoing healing type ratings in traits/effects: L=item level, N=points"
 RELAGILITY,S,,,L,,0,0.5,-10.25,,,,,,Old relic stats
 RELBLOCK,S,,,L,,,8.08,,,,,,,Old relic stats
 RELCRITDEF,S,,,L,,,8.08,,,,,,,Old relic stats
@@ -1530,8 +1538,8 @@ REPFINESSE,S,,50,T,N,,1,322,557,1,50,,,Reputation finesse calculation
 REPFINESSE,S,50,85,T,N,,1,557,749.9477,50,85,,,Reputation finesse calculation
 REPFINESSE,S,85,105,T,N,,1,749.9477,859.1634,85,105,,,Reputation finesse calculation
 REPFINESSE,S,105,,T,N,,1,859.1634,939.2549,105,120,,,Reputation finesse calculation
-REPMAINH,S,,,A,,,FloorDbl(@RepMainRawH|Nothing),,,,,,,Reputation main stats calculation
-REPMAINL,S,,,A,,,FloorDbl(@RepMainRawL|Nothing),,,,,,,Reputation main stats calculation
+REPMAINH,S,,,A,,,FloorDbl(@RepMainRawH$PNULL),,,,,,,Reputation main stats calculation
+REPMAINL,S,,,A,,,FloorDbl(@RepMainRawL$PNULL),,,,,,,Reputation main stats calculation
 REPMAINRAWH,S,,50,T,N,,1,80,153,1,50,,,Reputation main stats calculation
 REPMAINRAWH,S,50,85,T,N,,1,153,206,50,85,,,Reputation main stats calculation
 REPMAINRAWH,S,85,105,T,N,,1,206,236,85,105,,,Reputation main stats calculation
@@ -1609,7 +1617,7 @@ RUNEKEEPERCDWILLTOOUTHEAL,S,,,C,N,,3,,,,,,,Rune-keeper Will stat contribution: L
 RUNEKEEPERCDWILLTORESIST,S,,,C,N,,2,,,,,,,Rune-keeper Will stat contribution: L=stat index
 RUNEKEEPERCDWILLTOTACMAS,S,,,C,N,,3,,,,,,,Rune-keeper Will stat contribution: L=stat index
 RUNEKEEPERCDWILLTOTACMIT,S,,,C,N,,1,,,,,,,Rune-keeper Will stat contribution: L=stat index
-SCALEARMOUR,S,,75,T,N,0,7,1745,,1,91,,,Shield of the Hammerhand/High-Elf jewelry/Racial traits stats
+SCALEARMOUR,S,,75,T,N,0,1,7,1745,1,91,,,Shield of the Hammerhand/High-Elf jewelry/Racial traits stats
 SCALEARMOUR,S,76,84,L,N,,82,-4714,,,,,,Shield of the Hammerhand/High-Elf jewelry/Racial traits stats
 SCALEARMOUR,S,85,94,L,N,,63,-3101,,,,,,Shield of the Hammerhand/High-Elf jewelry/Racial traits stats
 SCALEARMOUR,S,95,99,L,N,,55,-2346,,,,,,Shield of the Hammerhand/High-Elf jewelry/Racial traits stats
@@ -1673,8 +1681,8 @@ SHIELDBRAWLERBLOCKRAW,S,121,121,E,N,,@ShieldBrawlerBlockRaw120,20.0025,,,,,,Dwar
 SHIELDBRAWLERBLOCKRAW,S,122,125,E,N,,@ShieldBrawlerBlockRaw121,5.5004,,,,,,Dwarf Shield-brawler racial trait Block rating: L=character level
 SHIELDBRAWLERBLOCKRAW,S,126,126,E,N,,@ShieldBrawlerBlockRaw125,20.0025,,,,,,Dwarf Shield-brawler racial trait Block rating: L=character level
 SHIELDBRAWLERBLOCKRAW,S,127,,E,N,,@ShieldBrawlerBlockRaw126,5.5004,,,,,,Dwarf Shield-brawler racial trait Block rating: L=character level
-STATPROG,S,,75,T,N,,RoundDbl(N|Nothing),1,75,1,75,,1,"Stat progression scheme. L=character level, N=progression base value"
-STATPROG,S,75,76,T,N,,1,RoundDbl(N|Nothing)*75,@StdProg76#,75,76,,1,"Stat progression scheme. L=character level, N=progression base value"
+STATPROG,S,,75,T,N,,RoundDbl($N$PNULL),1,75,1,75,,1,"Stat progression scheme. L=character level, N=progression base value"
+STATPROG,S,75,76,T,N,,1,RoundDbl($N$PNULL)*75,@StdProg76#,75,76,,1,"Stat progression scheme. L=character level, N=progression base value"
 STATPROG,S,76,,A,,,@StdProg#,,,,,,1,"Stat progression scheme. L=character level, N=progression base value"
 STDMORALEH,S,,,A,,0,@StdMoraleRawH,,,,,,,
 STDMORALEL,S,,,A,,0,@StdMoraleRawL,,,,,,,
@@ -1737,19 +1745,19 @@ STDPOWERRAWL,S,122,125,E,N,,@StdPowerRawL121,5.515,,,,,,Captain Standard Power �
 STDPOWERRAWL,S,126,126,E,N,,@StdPowerRawL125,19.98,,,,,,Captain Standard Power – Low: L=ilvl
 STDPOWERRAWL,S,127,130,E,N,,@StdPowerRawL126,5.5,,,,,,Captain Standard Power – Low: L=ilvl
 STDPOWERRAWL,S,131,,A,,,@StdPowerRawL130,,,,,,,Captain Standard Power – Low: L=ilvl
-STDPROG,S,,75,T,N,,N,1,75,1,75,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,75,76,T,N,,1,N*75,RoundDbl(N*82.5|-2),75,76,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,76,100,T,N,,1,RoundDbl(N*82.5|-2),N*150,76,100,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,100,101,T,N,,N,150,165,100,101,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,101,105,T,N,,N,165,225,101,105,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,105,106,T,N,,N,225,270,105,106,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,106,115,T,N,,N,270,450,106,115,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,115,116,T,N,,N,450,495,115,116,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,116,120,T,N,,N,495,1125,116,120,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,120,121,T,N,,N,1125,1575,120,121,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,121,130,T,N,,N,1575,3150,121,130,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,130,131,T,N,,N,3150,3780,130,131,,1,"Standard progression scheme. L=character level, N=progression base value"
-STDPROG,S,131,,T,N,,N,3780,6300,130,140,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,,75,T,N,,$N,1,75,1,75,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,75,76,T,N,,1,$N*75,RoundDbl($N*82.5|-2),75,76,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,76,100,T,N,,1,RoundDbl($N*82.5|-2),$N*150,76,100,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,100,101,T,N,,$N,150,165,100,101,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,101,105,T,N,,$N,165,225,101,105,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,105,106,T,N,,$N,225,270,105,106,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,106,115,T,N,,$N,270,450,106,115,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,115,116,T,N,,$N,450,495,115,116,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,116,120,T,N,,$N,495,1125,116,120,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,120,121,T,N,,$N,1125,1575,120,121,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,121,130,T,N,,$N,1575,3150,121,130,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,130,131,T,N,,$N,3150,3780,130,131,,1,"Standard progression scheme. L=character level, N=progression base value"
+STDPROG,S,131,,T,N,,$N,3780,6300,130,140,,1,"Standard progression scheme. L=character level, N=progression base value"
 STOUTAXERDPSVONENAME,S,,,A,,,!Unwritten Destiny!,,,,,,,Stoutaxe Racial Passive Trait One: L=stat index
 STOUTAXERDPSVONEVITALITY,S,,,A,,,@RacialVitality,,,,,,,Stoutaxe Racial Passive Trait One: L=stat index
 STOUTAXERDPSVTWONAME,S,,,A,,,!!,,,,,,,Stoutaxe Racial Passive Trait Two: L=stat index
@@ -1767,7 +1775,7 @@ T2PENBPE,S,121,121,E,N,,@T2penBPE120,20,,,,,1,T2 BPE penetration: L=mob level
 T2PENBPE,S,122,125,E,N,,@T2penBPE121,5.5,,,,,1,T2 BPE penetration: L=mob level
 T2PENBPE,S,126,126,E,N,,@T2penBPE125,20,,,,,1,T2 BPE penetration: L=mob level
 T2PENBPE,S,127,,E,N,,@T2penBPE126,5.5,,,,,1,T2 BPE penetration: L=mob level
-T2PENMIT,S,,115,A,,,FloorDbl(L*13.5|Nothing)*-5,,,,,,1,T2 Mitigation penetration: L=mob level
+T2PENMIT,S,,115,A,,,FloorDbl($L*13.5$PNULL)*-5,,,,,,1,T2 Mitigation penetration: L=mob level
 T2PENMIT,S,116,116,E,N,,@T2penMit115,20,,,,,1,T2 Mitigation penetration: L=mob level
 T2PENMIT,S,117,120,E,N,,@T2penMit116,5.5,,,,,1,T2 Mitigation penetration: L=mob level
 T2PENMIT,S,121,121,E,N,,@T2penMit120,20,,,,,1,T2 Mitigation penetration: L=mob level
@@ -1817,75 +1825,75 @@ TACMITMPRATPC,S,,,A,,,@MitMediumPRatPC,,,,,,1,"Medium Class Tactical Mitigation,
 TACMITMPRATPCAP,S,,,A,,,@MitMediumPRatPCap,,,,,,1,"Medium Class Tactical Mitigation, Rating Percentage Cap"
 TACMITMPRATPCAPR,S,,,A,,,@MitMediumPRatPCapR,,,,,,1,"Medium Class Tactical Mitigation, Rating Percentage Cap Rating"
 TACMITT,S,,,A,,,@RatMitigationT#,,,,,,,Main Tactical Mitigation in traits/effects calculation
-TITAGILITY,S,,,A,,,@TitMain#{C},,,,,,,"Legendary Title Agility: C=Roman numeral I, II, III, IV, etc"
-TITBLOCK,S,,,A,,,@TitBPE#{C},,,,,,,"Legendary Title Block rating: C=Roman numeral I, II, III, IV, etc"
-TITBPE,S,,,A,,,@RatDefence{@TitBPEChoice{RomanRankDecode(C)}},,,,,,,"Legendary Title B/P/E ratings: C=Roman numeral I, II, III, IV, etc"
+TITAGILITY,S,,,A,,,@TitMain#{$C},,,,,,,"Legendary Title Agility: C=Roman numeral I, II, III, IV, etc"
+TITBLOCK,S,,,A,,,@TitBPE#{$C},,,,,,,"Legendary Title Block rating: C=Roman numeral I, II, III, IV, etc"
+TITBPE,S,,,A,,,@RatDefence{@TitBPEChoice{$ROMAN_RANK}},,,,,,,"Legendary Title B/P/E ratings: C=Roman numeral I, II, III, IV, etc"
 TITBPECHOICE,S,,,D,N,,75,,,,,,,"Legendary Title B/P/E ratings: C=Roman numeral I, II, III, IV, etc"
 TITBPECHOICE,S,,,,,,95,,,,,,,"Legendary Title B/P/E ratings: C=Roman numeral I, II, III, IV, etc"
 TITBPECHOICE,S,,,,,,115,,,,,,,"Legendary Title B/P/E ratings: C=Roman numeral I, II, III, IV, etc"
-TITCRITDEF,S,,,A,,,@CritDef{@TitCritDefChoice{RomanRankDecode(C)}},,,,,,,"Legendary Title Critical Defence rating: C=Roman numeral I, II, III, IV, etc"
+TITCRITDEF,S,,,A,,,@CritDef{@TitCritDefChoice{$ROMAN_RANK}},,,,,,,"Legendary Title Critical Defence rating: C=Roman numeral I, II, III, IV, etc"
 TITCRITDEFCHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Critical Defence rating: C=Roman numeral I, II, III, IV, etc"
 TITCRITDEFCHOICE,S,,,,,,95,,,,,,,"Legendary Title Critical Defence rating: C=Roman numeral I, II, III, IV, etc"
 TITCRITDEFCHOICE,S,,,,,,115,,,,,,,"Legendary Title Critical Defence rating: C=Roman numeral I, II, III, IV, etc"
-TITCRITHIT,S,,,A,,,@CritHit{@TitCritHitChoice{RomanRankDecode(C)}},,,,,,,"Legendary Title Critical rating: C=Roman numeral I, II, III, IV, etc"
+TITCRITHIT,S,,,A,,,@CritHit{@TitCritHitChoice{$ROMAN_RANK}},,,,,,,"Legendary Title Critical rating: C=Roman numeral I, II, III, IV, etc"
 TITCRITHITCHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Critical rating: C=Roman numeral I, II, III, IV, etc"
 TITCRITHITCHOICE,S,,,,,,95,,,,,,,"Legendary Title Critical rating: C=Roman numeral I, II, III, IV, etc"
 TITCRITHITCHOICE,S,,,,,,115,,,,,,,"Legendary Title Critical rating: C=Roman numeral I, II, III, IV, etc"
-TITEVADE,S,,,A,,,@TitBPE#{C},,,,,,,"Legendary Title Evade rating: C=Roman numeral I, II, III, IV, etc"
-TITFATE,S,,,A,,,@TitMain#{C},,,,,,,"Legendary Title Fate: C=Roman numeral I, II, III, IV, etc"
-TITFINESSE,S,,,A,,,@Finesse{@TitFinesseChoice{RomanRankDecode(C)}}#0.4,,,,,,,"Legendary Title Finesse rating: C=Roman numeral I, II, III, IV, etc"
+TITEVADE,S,,,A,,,@TitBPE#{$C},,,,,,,"Legendary Title Evade rating: C=Roman numeral I, II, III, IV, etc"
+TITFATE,S,,,A,,,@TitMain#{$C},,,,,,,"Legendary Title Fate: C=Roman numeral I, II, III, IV, etc"
+TITFINESSE,S,,,A,,,@Finesse{@TitFinesseChoice{$ROMAN_RANK}}#0.4,,,,,,,"Legendary Title Finesse rating: C=Roman numeral I, II, III, IV, etc"
 TITFINESSECHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Finesse rating: C=Roman numeral I, II, III, IV, etc"
 TITFINESSECHOICE,S,,,,,,95,,,,,,,"Legendary Title Finesse rating: C=Roman numeral I, II, III, IV, etc"
 TITFINESSECHOICE,S,,,,,,115,,,,,,,"Legendary Title Finesse rating: C=Roman numeral I, II, III, IV, etc"
-TITLOWMIT,S,,,A,,,175.5*@TitLowMitChoice{RomanRankDecode(C)}+44.5,,,,,,,"Legendary Title Lower Mitigation: C=Roman numeral I, II, III, IV, etc"
+TITLOWMIT,S,,,A,,,175.5*@TitLowMitChoice{$ROMAN_RANK}+44.5,,,,,,,"Legendary Title Lower Mitigation: C=Roman numeral I, II, III, IV, etc"
 TITLOWMITCHOICE,S,,,D,N,,1,,,,,,,"Legendary Title Lower Mitigation: C=Roman numeral I, II, III, IV, etc"
 TITLOWMITCHOICE,S,,,,,,2,,,,,,,"Legendary Title Lower Mitigation: C=Roman numeral I, II, III, IV, etc"
 TITLOWMITCHOICE,S,,,,,,3,,,,,,,"Legendary Title Lower Mitigation: C=Roman numeral I, II, III, IV, etc"
-TITLOWPHYMIT,S,,,A,,,@TitLowMit#{C},,,,,,,"Legendary Title Lower Physical Mitigation: C=Roman numeral I, II, III, IV, etc"
-TITLOWTACMIT,S,,,A,,,@TitLowMit#{C},,,,,,,"Legendary Title Lower Tactical Mitigation: C=Roman numeral I, II, III, IV, etc"
-TITMAIN,S,,,A,,,@Main{@TitMainChoice{RomanRankDecode(C)}},,,,,,,"Legendary Title Main stats: C=Roman numeral I, II, III, IV, etc"
+TITLOWPHYMIT,S,,,A,,,@TitLowMit#{$C},,,,,,,"Legendary Title Lower Physical Mitigation: C=Roman numeral I, II, III, IV, etc"
+TITLOWTACMIT,S,,,A,,,@TitLowMit#{$C},,,,,,,"Legendary Title Lower Tactical Mitigation: C=Roman numeral I, II, III, IV, etc"
+TITMAIN,S,,,A,,,@Main{@TitMainChoice{$ROMAN_RANK}},,,,,,,"Legendary Title Main stats: C=Roman numeral I, II, III, IV, etc"
 TITMAINCHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Main stats: C=Roman numeral I, II, III, IV, etc"
 TITMAINCHOICE,S,,,,,,95,,,,,,,"Legendary Title Main stats: C=Roman numeral I, II, III, IV, etc"
 TITMAINCHOICE,S,,,,,,115,,,,,,,"Legendary Title Main stats: C=Roman numeral I, II, III, IV, etc"
-TITMASTERY,S,,,A,,,FloorDbl(2.1*@TitMasteryChoice{RomanRankDecode(C)}|Nothing)*5,,,,,,,"Legendary Title Mastery rating: C=Roman numeral I, II, III, IV, etc"
+TITMASTERY,S,,,A,,,FloorDbl(2.1*@TitMasteryChoice{$ROMAN_RANK}$PNULL)*5,,,,,,,"Legendary Title Mastery rating: C=Roman numeral I, II, III, IV, etc"
 TITMASTERYCHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Mastery rating: C=Roman numeral I, II, III, IV, etc"
 TITMASTERYCHOICE,S,,,,,,100,,,,,,,"Legendary Title Mastery rating: C=Roman numeral I, II, III, IV, etc"
 TITMASTERYCHOICE,S,,,,,,125,,,,,,,"Legendary Title Mastery rating: C=Roman numeral I, II, III, IV, etc"
-TITMIGHT,S,,,A,,,@TitMain#{C},,,,,,,"Legendary Title Might: C=Roman numeral I, II, III, IV, etc"
-TITMITIGATION,S,,,A,,,@RatMitigation{@TitMitigationChoice{RomanRankDecode(C)}},,,,,,,"Legendary Title Mitigation: C=Roman numeral I, II, III, IV, etc"
+TITMIGHT,S,,,A,,,@TitMain#{$C},,,,,,,"Legendary Title Might: C=Roman numeral I, II, III, IV, etc"
+TITMITIGATION,S,,,A,,,@RatMitigation{@TitMitigationChoice{$ROMAN_RANK}},,,,,,,"Legendary Title Mitigation: C=Roman numeral I, II, III, IV, etc"
 TITMITIGATIONCHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Mitigation: C=Roman numeral I, II, III, IV, etc"
 TITMITIGATIONCHOICE,S,,,,,,85,,,,,,,"Legendary Title Mitigation: C=Roman numeral I, II, III, IV, etc"
 TITMITIGATIONCHOICE,S,,,,,,95,,,,,,,"Legendary Title Mitigation: C=Roman numeral I, II, III, IV, etc"
-TITPARRY,S,,,A,,,@TitBPE#{C},,,,,,,"Legendary Title Parry rating: C=Roman numeral I, II, III, IV, etc"
-TITPHYMAS,S,,,A,,,@TitMastery#{C},,,,,,,"Legendary Title Physical Mastery: C=Roman numeral I, II, III, IV, etc"
-TITPHYMIT,S,,,A,,,@TitMitigation#{C},,,,,,,"Legendary Title Physical Mitigation: C=Roman numeral I, II, III, IV, etc"
-TITTACMAS,S,,,A,,,@TitMastery#{C},,,,,,,"Legendary Title Tactical Mastery: C=Roman numeral I, II, III, IV, etc"
-TITTACMIT,S,,,A,,,@TitMitigation#{C},,,,,,,"Legendary Title Tactical Mitigation: C=Roman numeral I, II, III, IV, etc"
-TITVITALITY,S,,,A,,,@Vitality{@TitVitalityChoice{RomanRankDecode(C)}},,,,,,,"Legendary Title Vitality: C=Roman numeral I, II, III, IV, etc"
+TITPARRY,S,,,A,,,@TitBPE#{$C},,,,,,,"Legendary Title Parry rating: C=Roman numeral I, II, III, IV, etc"
+TITPHYMAS,S,,,A,,,@TitMastery#{$C},,,,,,,"Legendary Title Physical Mastery: C=Roman numeral I, II, III, IV, etc"
+TITPHYMIT,S,,,A,,,@TitMitigation#{$C},,,,,,,"Legendary Title Physical Mitigation: C=Roman numeral I, II, III, IV, etc"
+TITTACMAS,S,,,A,,,@TitMastery#{$C},,,,,,,"Legendary Title Tactical Mastery: C=Roman numeral I, II, III, IV, etc"
+TITTACMIT,S,,,A,,,@TitMitigation#{$C},,,,,,,"Legendary Title Tactical Mitigation: C=Roman numeral I, II, III, IV, etc"
+TITVITALITY,S,,,A,,,@Vitality{@TitVitalityChoice{$ROMAN_RANK}},,,,,,,"Legendary Title Vitality: C=Roman numeral I, II, III, IV, etc"
 TITVITALITYCHOICE,S,,,D,N,,75,,,,,,,"Legendary Title Vitality: C=Roman numeral I, II, III, IV, etc"
 TITVITALITYCHOICE,S,,,,,,95,,,,,,,"Legendary Title Vitality: C=Roman numeral I, II, III, IV, etc"
 TITVITALITYCHOICE,S,,,,,,115,,,,,,,"Legendary Title Vitality: C=Roman numeral I, II, III, IV, etc"
-TITWILL,S,,,A,,,@TitMain#{C},,,,,,,"Legendary Title Will: C=Roman numeral I, II, III, IV, etc"
-TOMEMAIN,S,,,A,,,@TomeMainA{RomanRankDecode(C)},,,,,,,"Stat Tome main value: C=Roman numeral I, II, III, IV, etc"
+TITWILL,S,,,A,,,@TitMain#{$C},,,,,,,"Legendary Title Will: C=Roman numeral I, II, III, IV, etc"
+TOMEMAIN,S,,,A,,,@TomeMainA{$ROMAN_RANK},,,,,,,"Stat Tome main value: C=Roman numeral I, II, III, IV, etc"
 TOMEMAINA,S,,0,C,N,,0,,,,,,,Stat Tome main value: L=tome rank
 TOMEMAINA,S,1,6,C,N,,15,,,,,,,Stat Tome main value: L=tome rank
 TOMEMAINA,S,7,7,C,N,,30,,,,,,,Stat Tome main value: L=tome rank
 TOMEMAINA,S,8,,C,N,,40,,,,,,,Stat Tome main value: L=tome rank
-TOMETOTAL,S,,,A,,,@TomeTotalA{RomanRankDecode(C)},,,,,,,"Stat Tome Total: C=Roman numeral I, II, III, IV, etc"
+TOMETOTAL,S,,,A,,,@TomeTotalA{$ROMAN_RANK},,,,,,,"Stat Tome Total: C=Roman numeral I, II, III, IV, etc"
 TOMETOTALA,S,,0,A,,,0,,,,,,,Stat Tome Total: L=tome rank
-TOMETOTALA,S,1,,A,,,@TomeMainA+@TomeTotalA{L-1},,,,,,,Stat Tome Total: L=tome rank
-TPENARMOUR,S,,,A,,,@TpenChoice{N}*(@ArmourLowRaw1#{!MSh!}/@TraitProg1#{@ProgBMitMedium})*@TraitProg#{@ProgBMitMedium}*@AdjTraitProgRatings#{@ProgBMitMedium},,,,,,1,"Tiered Armour penetration: L=mob level, N=instance tier"
-TPENBPE,S,,,A,,,@TpenChoice{N}*@RatDefenceT,,,,,,1,"Tiered BPE penetration: L=mob level, N=instance tier"
+TOMETOTALA,S,1,,A,,,@TomeMainA+@TomeTotalA{$L-1},,,,,,,Stat Tome Total: L=tome rank
+TPENARMOUR,S,,,A,,,@TpenChoice{$N}*(@ArmourLowRaw1#{!MSh!}/@TraitProg1#{@ProgBMitMedium})*@TraitProg#{@ProgBMitMedium}*@AdjTraitProgRatings#{@ProgBMitMedium},,,,,,1,"Tiered Armour penetration: L=mob level, N=instance tier"
+TPENBPE,S,,,A,,,@TpenChoice{$N}*@RatDefenceT,,,,,,1,"Tiered BPE penetration: L=mob level, N=instance tier"
 TPENCHOICE,S,,,D,N,,0,,,,,,1,T1 = 0
 TPENCHOICE,S,,,,,,-1,,,,,,1,T2 = factor x1
 TPENCHOICE,S,,,,,,-2,,,,,,1,T3 = factor x2
-TPENRESIST,S,,,A,,,@TpenChoice{N}*@ResistT#2,,,,,,1,"Tiered Resistance penetration: L=mob level, N=instance tier"
+TPENRESIST,S,,,A,,,@TpenChoice{$N}*@ResistT#2,,,,,,1,"Tiered Resistance penetration: L=mob level, N=instance tier"
 TRAITPROG,S,,105,T,N,,1,@StatProg1#,@StatProg105#,1,105,,1,"Traits & Effects Stat progression scheme. L=character level, N=progression base value"
 TRAITPROG,S,105,,A,,,@StatProg#,,,,,,1,"Traits & Effects Stat progression scheme. L=character level, N=progression base value"
 TRAITSLOWSEG,S,,105,T,,,1,1,180,1,105,,,Common low segment for traits: N=base value
 TRAITSLOWSEG,S,106,,A,,,0,,,,,,,Common low segment for traits: N=base value
-TRAITVITALITYPROG,S,,40,T,N,,1,@StatProg1#,RoundDbl(N|Nothing)*27.5,1,40,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
-TRAITVITALITYPROG,S,40,50,T,N,,1,RoundDbl(N|Nothing)*27.5,@StatProg50#,40,50,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
+TRAITVITALITYPROG,S,,40,T,N,,1,@StatProg1#,RoundDbl($N$PNULL)*27.5,1,40,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
+TRAITVITALITYPROG,S,40,50,T,N,,1,RoundDbl($N$PNULL)*27.5,@StatProg50#,40,50,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
 TRAITVITALITYPROG,S,50,105,T,N,,1,@StatProg50#,@StatProg105#,50,105,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
 TRAITVITALITYPROG,S,105,115,A,,,@StatProg#,,,,,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
 TRAITVITALITYPROG,S,115,120,T,N,,1,@StatProg115#,@StatProg120#,115,120,,,"Traits & Effects Vitality Stat progression scheme. L=character level, N=progression base value"
@@ -1961,7 +1969,7 @@ VIRTRNKCOST,S,,0,C,N,,0,,,,,,,Virtue Rank Cost – single rank: L=virtue rank
 VIRTRNKCOST,S,1,10,C,N,,1000,,,,,,,Virtue Rank Cost – single rank: L=virtue rank
 VIRTRNKCOST,S,11,,L,N,-2,18,878,,,,,,Virtue Rank Cost – single rank: L=virtue rank
 VIRTRNKCOSTTOT,S,,0,A,,,0,,,,,,,Virtue Rank Cost – all ranks: L=virtue rank
-VIRTRNKCOSTTOT,S,1,,A,,,@VirtRnkCostTot{L-1}+@VirtRnkCost,,,,,,,Virtue Rank Cost – all ranks: L=virtue rank
+VIRTRNKCOSTTOT,S,1,,A,,,@VirtRnkCostTot{$L-1}+@VirtRnkCost,,,,,,,Virtue Rank Cost – all ranks: L=virtue rank
 VIRTTOLERANCEPHYMIT,S,,,A,,,@VSPhyMitL,,,,,,,Virtue Definition lerance: L=virtue rank
 VIRTTOLERANCERESIST,S,,,A,,,@VSResistM,,,,,,,Virtue Definition lerance: L=virtue rank
 VIRTTOLERANCETACMIT,S,,,A,,,@VSTacMitH,,,,,,,Virtue Definition lerance: L=virtue rank
@@ -1987,14 +1995,14 @@ VIRTZEALMIGHT,S,,,A,,,@VSMightH,,,,,,,Virtue Definition Zeal: L=virtue rank
 VIRTZEALPHYMAS,S,,,A,,,@VSPhyMasM,,,,,,,Virtue Definition Zeal: L=virtue rank
 VIRTZEALVPPHYMAS,S,,,A,,,@VSVPPhyMas,,,,,,,Virtue Definition Zeal: L=virtue rank
 VIRTZEALVPTACMAS,S,,,A,,,@VSVPTacMas,,,,,,,Virtue Definition Zeal: L=virtue rank
-VITALITY,S,,,A,,,FloorDbl(@VitalityRaw#|Nothing),,,,,,,Main Vitality adjusted for lower items calculation (needs to be rounded down)
-VITALITYRAW,S,,,A,,,@PntMPVitality*@ItemVitalityAdjProg#{@ProgBVitality}*@AdjItemProgVitality#{@ProgBVitality}*N,,,,,,,"Main Item Vitality adjusted for lower items calculation: L=item level, N=points"
-VITALITYSM,S,,,A,,,FloorDbl(@VitalitySmRaw#|Nothing),,,,,,,Main Vitality adjusted and smoothened calculation (needs to be rounded down)
-VITALITYSMRAW,S,,,A,,,@PntMPVitality*@ItemVitalitySmProg#{@ProgBVitality}*@AdjItemProgVitality#{@ProgBVitality}*N,,,,,,,"Main Item Vitality adjusted and smoothened calculation: L=item level, N=points"
-VITALITYSTD,S,,,A,,,FloorDbl(@VitalityStdRaw#|Nothing),,,,,,,Main Vitality calculation (needs to be rounded down)
-VITALITYSTDRAW,S,,,A,,,@PntMPVitality*@ItemVitalityProg#{@ProgBVitality}*@AdjItemProgVitality#{@ProgBVitality}*N,,,,,,,"Main Item Vitality calculation: L=item level, N=points"
-VITALITYT,S,,,A,,,FloorDbl(@VitalityTRaw#|Nothing),,,,,,,Main Trait Vitality calculation (needs to be rounded down)
-VITALITYTRAW,S,,,A,,,@PntMPVitality*@TraitVitalityProg#{@ProgBVitality}*@AdjTraitProgVitality#{@ProgBVitality}*N,,,,,,,"Main Item Vitality adjusted for lower items calculation: L=item level, N=points"
+VITALITY,S,,,A,,,FloorDbl(@VitalityRaw#$PNULL),,,,,,,Main Vitality adjusted for lower items calculation (needs to be rounded down)
+VITALITYRAW,S,,,A,,,@PntMPVitality*@ItemVitalityAdjProg#{@ProgBVitality}*@AdjItemProgVitality#{@ProgBVitality}*$N,,,,,,,"Main Item Vitality adjusted for lower items calculation: L=item level, N=points"
+VITALITYSM,S,,,A,,,FloorDbl(@VitalitySmRaw#$PNULL),,,,,,,Main Vitality adjusted and smoothened calculation (needs to be rounded down)
+VITALITYSMRAW,S,,,A,,,@PntMPVitality*@ItemVitalitySmProg#{@ProgBVitality}*@AdjItemProgVitality#{@ProgBVitality}*$N,,,,,,,"Main Item Vitality adjusted and smoothened calculation: L=item level, N=points"
+VITALITYSTD,S,,,A,,,FloorDbl(@VitalityStdRaw#$PNULL),,,,,,,Main Vitality calculation (needs to be rounded down)
+VITALITYSTDRAW,S,,,A,,,@PntMPVitality*@ItemVitalityProg#{@ProgBVitality}*@AdjItemProgVitality#{@ProgBVitality}*$N,,,,,,,"Main Item Vitality calculation: L=item level, N=points"
+VITALITYT,S,,,A,,,FloorDbl(@VitalityTRaw#$PNULL),,,,,,,Main Trait Vitality calculation (needs to be rounded down)
+VITALITYTRAW,S,,,A,,,@PntMPVitality*@TraitVitalityProg#{@ProgBVitality}*@AdjTraitProgVitality#{@ProgBVitality}*$N,,,,,,,"Main Item Vitality adjusted for lower items calculation: L=item level, N=points"
 VMHIGH,S,,,C,N,,2,,,,,,,Virtue Stat Modifier High
 VMLOW,S,,,C,N,,0.6,,,,,,,Virtue Stat Modifier Low
 VMMASTERYPSV,S,,,C,N,,0.2,,,,,,,Virtue Stat Modifier Mastery Passive
@@ -2002,7 +2010,7 @@ VMMEDIUM,S,,,C,N,,1,,,,,,,Virtue Stat Modifier Medium
 VMMORALEPSV,S,,,C,N,,0.3,,,,,,,Virtue Stat Modifier Mastery Passive
 VRNKCAP,S,,,C,N,,65,,,,,,,Virtue Rank Cap overall
 VRNKLVLCAP,S,,4,C,N,,2,,,,,,,Virtue Rank Cap by Level: L=character level
-VRNKLVLCAP,S,5,110,A,,,FloorDbl(L/2|Nothing),,,,,,,Virtue Rank Cap by Level: L=character level
+VRNKLVLCAP,S,5,110,A,,,FloorDbl($L/2$PNULL),,,,,,,Virtue Rank Cap by Level: L=character level
 VRNKLVLCAP,S,111,,L,N,,1,-55,,,,,,Virtue Rank Cap by Level: L=character level
 VRNKTOILVL,S,,0,C,N,,0,,,,,,,Virtue Rank to Item Level mapping
 VRNKTOILVL,S,1,38,T,,,1,4,78,1,38,,,Virtue Rank to Item Level mapping
@@ -2204,8 +2212,8 @@ WRDCRITPROTCHOICE,S,1,120,,,,4,,,,,,,"Warden Critical Protection: Critical Defen
 WRDCRITPROTCHOICE,S,1,120,,,,7,,,,,,,"Warden Critical Protection: Critical Defence Percentage: L=character level, N=trait rank"
 WRDCRITPROTCHOICE,S,1,120,,,,2,,,,,,,"Warden Critical Protection: Critical Defence Percentage: L=character level, N=trait rank"
 WRDCRITPROTCHOICE,S,121,,C,N,,0,,,,,,,"Warden Critical Protection: Critical Defence Percentage: L=character level, N=trait rank"
-WRDCRITPROTCRITDEFP,S,,,A,,,@WrdCritProtBase#{@WrdCritProtChoice{N}},,,,,,,"Warden Critical Protection: Critical Defence Percentage: L=character level, N=trait rank"
-WRDPHYMAS,S,,,A,,,@PhyMasT#{@WrdPhyMasChoice{N}},,,,,,,"Warden Physical Mastery: Physical Mastery: L=character level, N=trait rank"
+WRDCRITPROTCRITDEFP,S,,,A,,,@WrdCritProtBase#{@WrdCritProtChoice{$N}},,,,,,,"Warden Critical Protection: Critical Defence Percentage: L=character level, N=trait rank"
+WRDPHYMAS,S,,,A,,,@PhyMasT#{@WrdPhyMasChoice{$N}},,,,,,,"Warden Physical Mastery: Physical Mastery: L=character level, N=trait rank"
 WRDPHYMASCHOICE,S,,0,C,N,,0,,,,,,,"Warden Physical Mastery: Physical Mastery: L=character level, N=trait rank"
 WRDPHYMASCHOICE,S,1,,D,N,,0.4,,,,,,,"Warden Physical Mastery: Physical Mastery: L=character level, N=trait rank"
 WRDPHYMASCHOICE,S,,,,,,0.8,,,,,,,"Warden Physical Mastery: Physical Mastery: L=character level, N=trait rank"

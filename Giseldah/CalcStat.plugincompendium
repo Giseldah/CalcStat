@@ -2,10 +2,12 @@
 <PluginConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Id>1022</Id>
   <Name>CalcStat</Name>
-  <Version>1.2.0</Version>
+  <Version>1.3.0</Version>
   <Author>Giseldah</Author>
   <InfoUrl>http://www.lotrointerface.com/downloads/info1022</InfoUrl>
   <DownloadUrl>http://www.lotrointerface.com/downloads/download1022</DownloadUrl>
-  <Descriptors />
+  <Descriptors>
+    <descriptor>Giseldah\CalcStat.plugin</descriptor>
+  </Descriptors>
   <Dependencies />
 </PluginConfig>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Plugin><Information>
+<Name>CalcStat</Name>
+<Author>Giseldah</Author>
+<Version>1.3.0</Version>
+<Description>
+CalcStat is a library which can be used by plugins to calculate various stats.
+This module doesn't contain any plugin functionality directly.
+
+See for information: https://www.lotrointerface.com/downloads/info1022-CalcStat.html
+</Description>
+</Information>
+<Package>Giseldah.CalcStat.Stub</Package>
+</Plugin>
